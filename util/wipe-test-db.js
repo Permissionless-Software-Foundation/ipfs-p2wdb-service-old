@@ -7,7 +7,7 @@
 const mongoose = require('mongoose')
 
 // Force test environment
-process.env.KOA_ENV = 'test'
+process.env.P2W_ENV = 'test'
 const config = require('../config')
 
 async function cleanDb () {

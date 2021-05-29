@@ -112,8 +112,8 @@ async function loginAdminUser () {
 // Retrieve the admin user JWT token from the JSON file it's saved at.
 async function getAdminJWT () {
   try {
-    // process.env.KOA_ENV = process.env.KOA_ENV || 'dev'
-    // console.log(`env: ${process.env.KOA_ENV}`)
+    // process.env.P2W_ENV = process.env.P2W_ENV || 'dev'
+    // console.log(`env: ${process.env.P2W_ENV}`)
 
     const FILENAME = `../../config/system-user-${config.env}.json`
     const adminUserData = require(FILENAME)
