@@ -27,7 +27,7 @@ module.exports = {
   isCircuitRelay: process.env.ENABLE_CIRCUIT_RELAY ? true : false,
 
   // Information passed to other IPFS peers about this node.
-  apiInfo: 'https://ipfs-service-provider.fullstack.cash/',
+  apiInfo: 'https://p2wdb.fullstack.cash/',
 
   // P2W DB OrbitDB name.
   orbitDbName: 'testdb006',
@@ -36,10 +36,9 @@ module.exports = {
   announceJsonLd: {
     '@context': 'https://schema.org/',
     '@type': 'WebAPI',
-    name: 'ipfs-service-provider',
-    description:
-      'This is a generic IPFS Serivice Provider that uses JSON RPC over IPFS to communicate with it. This instance has not been customized. Source code: https://github.com/Permissionless-Software-Foundation/ipfs-service-provider',
-    documentation: 'https://ipfs-service-provider.fullstack.cash/',
+    name: 'ipfs-p2wdb-service',
+    description: 'This is an access point to the PSF pay-to-write database.',
+    documentation: 'https://p2wdb.fullstack.cash/',
     provider: {
       '@type': 'Organization',
       name: 'Permissionless Software Foundation',

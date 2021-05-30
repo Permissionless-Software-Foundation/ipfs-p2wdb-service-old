@@ -80,7 +80,9 @@ class PayToWriteDB {
   // Read all entries in the OrbitDB.
   readAll () {
     try {
-      const allData = this.db.all()
+      // console.log('this.db: ', this.db)
+
+      const allData = this.db.all
 
       return allData
     } catch (err) {

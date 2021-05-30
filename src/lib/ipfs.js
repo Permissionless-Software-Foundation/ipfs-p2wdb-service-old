@@ -1,6 +1,7 @@
 /*
   This support library handles the connection to the IPFS network. It instantiates
-  the IPFS node and starts the ipfs-coord library.
+  the IPFS node and starts the ipfs-coord library. It also initiates the router
+  for handling JSON RPC commands recieved over IPFS pubsub channels through ipfs-coord.
 */
 
 // Global npm libraries
@@ -44,6 +45,7 @@ class IPFSLib {
 
       // Update the RPC instance with the instance of ipfs-coord.
       this.rpc.ipfsCoord = this.ipfsCoord
+      this.rpc.p2wdb = this.p2wdb
 
       console.log('IPFS is ready.')
     } catch (err) {

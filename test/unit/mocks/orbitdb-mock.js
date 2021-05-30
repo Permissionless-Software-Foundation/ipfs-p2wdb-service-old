@@ -3,8 +3,8 @@
 */
 
 class OrbitDBMock {
-  all () {
-    return {}
+  constructor () {
+    this.all = {}
   }
 
   async put () {
