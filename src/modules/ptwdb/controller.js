@@ -1,7 +1,7 @@
 const KeyValue = require('../../models/key-value')
 
-const IPFS = require('ipfs')
-const PayToWriteDB = require('../../lib/orbitdb-lib/pay-to-write')
+// const IPFS = require('ipfs')
+// const PayToWriteDB = require('../../lib/orbitdb-lib/pay-to-write')
 
 const config = require('../../../config')
 
@@ -21,23 +21,23 @@ class PTWDBController {
     // this.dbIsReady = this.startIpfs()``
   }
 
-  async startIpfs () {
-    try {
-      this.ipfs = await IPFS.create()
-
-      const config = {
-        ipfs: this.ipfs
-      }
-      this.ptwDb = new PayToWriteDB(config)
-
-      this.db = await this.ptwDb.createDb(this.config.orbitDbName)
-
-      return true
-    } catch (err) {
-      console.log('Error while trying to start IPFS: ', err)
-      // Do not throw error.
-    }
-  }
+  // async startIpfs () {
+  //   try {
+  //     this.ipfs = await IPFS.create()
+  //
+  //     const config = {
+  //       ipfs: this.ipfs
+  //     }
+  //     this.ptwDb = new PayToWriteDB(config)
+  //
+  //     this.db = await this.ptwDb.createDb(this.config.orbitDbName)
+  //
+  //     return true
+  //   } catch (err) {
+  //     console.log('Error while trying to start IPFS: ', err)
+  //     // Do not throw error.
+  //   }
+  // }
 
   /*
    * @apiExample Example usage:
