@@ -18,7 +18,7 @@ class PTWDBController {
     this.ptwDb = {}
 
     // Returns a Promise that resolves to `true` when the database is ready.
-    this.dbIsReady = this.startIpfs()
+    // this.dbIsReady = this.startIpfs()``
   }
 
   async startIpfs () {

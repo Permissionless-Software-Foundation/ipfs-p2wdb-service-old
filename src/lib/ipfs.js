@@ -12,6 +12,8 @@ const BCHJS = require('@psf/bch-js')
 // Local libraries
 const config = require('../../config')
 const JSONRPC = require('../rpc')
+const wlogger = require('./wlogger')
+const PayToWriteDB = require('./orbitdb-lib/pay-to-write')
 
 class IPFSLib {
   constructor (localConfig) {
@@ -21,6 +23,10 @@ class IPFSLib {
     this.bchjs = new BCHJS()
     this.rpc = new JSONRPC()
     this.config = config
+
+    // Pointers to instances of ipfs and P2WDB orbitdb.
+    this.ipfs = {}
+    this.p2wdb = {}
 
     // this.rpc = {}
     // if (localConfig.rpc) {
@@ -34,6 +40,7 @@ class IPFSLib {
     try {
       await this.startIpfs()
       await this.startIpfsCoord()
+      await this.startP2wdb()
 
       // Update the RPC instance with the instance of ipfs-coord.
       this.rpc.ipfsCoord = this.ipfsCoord
@@ -106,6 +113,25 @@ class IPFSLib {
       await this.ipfsCoord.isReady()
     } catch (err) {
       console.error('Error in startIpfsCoord()')
+      throw err
+    }
+  }
+
+  async startP2wdb () {
+    try {
+      const _config = {
+        ipfs: this.ipfs
+      }
+
+      // Create an instance of the P2W DB.
+      this.p2wdb = new PayToWriteDB(_config)
+
+      // Wait for OrbitDB to start.
+      await this.p2wdb.createDb(this.config.orbitDbName)
+
+      // OrbitDB is directly accessible through this.p2wdb.db
+    } catch (err) {
+      wlogger.error('Error in ipfs.js/startP2wdb()')
       throw err
     }
   }
