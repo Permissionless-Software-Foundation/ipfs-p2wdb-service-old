@@ -2,8 +2,6 @@ const KeyValue = require('../../models/key-value')
 
 const config = require('../../../config')
 
-// let _this
-
 class PTWDBController {
   constructor () {
     // _this = this
@@ -13,28 +11,7 @@ class PTWDBController {
     this.config = config
     this.ipfs = {}
     this.ptwDb = {}
-
-    // Returns a Promise that resolves to `true` when the database is ready.
-    // this.dbIsReady = this.startIpfs()``
   }
-
-  // async startIpfs () {
-  //   try {
-  //     this.ipfs = await IPFS.create()
-  //
-  //     const config = {
-  //       ipfs: this.ipfs
-  //     }
-  //     this.ptwDb = new PayToWriteDB(config)
-  //
-  //     this.db = await this.ptwDb.createDb(this.config.orbitDbName)
-  //
-  //     return true
-  //   } catch (err) {
-  //     console.log('Error while trying to start IPFS: ', err)
-  //     // Do not throw error.
-  //   }
-  // }
 
   /*
    * @apiExample Example usage:

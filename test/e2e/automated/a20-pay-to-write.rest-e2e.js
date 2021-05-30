@@ -1,3 +1,7 @@
+/*
+  e2e tests for the P2WDB REST API endpoints.
+*/
+
 const axios = require('axios')
 const assert = require('chai').assert
 const config = require('../../../config')
