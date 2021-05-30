@@ -4,6 +4,8 @@
 
 This is a fork of [ipfs-service-provider](https://github.com/Permissionless-Software-Foundation/ipfs-service-provider). This project ports of the pay-to-write (P2W) database (DB) code from [this older project](https://github.com/Permissionless-Software-Foundation/pay-to-write-orbitdb) and adds it to the ipfs-service-provider boilerplate code in order to add both a REST API over HTTP and JSON RPC over IPFS to access the P2WDB services over both interfaces.
 
+test
+
 ## License
 
 [MIT](./LICENSE.md)
