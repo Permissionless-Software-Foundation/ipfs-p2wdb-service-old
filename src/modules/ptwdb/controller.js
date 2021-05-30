@@ -1,15 +1,12 @@
 const KeyValue = require('../../models/key-value')
 
-// const IPFS = require('ipfs')
-// const PayToWriteDB = require('../../lib/orbitdb-lib/pay-to-write')
-
 const config = require('../../../config')
 
-let _this
+// let _this
 
 class PTWDBController {
   constructor () {
-    _this = this
+    // _this = this
 
     // Encapsulate dependencies
     this.KeyValue = KeyValue
@@ -49,53 +46,12 @@ class PTWDBController {
       const signature = ctx.request.body.signature
       const message = ctx.request.body.message
 
-      if (!key || typeof key !== 'string') {
-        throw new Error('txid must be a string')
-      }
-      if (!signature || typeof signature !== 'string') {
-        throw new Error('signature must be a string')
-      }
-      if (!message || typeof message !== 'string') {
-        throw new Error('message must be a string')
-      }
+      const writeObj = { key, signature, message }
 
-      // Check to see if the TXID already exists in the MongoDB.
-      const mongoRes = await _this.KeyValue.find({ key })
-      if (mongoRes.length > 0) {
-        // console.log(`mongoRes: `, mongoRes)
-        const mongoKey = mongoRes[0].key
-
-        if (mongoKey === key) {
-          // Entry is already in the database.
-          throw new Error('Entry already in database')
-        }
-      }
-
-      // key value
-      const dbKeyValue = {
-        signature,
-        message
-      }
-
-      console.log(
-        `Adding key: ${key}, with value: ${JSON.stringify(dbKeyValue, null, 2)}`
-      )
-
-      // Add the entry to the Oribit DB
-      const hash = await _this.db.put(key, dbKeyValue)
-      console.log('hash: ', hash)
-
-      // Add the entry to the MongoDB if it passed the OrbitDB checks.
-      const kvObj = {
-        hash,
-        key,
-        value: dbKeyValue
-      }
-      const keyValue = new _this.KeyValue(kvObj)
-      await keyValue.save()
+      const success = await ctx.ipfsLib.p2wdb.write(writeObj)
 
       ctx.body = {
-        success: true
+        success
       }
     } catch (err) {
       console.error(err)
@@ -103,9 +59,16 @@ class PTWDBController {
     }
   }
 
+  /*
+   * @apiExample Example usage:
+   * curl -H "Content-Type: application/json" -X GET localhost:5001/ptwdb
+   */
   readAll (ctx) {
     try {
-      const allData = _this.db.all
+      // TODO: Replace this code with a call to pay-to-write.js/readAll()
+
+      // Get all the contents of the P2WDB.
+      const allData = ctx.ipfsLib.p2wdb.readAll()
 
       ctx.body = {
         success: true,

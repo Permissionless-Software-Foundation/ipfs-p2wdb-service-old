@@ -15,7 +15,7 @@ const mock = require('../mocks/pay-to-write-mock')
 let sandbox
 let uut
 
-describe('PayToWriteAccessController', () => {
+describe('#PayToWriteAccessController', () => {
   before(async () => {})
 
   beforeEach(() => {

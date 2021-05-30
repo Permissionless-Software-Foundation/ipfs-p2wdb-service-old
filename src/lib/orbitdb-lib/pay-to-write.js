@@ -7,10 +7,12 @@
 
 'use strict'
 
-// const Util = require('./lib/util')
-// const util = new Util()
-
+// Public npm libraries.
 const OrbitDB = require('orbit-db')
+
+// Local libraries
+const wlogger = require('../wlogger')
+const KeyValue = require('../../models/key-value')
 
 // Define the pay-to-write access controller.
 const AccessControllers = require('orbit-db-access-controllers')
@@ -33,6 +35,9 @@ class PayToWriteDB {
     } else {
       this.ipfs = config.ipfs
     }
+
+    this.db = {} // Instance of OrbitDB.
+    this.KeyValue = KeyValue // Mongo model.
 
     // _this.util = util
   }
@@ -68,6 +73,75 @@ class PayToWriteDB {
       return this.db
     } catch (err) {
       console.error('Error in createDb()')
+      throw err
+    }
+  }
+
+  // Read all entries in the OrbitDB.
+  readAll () {
+    try {
+      const allData = this.db.all()
+
+      return allData
+    } catch (err) {
+      wlogger.error('Error in pay-to-write.js/readAll()')
+      throw err
+    }
+  }
+
+  // Write an entry to the database. Returns true or false to indicate success or failure.
+  async write (writeObj) {
+    try {
+      const { key, signature, message } = writeObj
+
+      if (!key || typeof key !== 'string') {
+        throw new Error('key must be a string')
+      }
+      if (!signature || typeof signature !== 'string') {
+        throw new Error('signature must be a string')
+      }
+      if (!message || typeof message !== 'string') {
+        throw new Error('message must be a string')
+      }
+
+      // Check to see if the TXID already exists in the MongoDB.
+      const mongoRes = await this.KeyValue.find({ key })
+      if (mongoRes.length > 0) {
+        // console.log(`mongoRes: `, mongoRes)
+        const mongoKey = mongoRes[0].key
+
+        if (mongoKey === key) {
+          // Entry is already in the database.
+          throw new Error('Entry already in database')
+        }
+      }
+
+      // key value
+      const dbKeyValue = {
+        signature,
+        message
+      }
+
+      console.log(
+        `Adding key: ${key}, with value: ${JSON.stringify(dbKeyValue, null, 2)}`
+      )
+
+      // Add the entry to the Oribit DB
+      const hash = await this.db.put(key, dbKeyValue)
+      console.log('hash: ', hash)
+
+      // Add the entry to the MongoDB if it passed the OrbitDB checks.
+      const kvObj = {
+        hash,
+        key,
+        value: dbKeyValue
+      }
+      const keyValue = new this.KeyValue(kvObj)
+      await keyValue.save()
+
+      return true
+    } catch (err) {
+      wlogger.error('Error in pay-to-write.js/write()')
       throw err
     }
   }

@@ -11,7 +11,7 @@
     "test:unit:rest": "export SVC_ENV=test && mocha --exit --timeout 30000 test/unit/rest-api/",
     "test:unit:jsonrpc": "export SVC_ENV=test && mocha --exit --timeout 30000 test/unit/json-rpc/",
     "test:e2e:auto": "export SVC_ENV=test && mocha --exit --timeout 30000 test/e2e/automated/",
-    "test:temp": "export SVC_ENV=test && mocha --exit --timeout 15000 -g '#rate-limit' test/unit/json-rpc/",
+    "test:temp": "export SVC_ENV=test && mocha --exit --timeout 15000 -g '#PayToWrite' test/unit/biz-logic/",
     "lint": "standard --env mocha --fix",
     "docs": "./node_modules/.bin/apidoc -i src/ -o docs",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
