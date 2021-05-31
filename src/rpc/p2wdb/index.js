@@ -2,7 +2,7 @@
   This is the JSON RPC router for the P2WDB API.
 
   TODO:
-   - Unit and integrtion tests needed.
+   - Unit and integration tests needed.
 */
 
 // Public npm libraries
