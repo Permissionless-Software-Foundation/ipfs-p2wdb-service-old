@@ -28,7 +28,11 @@ The development environment is assumed to be Ubuntu Linux.
 
 ## Docker container
 
-Coming soon.
+The target production deployment of this software is as a Docker container. The [docker](./docker) folder contains the Dockerfile and `docker-compose.yml` file to generate a new Docker image. The production target is Ubuntu Linux 20.04, running Docker and Docker Compose.
+
+- Generate a new Docker image: `docker-compose build --no-cache`
+- Start the Docker container: `docker-compose up -d`
+- Stop the Docker container: `docker-compose down`
 
 ## License
 

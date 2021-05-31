@@ -1,3 +1,0 @@
-#!/bin/bash
-export P2W_ENV=production
-npm start

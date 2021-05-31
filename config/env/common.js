@@ -30,7 +30,7 @@ module.exports = {
   apiInfo: 'https://p2wdb.fullstack.cash/',
 
   // P2W DB OrbitDB name.
-  orbitDbName: 'testdb006',
+  orbitDbName: 'testdb007',
 
   // JSON-LD and Schema.org schema with info about this app.
   announceJsonLd: {

@@ -1,0 +1,23 @@
+mongodb:
+  image: mongo:4.4.2-bionic
+  container_name: mongo-p2wdb
+  ports:
+    - '5555:27017'
+  volumes:
+    - ./mongodb:/data/db
+  command: mongod --logpath=/dev/null # -- quiet
+  restart: always
+
+p2wdb:
+  build: .
+  dockerfile: Dockerfile
+  container_name: p2wdb
+  #command: ["daemon", "--migrate=true", "--enable-pubsub-experiment"]
+  links:
+    - mongodb
+  ports:
+    - 5001:5001
+  volumes:
+    - ../ipfsdata:/home/safeuser/ipfs-p2wdb-service/ipfsdata
+    - ../orbitdb:/home/safeuser/ipfs-p2wdb-service/orbitdb
+  restart: unless-stopped
