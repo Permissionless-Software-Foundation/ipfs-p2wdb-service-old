@@ -76,6 +76,10 @@ async function startServer () {
   const ipfsLib = new IPFSLib()
   await ipfsLib.start()
 
+  // Save the pointer ot the ipfsLib to the context object, so that it's available
+  // to API handlers.
+  app.context.ipfsLib = ipfsLib
+
   return app
 }
 // startServer()

@@ -10,6 +10,7 @@ const wlogger = require('../lib/wlogger')
 const UserController = require('./users')
 const AuthController = require('./auth')
 const AboutController = require('./about')
+const P2wdbController = require('./p2wdb')
 
 let _this
 
@@ -20,9 +21,11 @@ class JSONRPC {
     this.userController = new UserController()
     this.authController = new AuthController()
     this.aboutController = new AboutController()
+    this.p2wdbController = new P2wdbController()
 
-    // This will be replaced once the ipfs-coord lib finishes initializing.
+    // Placeholders that will be replaced after other libraries finish initalizing.
     this.ipfsCoord = {}
+    this.p2wdb = {}
 
     _this = this
   }
@@ -68,6 +71,16 @@ class JSONRPC {
           break
         case 'about':
           retObj = await _this.aboutController.aboutRouter(parsedData)
+          break
+        case 'p2wdb':
+          // CT 5/30/21: Passing p2wdb is a hack to make it work right now.
+          // There should be a better way than passing the pointer to the p2wdb
+          // library.
+          retObj = await _this.p2wdbController.p2wdbRouter(
+            parsedData,
+            _this.p2wdb
+          )
+          break
       }
 
       // console.log('retObj: ', retObj)
