@@ -79,6 +79,12 @@ class IPFSLib {
               HighWater: 30,
               LowWater: 10
             }
+          },
+          Addresses: {
+            Swarm: [
+              `/ip4/0.0.0.0/tcp/${this.config.ipfsTcpPort}`,
+              `/ip4/0.0.0.0/tcp/${this.config.ipfsWsPort}/ws`
+            ]
           }
         }
       }

@@ -44,5 +44,9 @@ module.exports = {
       name: 'Permissionless Software Foundation',
       url: 'https://PSFoundation.cash'
     }
-  }
+  },
+
+  // IPFS Ports
+  ipfsTcpPort: 5668,
+  ipfsWsPort: 5669
 }

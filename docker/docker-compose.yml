@@ -2,7 +2,7 @@ mongodb:
   image: mongo:4.4.2-bionic
   container_name: mongo-p2wdb
   ports:
-    - '5666:27017'
+    - '172.17.0.1:5666:27017'
   volumes:
     - ./mongodb:/data/db
   command: mongod --logpath=/dev/null # -- quiet
@@ -16,7 +16,9 @@ p2wdb:
   links:
     - mongodb
   ports:
-    - 5667:5001
+    - 5667:5001 # REST API
+    - 5668:5668 # IPFS TCP port
+    - 5669:5669 # IPFS WS Port
   volumes:
     - ../ipfsdata:/home/safeuser/ipfs-p2wdb-service/ipfsdata
     - ../orbitdb:/home/safeuser/ipfs-p2wdb-service/orbitdb
