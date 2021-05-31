@@ -1,5 +1,8 @@
 /*
   This is the JSON RPC router for the P2WDB API.
+
+  TODO:
+   - Unit and integrtion tests needed.
 */
 
 // Public npm libraries
@@ -7,8 +10,6 @@
 
 // Local libraries
 const wlogger = require('../../lib/wlogger')
-// const UserLib = require('../../lib/users')
-// const RateLimit = require('../rate-limit')
 
 class P2wdbRPC {
   async p2wdbRouter (rpcData, p2wdb) {
@@ -41,6 +42,18 @@ class P2wdbRPC {
     }
   }
 
+  /**
+   * @api {JSON} /p2wdb Read All
+   * @apiPermission public
+   * @apiName P2WDB Read All
+   * @apiGroup JSON P2WDB
+   *
+   * @apiExample Example usage:
+   * {"jsonrpc":"2.0","id":"555","method":"p2wdb","params":{"endpoint": "readAll"}}
+   *
+   * @apiDescription
+   * Read all entries in the database.
+   */
   // Read all entries from the P2WDB.
   // {"jsonrpc":"2.0","id":"555","method":"p2wdb","params":{"endpoint": "readAll"}}
   async readAll (rpcData, p2wdb) {
@@ -72,6 +85,18 @@ class P2wdbRPC {
     }
   }
 
+  /**
+   * @api {JSON} /p2wdb Write
+   * @apiPermission public
+   * @apiName P2WDB Write
+   * @apiGroup JSON P2WDB
+   *
+   * @apiExample Example usage:
+   * {"jsonrpc":"2.0","id":"555","method":"p2wdb","params":{"endpoint": "write", "txid": "23a104c012c912c351e61a451c387e511f65d115fa79bb5038f4e6bac811754a", "message": "test", "signature": "ID1G37GgWc2MugZHzNss53mMQPT0Mebix6erYC/Qlc+PaJqZaMfjK59KXPDF5wJWlHjcK8hpVbly/5SBAspR54o="}}
+   *
+   * @apiDescription
+   * Write a new entry to the database.
+   */
   // (attempt to) write an entry to the P2WDB.
   // {"jsonrpc":"2.0","id":"555","method":"p2wdb","params":{"endpoint": "write", "txid": "23a104c012c912c351e61a451c387e511f65d115fa79bb5038f4e6bac811754a", "message": "test", "signature": "ID1G37GgWc2MugZHzNss53mMQPT0Mebix6erYC/Qlc+PaJqZaMfjK59KXPDF5wJWlHjcK8hpVbly/5SBAspR54o="}}
   async write (rpcData, p2wdb) {

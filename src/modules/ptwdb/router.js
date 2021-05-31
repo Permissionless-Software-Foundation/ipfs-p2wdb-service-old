@@ -2,7 +2,7 @@ const CONTROLLER = require('./controller')
 const controller = new CONTROLLER()
 
 // ptwdb = pay to write DB
-module.exports.baseUrl = '/ptwdb'
+module.exports.baseUrl = '/p2wdb'
 
 module.exports.routes = [
   {
@@ -13,9 +13,7 @@ module.exports.routes = [
   {
     method: 'GET',
     route: '/',
-    handlers: [
-      controller.readAll
-    ]
+    handlers: [controller.readAll]
   }
   // {
   //   method: 'GET',
