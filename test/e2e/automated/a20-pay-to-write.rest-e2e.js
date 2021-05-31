@@ -47,7 +47,7 @@ describe('#Pay-To-Write', () => {
       try {
         const options = {
           method: 'POST',
-          url: `${LOCALHOST}/ptwdb`,
+          url: `${LOCALHOST}/p2wdb`,
           data: {
             signature:
               'H+S7OTnqZzs34lAJW4DPvCkLIv4HlR1wBux7x2OxmeiCVJ8xDmo3jcHjtWc4N9mdBVB4VUSPRt9Ete9wVVDzDeI=',
@@ -67,7 +67,7 @@ describe('#Pay-To-Write', () => {
       try {
         const options = {
           method: 'POST',
-          url: `${LOCALHOST}/ptwdb`,
+          url: `${LOCALHOST}/p2wdb`,
           data: {
             txid:
               '7429dff697633eb43efbea5d8552cec4911b780bf5eb4bc748fca4eed2cb8faa',
@@ -87,7 +87,7 @@ describe('#Pay-To-Write', () => {
       try {
         const options = {
           method: 'POST',
-          url: `${LOCALHOST}/ptwdb`,
+          url: `${LOCALHOST}/p2wdb`,
           data: {
             txid:
               '7429dff697633eb43efbea5d8552cec4911b780bf5eb4bc748fca4eed2cb8faa',
@@ -108,7 +108,7 @@ describe('#Pay-To-Write', () => {
       try {
         const options = {
           method: 'POST',
-          url: `${LOCALHOST}/ptwdb`,
+          url: `${LOCALHOST}/p2wdb`,
           data: {
             txid:
               '7429dff697633eb43efbea5d8552cec4911b780bf5eb4bc748fca4eed2cb8faa',
@@ -141,7 +141,7 @@ describe('#Pay-To-Write', () => {
 
       const options = {
         method: 'POST',
-        url: `${LOCALHOST}/ptwdb`,
+        url: `${LOCALHOST}/p2wdb`,
         data: {
           txid,
           signature:
@@ -164,7 +164,7 @@ describe('#Pay-To-Write', () => {
 
         const options = {
           method: 'POST',
-          url: `${LOCALHOST}/ptwdb`,
+          url: `${LOCALHOST}/p2wdb`,
           data: {
             txid,
             signature:
