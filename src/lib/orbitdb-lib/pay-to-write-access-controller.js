@@ -13,9 +13,9 @@ const config = require('../../../config')
 const ensureAddress = require('./ensure-ac-address')
 const KeyValue = require('../../models/key-value')
 
-const TOKENID =
-  // 'dd2fc6e47bfef7c9cfef39bd1be86b3a263a1822736a0c7a0655a758c6ea1713'
-  'c2586d6a726ad3953dbac0c1e2a9c6342a78eb23e7e5f086f1b6aa4d760491d4'
+// const TOKENID =
+//   // 'dd2fc6e47bfef7c9cfef39bd1be86b3a263a1822736a0c7a0655a758c6ea1713'
+//   'c2586d6a726ad3953dbac0c1e2a9c6342a78eb23e7e5f086f1b6aa4d760491d4'
 
 let _this
 
@@ -158,7 +158,7 @@ class PayToWriteAccessController extends AccessController {
       if (!txInfo.isValidSLPTx) return false
 
       // Return false if tokenId does not match.
-      if (txInfo.tokenId !== TOKENID) return false
+      if (txInfo.tokenId !== this.config.tokenId) return false
 
       // Sum up all the token inputs
       let inputTokenQty = 0
@@ -195,7 +195,7 @@ class PayToWriteAccessController extends AccessController {
 
       // If the difference is above a positive threshold, then it's a burn
       // transaction.
-      if (diff > 0.001) {
+      if (diff >= this.config.reqTokenQty) {
         console.log(
           `TX ${txid} proved burn of tokens. Will be allowed to write to DB.`
         )
