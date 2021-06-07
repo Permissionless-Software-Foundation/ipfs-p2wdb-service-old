@@ -58,6 +58,8 @@ class P2wdbRPC {
   // {"jsonrpc":"2.0","id":"555","method":"p2wdb","params":{"endpoint": "readAll"}}
   async readAll (rpcData, p2wdb) {
     try {
+      console.log('P2WDB readAll() RPC endpoint called.')
+
       // Get all the contents of the P2WDB.
       const allData = p2wdb.readAll()
 
@@ -68,6 +70,8 @@ class P2wdbRPC {
         message: '',
         data: allData
       }
+
+      wlogger.debug(`Returning response: ${JSON.stringify(response, null, 2)}`)
 
       return response
     } catch (err) {
@@ -101,6 +105,8 @@ class P2wdbRPC {
   // {"jsonrpc":"2.0","id":"555","method":"p2wdb","params":{"endpoint": "write", "txid": "23a104c012c912c351e61a451c387e511f65d115fa79bb5038f4e6bac811754a", "message": "test", "signature": "ID1G37GgWc2MugZHzNss53mMQPT0Mebix6erYC/Qlc+PaJqZaMfjK59KXPDF5wJWlHjcK8hpVbly/5SBAspR54o="}}
   async write (rpcData, p2wdb) {
     try {
+      console.log('P2WDB write() RPC endpoint called.')
+
       const key = rpcData.payload.params.txid
       const signature = rpcData.payload.params.signature
       const message = rpcData.payload.params.message
@@ -115,6 +121,8 @@ class P2wdbRPC {
         success,
         message: ''
       }
+
+      wlogger.debug(`Returning response: ${JSON.stringify(response, null, 2)}`)
 
       return response
     } catch (err) {
