@@ -132,7 +132,7 @@ describe('#Pay-To-Write', () => {
 
     it('should return true if can append into the db', async () => {
       const txid =
-        '038b63aa3b1fc8d6ca6043ce577410e8d0bdd9189a3f07d4e0d8f32274e1ddc0'
+        '9ac06c53c158430ea32a587fb4e2bc9e947b1d8c6ff1e4cc02afa40d522d7967'
 
       // Ensure entry is not in the database.
       try {
@@ -145,7 +145,7 @@ describe('#Pay-To-Write', () => {
         data: {
           txid,
           signature:
-            'H+KlUnu+Eg6599g0S+pb1VHCLb6+ga9K05U+3T5dSu0qAR0I6DeoUe8LRyO+td4f5OhBIK8iFFcDoRsmEt/VfLw=',
+            'H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg=',
           message: 'test'
         }
       }
@@ -160,7 +160,7 @@ describe('#Pay-To-Write', () => {
     it('should throw error if entry already in db', async () => {
       try {
         const txid =
-          '038b63aa3b1fc8d6ca6043ce577410e8d0bdd9189a3f07d4e0d8f32274e1ddc0'
+          '9ac06c53c158430ea32a587fb4e2bc9e947b1d8c6ff1e4cc02afa40d522d7967'
 
         const options = {
           method: 'POST',
@@ -168,7 +168,7 @@ describe('#Pay-To-Write', () => {
           data: {
             txid,
             signature:
-              'H+KlUnu+Eg6599g0S+pb1VHCLb6+ga9K05U+3T5dSu0qAR0I6DeoUe8LRyO+td4f5OhBIK8iFFcDoRsmEt/VfLw=',
+              'H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg=',
             message: 'test'
           }
         }

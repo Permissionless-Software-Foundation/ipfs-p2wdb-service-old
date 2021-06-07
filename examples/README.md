@@ -2,14 +2,8 @@
 
 Below are a series of JSON RPC calls that can be manually entered at chat.fullstack.cash to interact with the JSON RPC of this IPFS Service Provider.
 
-- `{"jsonrpc":"2.0","id":"555","method":"users","params":{ "endpoint": "createUser", "email": "test555@test.com", "name": "testy tester", "password": "password"}}`<br />
+- `{"jsonrpc":"2.0","id":"555","method":"p2wdb","params":{"endpoint": "write", "txid": "9ac06c53c158430ea32a587fb4e2bc9e947b1d8c6ff1e4cc02afa40d522d7967", "message": "test", "signature": "H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg="}}`
 
-- `{"jsonrpc":"2.0","id":"556","method":"auth","params":{ "endpoint": "authUser", "login": "test555@test.com", "password": "password"}}`<br />
+Below are a series of REST API calls that use the same info below to write data to the P2WDB:
 
-- `{"jsonrpc":"2.0","id":"123","method":"users","params":{ "endpoint": "getAllUsers", "apiToken": "<JWT>"}}`<br />
-
-- `{"jsonrpc":"2.0","id":"123","method":"users","params":{ "endpoint": "updateUser", "apiToken": "<JWT>", "userId": "<_id>", "name": "test999"}}`<br />
-
-- `{"jsonrpc":"2.0","id":"123","method":"users","params":{ "endpoint": "getUser", "apiToken": "<JWT>", "userId": "<_id>"}}`<br />
-
-- `{"jsonrpc":"2.0","id":"123","method":"users","params":{ "endpoint": "deleteUser", "userId": "<_id>", "apiToken": "<JWT>"}}`
+- `curl -H "Content-Type: application/json" -X POST -d '{ "txid": "9ac06c53c158430ea32a587fb4e2bc9e947b1d8c6ff1e4cc02afa40d522d7967", "message": "test", "signature": "H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg=" }' localhost:5001/p2wdb`

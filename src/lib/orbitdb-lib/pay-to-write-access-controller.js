@@ -7,14 +7,15 @@
 const AccessController = require('orbit-db-access-controllers/src/access-controller-interface')
 const pMapSeries = require('p-map-series')
 const BCHJS = require('@psf/bch-js')
+const config = require('../../../config')
 
 // Local libraries
 const ensureAddress = require('./ensure-ac-address')
 const KeyValue = require('../../models/key-value')
 
-const TOKENID =
-  // 'dd2fc6e47bfef7c9cfef39bd1be86b3a263a1822736a0c7a0655a758c6ea1713'
-  'c2586d6a726ad3953dbac0c1e2a9c6342a78eb23e7e5f086f1b6aa4d760491d4'
+// const TOKENID =
+//   // 'dd2fc6e47bfef7c9cfef39bd1be86b3a263a1822736a0c7a0655a758c6ea1713'
+//   'c2586d6a726ad3953dbac0c1e2a9c6342a78eb23e7e5f086f1b6aa4d760491d4'
 
 let _this
 
@@ -28,6 +29,7 @@ class PayToWriteAccessController extends AccessController {
     // Encapsulate dependencies
     this.bchjs = new BCHJS()
     this.KeyValue = KeyValue
+    this.config = config
 
     _this = this
   }
@@ -94,6 +96,17 @@ class PayToWriteAccessController extends AccessController {
       const message = entry.payload.value.message
       const signature = entry.payload.value.signature
 
+      console.log(`payload: ${JSON.stringify(entry.payload.value, null, 2)}`)
+
+      // Throw an error if the message is bigger than 10 KB.
+      // TODO: Create a unit test for this code path.
+      if (message.length > this.config.maxMessageSize) {
+        console.error(
+          `TXID ${txid} not allowed to write to DB because message exceeds max size of ${this.config.maxMessageSize}`
+        )
+        return false
+      }
+
       // Fast validation: validate the TXID if it already exists in MongoDB.
       const mongoRes = await this.KeyValue.find({ key: txid })
       if (mongoRes.length > 0) {
@@ -145,7 +158,7 @@ class PayToWriteAccessController extends AccessController {
       if (!txInfo.isValidSLPTx) return false
 
       // Return false if tokenId does not match.
-      if (txInfo.tokenId !== TOKENID) return false
+      if (txInfo.tokenId !== this.config.tokenId) return false
 
       // Sum up all the token inputs
       let inputTokenQty = 0
@@ -182,7 +195,7 @@ class PayToWriteAccessController extends AccessController {
 
       // If the difference is above a positive threshold, then it's a burn
       // transaction.
-      if (diff > 0.001) {
+      if (diff >= this.config.reqTokenQty) {
         console.log(
           `TX ${txid} proved burn of tokens. Will be allowed to write to DB.`
         )
