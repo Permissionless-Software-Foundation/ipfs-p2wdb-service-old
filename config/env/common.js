@@ -30,7 +30,9 @@ module.exports = {
   apiInfo: 'https://p2wdb.fullstack.cash/',
 
   // P2W DB OrbitDB name.
-  orbitDbName: 'testdb007',
+  orbitDbName: process.env.ORBITDB_NAME
+    ? process.env.ORBITDB_NAME
+    : 'testdb008',
 
   // Maximum size of a new database entry.
   maxMessageSize: process.env.MAX_MESSAGE_SIZE
