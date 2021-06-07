@@ -14,6 +14,11 @@ Each endpoint is available over two interfaces:
 - A REST API over HTTP
 - A JSON RPC over IPFS, using [chat.fullstack.cash](https://chat.fullstack.cash)
 
+Documentation:
+
+- [API documentation for both interfaces can be found here.](https://p2wdb.fullstackcash.nl/)
+- [Example code for burning tokens and writing data to the DB.](./examples)
+
 This project is under heavy development and is only appropriate for use by JavaScript developers familiar with REST API or JSON RPC development.
 
 ## Setup Development Environment
@@ -33,6 +38,8 @@ The target production deployment of this software is as a Docker container. The 
 - Generate a new Docker image: `docker-compose build --no-cache`
 - Start the Docker container: `docker-compose up -d`
 - Stop the Docker container: `docker-compose down`
+
+The MongoDB container creates a new directory, `mongodb`. You'll need to delete this directory if you want to re-build the Docker image for the P2WDB.
 
 ## License
 

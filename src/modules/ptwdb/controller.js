@@ -20,7 +20,7 @@ class PTWDBController {
    * @apiGroup REST P2WDB
    *
    * @apiExample Example usage:
-   * curl -H "Content-Type: application/json" -X POST -d '{ "txid": "038b63aa3b1fc8d6ca6043ce577410e8d0bdd9189a3f07d4e0d8f32274e1ddc0", "message": "test", "signature": "H+KlUnu+Eg6599g0S+pb1VHCLb6+ga9K05U+3T5dSu0qAR0I6DeoUe8LRyO+td4f5OhBIK8iFFcDoRsmEt/VfLw=" }' localhost:5001/p2wdb
+   * curl -H "Content-Type: application/json" -X POST -d '{ "txid": "9ac06c53c158430ea32a587fb4e2bc9e947b1d8c6ff1e4cc02afa40d522d7967", "message": "test", "signature": "H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg=", "data": "This is the data that will go into the database." }' localhost:5001/p2wdb
    *
    * @apiDescription
    * Write a new entry to the database.
@@ -39,8 +39,10 @@ class PTWDBController {
       const key = ctx.request.body.txid
       const signature = ctx.request.body.signature
       const message = ctx.request.body.message
+      const data = ctx.request.body.data
 
-      const writeObj = { key, signature, message }
+      const writeObj = { key, signature, message, data }
+      console.log(`writeObj: ${JSON.stringify(writeObj, null, 2)}`)
 
       const success = await ctx.ipfsLib.p2wdb.write(writeObj)
 

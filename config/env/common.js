@@ -32,11 +32,11 @@ module.exports = {
   // P2W DB OrbitDB name.
   orbitDbName: process.env.ORBITDB_NAME
     ? process.env.ORBITDB_NAME
-    : 'testdb008',
+    : 'testdb009',
 
   // Maximum size of a new database entry.
-  maxMessageSize: process.env.MAX_MESSAGE_SIZE
-    ? parseInt(process.env.MAX_MESSAGE_SIZE)
+  maxDataSize: process.env.MAX_DATA_SIZE
+    ? parseInt(process.env.MAX_DATA_SIZE)
     : 10000,
 
   // SLP Token to use for this database.
@@ -54,7 +54,8 @@ module.exports = {
     '@context': 'https://schema.org/',
     '@type': 'WebAPI',
     name: 'ipfs-p2wdb-service',
-    description: 'This is an access point to the PSF pay-to-write database.',
+    description:
+      'This is a PROTOTYPE access point to the PSF pay-to-write database. DB content may be wiped at any moment. Do not depend on this DB for production use! Cost to write to the DB is 0.01 PSF tokens.',
     documentation: 'https://p2wdb.fullstack.cash/',
     provider: {
       '@type': 'Organization',

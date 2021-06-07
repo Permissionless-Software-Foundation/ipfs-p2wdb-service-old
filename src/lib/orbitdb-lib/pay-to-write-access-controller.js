@@ -95,14 +95,15 @@ class PayToWriteAccessController extends AccessController {
       const txid = entry.payload.key
       const message = entry.payload.value.message
       const signature = entry.payload.value.signature
+      const dbData = entry.payload.value.data
 
       console.log(`payload: ${JSON.stringify(entry.payload.value, null, 2)}`)
 
       // Throw an error if the message is bigger than 10 KB.
       // TODO: Create a unit test for this code path.
-      if (message.length > this.config.maxMessageSize) {
+      if (dbData.length > this.config.maxDataSize) {
         console.error(
-          `TXID ${txid} not allowed to write to DB because message exceeds max size of ${this.config.maxMessageSize}`
+          `TXID ${txid} not allowed to write to DB because message exceeds max size of ${this.config.maxDataSize}`
         )
         return false
       }

@@ -48,7 +48,7 @@ if (config.env !== 'test') {
   wlogger.add(
     new winston.transports.Console({
       format: winston.format.simple(),
-      level: 'info'
+      level: 'debug'
     })
   )
 }

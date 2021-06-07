@@ -104,6 +104,28 @@ describe('#Pay-To-Write', () => {
       }
     })
 
+    it('should throw error if data is not provided', async () => {
+      try {
+        const options = {
+          method: 'POST',
+          url: `${LOCALHOST}/p2wdb`,
+          data: {
+            txid:
+              '7429dff697633eb43efbea5d8552cec4911b780bf5eb4bc748fca4eed2cb8faa',
+            message: 'A message',
+            signature:
+              'H+S7OTnqZzs34lAJW4DPvCkLIv4HlR1wBux7x2OxmeiCVJ8xDmo3jcHjtWc4N9mdBVB4VUSPRt9Ete9wVVDzDeI='
+          }
+        }
+
+        const result = await axios(options)
+        console.log('result.data: ', result.data)
+        assert.fail('unexpected error')
+      } catch (err) {
+        assert.include(err.response.data, 'data must be a string')
+      }
+    })
+
     it('should return error if signature is invalid', async () => {
       try {
         const options = {
@@ -114,7 +136,8 @@ describe('#Pay-To-Write', () => {
               '7429dff697633eb43efbea5d8552cec4911b780bf5eb4bc748fca4eed2cb8faa',
             signature:
               'H+S7OTnqZzs34lAJW4DPvCkLIv4HlR1wBux7x2OxmeiCVJ8xDmo3jcHjtWc4N9mdBVB4VUSPRt9Ete9wVVDzDeI=',
-            message: 'A message'
+            message: 'A message',
+            data: 'test data'
           }
         }
 
@@ -146,7 +169,8 @@ describe('#Pay-To-Write', () => {
           txid,
           signature:
             'H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg=',
-          message: 'test'
+          message: 'test',
+          data: 'test data'
         }
       }
 
@@ -169,7 +193,8 @@ describe('#Pay-To-Write', () => {
             txid,
             signature:
               'H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg=',
-            message: 'test'
+            message: 'test',
+            data: 'test data'
           }
         }
 
