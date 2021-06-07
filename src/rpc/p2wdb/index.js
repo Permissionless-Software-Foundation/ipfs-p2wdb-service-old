@@ -110,8 +110,10 @@ class P2wdbRPC {
       const key = rpcData.payload.params.txid
       const signature = rpcData.payload.params.signature
       const message = rpcData.payload.params.message
+      const data = rpcData.payload.params.data
 
-      const writeObj = { key, signature, message }
+      const writeObj = { key, signature, message, data }
+      console.log(`writeObj: ${JSON.stringify(writeObj, null, 2)}`)
 
       const success = await p2wdb.write(writeObj)
 

@@ -94,7 +94,7 @@ class PayToWriteDB {
   // Write an entry to the database. Returns true or false to indicate success or failure.
   async write (writeObj) {
     try {
-      const { key, signature, message } = writeObj
+      const { key, signature, message, data } = writeObj
 
       if (!key || typeof key !== 'string') {
         throw new Error('key must be a string')
@@ -104,6 +104,9 @@ class PayToWriteDB {
       }
       if (!message || typeof message !== 'string') {
         throw new Error('message must be a string')
+      }
+      if (!data || typeof data !== 'string') {
+        throw new Error('data must be a string')
       }
 
       // Check to see if the TXID already exists in the MongoDB.
@@ -121,7 +124,8 @@ class PayToWriteDB {
       // key value
       const dbKeyValue = {
         signature,
-        message
+        message,
+        data
       }
 
       console.log(

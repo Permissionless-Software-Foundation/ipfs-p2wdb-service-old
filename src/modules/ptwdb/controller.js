@@ -39,8 +39,10 @@ class PTWDBController {
       const key = ctx.request.body.txid
       const signature = ctx.request.body.signature
       const message = ctx.request.body.message
+      const data = ctx.request.body.data
 
-      const writeObj = { key, signature, message }
+      const writeObj = { key, signature, message, data }
+      console.log(`writeObj: ${JSON.stringify(writeObj, null, 2)}`)
 
       const success = await ctx.ipfsLib.p2wdb.write(writeObj)
 

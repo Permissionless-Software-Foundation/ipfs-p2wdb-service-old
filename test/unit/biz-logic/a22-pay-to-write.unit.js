@@ -83,12 +83,31 @@ describe('#PayToWrite', () => {
       }
     })
 
+    it('should throw error if data is not provided', async () => {
+      try {
+        const writeObj = {
+          key:
+            '7429dff697633eb43efbea5d8552cec4911b780bf5eb4bc748fca4eed2cb8faa',
+          signature:
+            'H+S7OTnqZzs34lAJW4DPvCkLIv4HlR1wBux7x2OxmeiCVJ8xDmo3jcHjtWc4N9mdBVB4VUSPRt9Ete9wVVDzDeI=',
+          message: 'A message'
+        }
+
+        await uut.write(writeObj)
+
+        assert.fail('unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'data must be a string')
+      }
+    })
+
     it('should return true if can append into the db', async () => {
       const writeObj = {
         key: '7429dff697633eb43efbea5d8552cec4911b780bf5eb4bc748fca4eed2cb8faa',
         signature:
           'H+S7OTnqZzs34lAJW4DPvCkLIv4HlR1wBux7x2OxmeiCVJ8xDmo3jcHjtWc4N9mdBVB4VUSPRt9Ete9wVVDzDeI=',
-        message: 'A message'
+        message: 'A message',
+        data: 'Some test data'
       }
 
       const result = await uut.write(writeObj)
@@ -105,7 +124,8 @@ describe('#PayToWrite', () => {
             '7429dff697633eb43efbea5d8552cec4911b780bf5eb4bc748fca4eed2cb8faa',
           signature:
             'H+S7OTnqZzs34lAJW4DPvCkLIv4HlR1wBux7x2OxmeiCVJ8xDmo3jcHjtWc4N9mdBVB4VUSPRt9Ete9wVVDzDeI=',
-          message: 'A message'
+          message: 'A message',
+          data: 'Some test data'
         }
 
         // Force database to return the same value.
