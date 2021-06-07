@@ -17,11 +17,9 @@ const SIGNATURE =
   'H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg='
 
 const dataObj = {
-  title: 'Ivermectin obliterates 97 percent of Delhi cases',
-  sourceUrl:
-    'https://www.thedesertreview.com/news/national/ivermectin-obliterates-97-percent-of-delhi-cases/article_6a3be6b2-c31f-11eb-836d-2722d2325a08.html',
-  ipfsUrl:
-    'https://hub.textile.io/ipfs/bafkreidsemzda6fhrkczx3q4xpeb7db5fcgfsk7yzyjtp6qffnemhutfzq'
+  title: 'Ross Ulbricht Presentation from Prison',
+  sourceUrl: 'https://youtu.be/3V_SkLxgQjQ',
+  ipfsUrl: ''
 }
 
 // REST API servers.

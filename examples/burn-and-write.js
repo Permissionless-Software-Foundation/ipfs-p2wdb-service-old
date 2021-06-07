@@ -184,7 +184,8 @@ async function burnAndWrite () {
     await bchjs.Util.sleep(5000)
 
     // Submit the txid as proof-of-burn to write data to the database.
-    const result = await axios.post('http://localhost:5001/p2wdb', {
+    // const result = await axios.post('http://localhost:5001/p2wdb', {
+    const result = await axios.post('https://p2wdb.fullstackcash.nl/p2wdb', {
       txid: txidStr[0],
       message: MESSAGE,
       signature: SIGNATURE,
