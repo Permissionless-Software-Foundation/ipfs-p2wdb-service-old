@@ -32,6 +32,11 @@ module.exports = {
   // P2W DB OrbitDB name.
   orbitDbName: 'testdb007',
 
+  // Maximum size of a new database entry.
+  maxMessageSize: process.env.MAX_MESSAGE_SIZE
+    ? parseInt(process.env.MAX_MESSAGE_SIZE)
+    : 10000,
+
   // JSON-LD and Schema.org schema with info about this app.
   announceJsonLd: {
     '@context': 'https://schema.org/',
