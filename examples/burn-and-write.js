@@ -17,10 +17,14 @@ const MESSAGE = 'test'
 const SIGNATURE =
   'H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg='
 
+// const SERVER = 'http://localhost:5001/p2wdb'
+// const SERVER = 'https://p2wdb.fullstackcash.nl/p2wdb'
+const SERVER = 'http://157.90.118.230:5001/p2wdb'
+
 const dataObj = {
-  title: 'Title 2',
-  sourceUrl: 'url 2',
-  ipfsUrl: 'url 2'
+  title: 'Title 3',
+  sourceUrl: 'url 3',
+  ipfsUrl: 'url 3'
 }
 
 // REST API servers.
@@ -182,7 +186,7 @@ async function burnAndWrite () {
     await bchjs.Util.sleep(5000)
 
     // Submit the txid as proof-of-burn to write data to the database.
-    const result = await axios.post('http://localhost:5001/p2wdb', {
+    const result = await axios.post(SERVER, {
       // const result = await axios.post('https://p2wdb.fullstackcash.nl/p2wdb', {
       txid: txidStr[0],
       message: MESSAGE,
