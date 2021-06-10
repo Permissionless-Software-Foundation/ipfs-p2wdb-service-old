@@ -32,7 +32,8 @@ module.exports = {
   // P2W DB OrbitDB name.
   orbitDbName: process.env.ORBITDB_NAME
     ? process.env.ORBITDB_NAME
-    : 'testdb011',
+    : '/orbitdb/zdpuAtkE6etPNfEKR7eGdgGpEFjJF2QKWNatDTk6VBxU7qJTo/testdb011', // Subscribe to an existing database.
+  // : 'testdb011', // Start a new database
 
   // Maximum size of a new database entry.
   maxDataSize: process.env.MAX_DATA_SIZE
