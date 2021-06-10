@@ -32,7 +32,7 @@ module.exports = {
   // P2W DB OrbitDB name.
   orbitDbName: process.env.ORBITDB_NAME
     ? process.env.ORBITDB_NAME
-    : 'testdb009',
+    : 'testdb011',
 
   // Maximum size of a new database entry.
   maxDataSize: process.env.MAX_DATA_SIZE

@@ -20,7 +20,7 @@ const KeyValue = require('../../models/key-value')
 let _this
 
 class PayToWriteAccessController extends AccessController {
-  constructor (orbitdb, options) {
+  constructor(orbitdb, options) {
     super()
     this._orbitdb = orbitdb
     this._db = null
@@ -34,26 +34,53 @@ class PayToWriteAccessController extends AccessController {
     _this = this
   }
 
-  /* Factory */
-  static async create (orbitdb, options = {}) {
-    const ac = new PayToWriteAccessController(orbitdb, options)
-
-    // console.log('orbitdb: ', orbitdb)
-    console.log('create options: ', options)
-
-    await ac.load(
-      options.address || options.name || 'default-access-controller'
-    )
-
-    // Add write access from options
-    if (options.write && !options.address) {
-      await pMapSeries(options.write, async e => ac.grant('write', e))
-    }
-
-    return ac
+  // Returns the type of the access controller
+  static get type() {
+    return 'payToWrite'
   }
 
-  async load (address) {
+  // Returns the address of the OrbitDB used as the AC
+  get address() {
+    return this._db.address
+  }
+
+  get capabilities() {
+    if (this._db) {
+      const capabilities = this._db.index
+
+      const toSet = e => {
+        const key = e[0]
+        capabilities[key] = new Set([...(capabilities[key] || []), ...e[1]])
+      }
+
+      // Merge with the access controller of the database
+      // and make sure all values are Sets
+      Object.entries({
+        ...capabilities,
+        // Add the root access controller's 'write' access list
+        // as admins on this controller
+        ...{
+          admin: new Set([
+            ...(capabilities.admin || []),
+            ...this._db.access.write
+          ])
+        }
+      }).forEach(toSet)
+
+      return capabilities
+    }
+    return {}
+  }
+
+  get(capability) {
+    return this.capabilities[capability] || new Set([])
+  }
+
+  async close() {
+    await this._db.close()
+  }
+
+  async load(address) {
     if (this._db) {
       await this._db.close()
     }
@@ -75,18 +102,54 @@ class PayToWriteAccessController extends AccessController {
     await this._db.load()
   }
 
-  // Returns the type of the access controller
-  static get type () {
-    return 'payToWrite'
+  async save() {
+    // return the manifest data
+    return {
+      address: this._db.address.toString()
+    }
   }
 
-  // Returns the address of the OrbitDB used as the AC
-  get address () {
-    return this._db.address
+  async grant(capability, key) {
+    // Merge current keys with the new key
+    const capabilities = new Set([
+      ...(this._db.get(capability) || []),
+      ...[key]
+    ])
+    await this._db.put(capability, Array.from(capabilities.values()))
+  }
+
+  async revoke(capability, key) {
+    const capabilities = new Set(this._db.get(capability) || [])
+    capabilities.delete(key)
+    if (capabilities.size > 0) {
+      await this._db.put(capability, Array.from(capabilities.values()))
+    } else {
+      await this._db.del(capability)
+    }
+  }
+
+  /* Private methods */
+  _onUpdate() {
+    this.emit('updated')
+  }
+
+  /* Factory */
+  static async create(orbitdb, options = {}) {
+    const ac = new PayToWriteAccessController(orbitdb, options)
+    await ac.load(
+      options.address || options.name || 'default-access-controller'
+    )
+
+    // Add write access from options
+    if (options.write && !options.address) {
+      await pMapSeries(options.write, async e => ac.grant('write', e))
+    }
+
+    return ac
   }
 
   // Return true if entry is allowed to be added to the database
-  async canAppend (entry, identityProvider) {
+  async canAppend(entry, identityProvider) {
     try {
       console.log('canAppend entry: ', entry)
 
@@ -148,7 +211,7 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // Returns true if the txid burned at least 0.001 tokens.
-  async _validateTx (txid) {
+  async _validateTx(txid) {
     try {
       let isValid = false
 
@@ -210,82 +273,12 @@ class PayToWriteAccessController extends AccessController {
     }
   }
 
-  get capabilities () {
-    if (this._db) {
-      const capabilities = this._db.index
-
-      const toSet = e => {
-        const key = e[0]
-        capabilities[key] = new Set([...(capabilities[key] || []), ...e[1]])
-      }
-
-      // Merge with the access controller of the database
-      // and make sure all values are Sets
-      Object.entries({
-        ...capabilities,
-        // Add the root access controller's 'write' access list
-        // as admins on this controller
-        ...{
-          admin: new Set([
-            ...(capabilities.admin || []),
-            ...this._db.access.write
-          ])
-        }
-      }).forEach(toSet)
-
-      return capabilities
-    }
-    return {}
-  }
-
-  get (capability) {
-    return this.capabilities[capability] || new Set([])
-  }
-
-  async close () {
-    await this._db.close()
-  }
-
-  async save () {
-    // return the manifest data
-    return {
-      address: this._db.address.toString()
-    }
-  }
-
-  async grant (capability, key) {
-    console.log('grant capability: ', capability)
-    console.log('grant key: ', key)
-
-    // Merge current keys with the new key
-    const capabilities = new Set([
-      ...(this._db.get(capability) || []),
-      ...[key]
-    ])
-    await this._db.put(capability, Array.from(capabilities.values()))
-  }
-
-  async revoke (capability, key) {
-    const capabilities = new Set(this._db.get(capability) || [])
-    capabilities.delete(key)
-    if (capabilities.size > 0) {
-      await this._db.put(capability, Array.from(capabilities.values()))
-    } else {
-      await this._db.del(capability)
-    }
-  }
-
-  /* Private methods */
-  _onUpdate () {
-    this.emit('updated')
-  }
-
   // Validate a signed messages, to ensure the signer of the message is the owner
   // of the second output of the TX. This ensures the same user who burned the
   // tokens is the same user submitting the new DB entry. It prevents
   // 'front running', or malicous users watching the network for valid burn
   // TXs then using them to submit their own data to the DB.
-  async _validateSignature (txid, signature, message) {
+  async _validateSignature(txid, signature, message) {
     try {
       // Input validation
       if (!txid || typeof txid !== 'string') {

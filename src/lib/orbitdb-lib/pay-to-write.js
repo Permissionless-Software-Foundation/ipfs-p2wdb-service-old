@@ -67,6 +67,8 @@ class PayToWriteDB {
       // Create the key-value store.
       this.db = await orbitdb.keyvalue(dbName, options)
 
+      console.log('OrbitDB ID: ', this.db.id)
+
       // Load data persisted to the hard drive.
       await this.db.load()
 
