@@ -64,11 +64,35 @@ class PayToWriteDB {
         }
       }
 
+      dbName =
+        '/orbitdb/zdpuAtkE6etPNfEKR7eGdgGpEFjJF2QKWNatDTk6VBxU7qJTo/testdb011'
+
       // Create the key-value store.
       this.db = await orbitdb.keyvalue(dbName, options)
 
+      console.log('OrbitDB ID: ', this.db.id)
+
       // Load data persisted to the hard drive.
       await this.db.load()
+
+      // Used for debugging. Can be commented out when not debugging.
+      // Displays replication data when a peer OrbitDB notifies this peer of
+      // a new DB entry, and this DB tries to replicate the data.
+      this.db.events.on('replicate', (address, entry) => {
+        try {
+          console.log('replicate event fired')
+          console.log('replicate address: ', address)
+          console.log('replicate entry: ', entry)
+
+          const data = this.db.get(entry)
+          console.log('entry data: ', data)
+
+          const all = this.db.all
+          console.log('all entries: ', all)
+        } catch (err) {
+          console.error('Error in replicate event:', err)
+        }
+      })
 
       return this.db
     } catch (err) {

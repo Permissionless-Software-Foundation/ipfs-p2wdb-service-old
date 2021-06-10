@@ -34,23 +34,50 @@ class PayToWriteAccessController extends AccessController {
     _this = this
   }
 
-  /* Factory */
-  static async create (orbitdb, options = {}) {
-    const ac = new PayToWriteAccessController(orbitdb, options)
+  // Returns the type of the access controller
+  static get type () {
+    return 'payToWrite'
+  }
 
-    // console.log('orbitdb: ', orbitdb)
-    console.log('create options: ', options)
+  // Returns the address of the OrbitDB used as the AC
+  get address () {
+    return this._db.address
+  }
 
-    await ac.load(
-      options.address || options.name || 'default-access-controller'
-    )
+  get capabilities () {
+    if (this._db) {
+      const capabilities = this._db.index
 
-    // Add write access from options
-    if (options.write && !options.address) {
-      await pMapSeries(options.write, async e => ac.grant('write', e))
+      const toSet = e => {
+        const key = e[0]
+        capabilities[key] = new Set([...(capabilities[key] || []), ...e[1]])
+      }
+
+      // Merge with the access controller of the database
+      // and make sure all values are Sets
+      Object.entries({
+        ...capabilities,
+        // Add the root access controller's 'write' access list
+        // as admins on this controller
+        ...{
+          admin: new Set([
+            ...(capabilities.admin || []),
+            ...this._db.access.write
+          ])
+        }
+      }).forEach(toSet)
+
+      return capabilities
     }
+    return {}
+  }
 
-    return ac
+  get (capability) {
+    return this.capabilities[capability] || new Set([])
+  }
+
+  async close () {
+    await this._db.close()
   }
 
   async load (address) {
@@ -75,14 +102,50 @@ class PayToWriteAccessController extends AccessController {
     await this._db.load()
   }
 
-  // Returns the type of the access controller
-  static get type () {
-    return 'payToWrite'
+  async save () {
+    // return the manifest data
+    return {
+      address: this._db.address.toString()
+    }
   }
 
-  // Returns the address of the OrbitDB used as the AC
-  get address () {
-    return this._db.address
+  async grant (capability, key) {
+    // Merge current keys with the new key
+    const capabilities = new Set([
+      ...(this._db.get(capability) || []),
+      ...[key]
+    ])
+    await this._db.put(capability, Array.from(capabilities.values()))
+  }
+
+  async revoke (capability, key) {
+    const capabilities = new Set(this._db.get(capability) || [])
+    capabilities.delete(key)
+    if (capabilities.size > 0) {
+      await this._db.put(capability, Array.from(capabilities.values()))
+    } else {
+      await this._db.del(capability)
+    }
+  }
+
+  /* Private methods */
+  _onUpdate () {
+    this.emit('updated')
+  }
+
+  /* Factory */
+  static async create (orbitdb, options = {}) {
+    const ac = new PayToWriteAccessController(orbitdb, options)
+    await ac.load(
+      options.address || options.name || 'default-access-controller'
+    )
+
+    // Add write access from options
+    if (options.write && !options.address) {
+      await pMapSeries(options.write, async e => ac.grant('write', e))
+    }
+
+    return ac
   }
 
   // Return true if entry is allowed to be added to the database
@@ -208,76 +271,6 @@ class PayToWriteAccessController extends AccessController {
       console.error('Error in _valideTx: ', err)
       return false
     }
-  }
-
-  get capabilities () {
-    if (this._db) {
-      const capabilities = this._db.index
-
-      const toSet = e => {
-        const key = e[0]
-        capabilities[key] = new Set([...(capabilities[key] || []), ...e[1]])
-      }
-
-      // Merge with the access controller of the database
-      // and make sure all values are Sets
-      Object.entries({
-        ...capabilities,
-        // Add the root access controller's 'write' access list
-        // as admins on this controller
-        ...{
-          admin: new Set([
-            ...(capabilities.admin || []),
-            ...this._db.access.write
-          ])
-        }
-      }).forEach(toSet)
-
-      return capabilities
-    }
-    return {}
-  }
-
-  get (capability) {
-    return this.capabilities[capability] || new Set([])
-  }
-
-  async close () {
-    await this._db.close()
-  }
-
-  async save () {
-    // return the manifest data
-    return {
-      address: this._db.address.toString()
-    }
-  }
-
-  async grant (capability, key) {
-    console.log('grant capability: ', capability)
-    console.log('grant key: ', key)
-
-    // Merge current keys with the new key
-    const capabilities = new Set([
-      ...(this._db.get(capability) || []),
-      ...[key]
-    ])
-    await this._db.put(capability, Array.from(capabilities.values()))
-  }
-
-  async revoke (capability, key) {
-    const capabilities = new Set(this._db.get(capability) || [])
-    capabilities.delete(key)
-    if (capabilities.size > 0) {
-      await this._db.put(capability, Array.from(capabilities.values()))
-    } else {
-      await this._db.del(capability)
-    }
-  }
-
-  /* Private methods */
-  _onUpdate () {
-    this.emit('updated')
   }
 
   // Validate a signed messages, to ensure the signer of the message is the owner
