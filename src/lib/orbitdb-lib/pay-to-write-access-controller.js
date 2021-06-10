@@ -20,7 +20,7 @@ const KeyValue = require('../../models/key-value')
 let _this
 
 class PayToWriteAccessController extends AccessController {
-  constructor(orbitdb, options) {
+  constructor (orbitdb, options) {
     super()
     this._orbitdb = orbitdb
     this._db = null
@@ -35,16 +35,16 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // Returns the type of the access controller
-  static get type() {
+  static get type () {
     return 'payToWrite'
   }
 
   // Returns the address of the OrbitDB used as the AC
-  get address() {
+  get address () {
     return this._db.address
   }
 
-  get capabilities() {
+  get capabilities () {
     if (this._db) {
       const capabilities = this._db.index
 
@@ -72,15 +72,15 @@ class PayToWriteAccessController extends AccessController {
     return {}
   }
 
-  get(capability) {
+  get (capability) {
     return this.capabilities[capability] || new Set([])
   }
 
-  async close() {
+  async close () {
     await this._db.close()
   }
 
-  async load(address) {
+  async load (address) {
     if (this._db) {
       await this._db.close()
     }
@@ -102,14 +102,14 @@ class PayToWriteAccessController extends AccessController {
     await this._db.load()
   }
 
-  async save() {
+  async save () {
     // return the manifest data
     return {
       address: this._db.address.toString()
     }
   }
 
-  async grant(capability, key) {
+  async grant (capability, key) {
     // Merge current keys with the new key
     const capabilities = new Set([
       ...(this._db.get(capability) || []),
@@ -118,7 +118,7 @@ class PayToWriteAccessController extends AccessController {
     await this._db.put(capability, Array.from(capabilities.values()))
   }
 
-  async revoke(capability, key) {
+  async revoke (capability, key) {
     const capabilities = new Set(this._db.get(capability) || [])
     capabilities.delete(key)
     if (capabilities.size > 0) {
@@ -129,12 +129,12 @@ class PayToWriteAccessController extends AccessController {
   }
 
   /* Private methods */
-  _onUpdate() {
+  _onUpdate () {
     this.emit('updated')
   }
 
   /* Factory */
-  static async create(orbitdb, options = {}) {
+  static async create (orbitdb, options = {}) {
     const ac = new PayToWriteAccessController(orbitdb, options)
     await ac.load(
       options.address || options.name || 'default-access-controller'
@@ -149,7 +149,7 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // Return true if entry is allowed to be added to the database
-  async canAppend(entry, identityProvider) {
+  async canAppend (entry, identityProvider) {
     try {
       console.log('canAppend entry: ', entry)
 
@@ -211,7 +211,7 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // Returns true if the txid burned at least 0.001 tokens.
-  async _validateTx(txid) {
+  async _validateTx (txid) {
     try {
       let isValid = false
 
@@ -278,7 +278,7 @@ class PayToWriteAccessController extends AccessController {
   // tokens is the same user submitting the new DB entry. It prevents
   // 'front running', or malicous users watching the network for valid burn
   // TXs then using them to submit their own data to the DB.
-  async _validateSignature(txid, signature, message) {
+  async _validateSignature (txid, signature, message) {
     try {
       // Input validation
       if (!txid || typeof txid !== 'string') {
