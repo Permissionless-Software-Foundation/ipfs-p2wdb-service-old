@@ -29,18 +29,26 @@ The REST API is based on this [koa boilerplate](https://github.com/christroutner
 
 The JSON RPC is based on the [ipfs-coord](https://github.com/Permissionless-Software-Foundation/ipfs-coord#readme) library. This library uses IPFS pubsub channels to allow new IPFS nodes to quickly find one another and establish an end-to-end encrypted (e2ee) connection. They can then communicate by passing JSON RPC commands.
 
-Both interfaces are maintained in the [ipfs-service-provider](https://github.com/Permissionless-Software-Foundation/ipfs-service-provider) repository, and are not directly maintained in the ipfs-p2wdb-service repository. Instead, changes around the interfaces are either pushed or pulled from the upstream ipfs-service-provider repository.
+Both interfaces are maintained in the [ipfs-service-provider](https://github.com/Permissionless-Software-Foundation/ipfs-service-provider) repository, and are not directly maintained in this ipfs-p2wdb-service repository. Instead, changes around the interfaces are either pushed or pulled from the upstream ipfs-service-provider repository.
 
 Reads and writes to the P2WDB can be accomplished over either REST API over HTTP or JSON RPC over IPFS. Which one is preferable depends on the use-case. Here is the software dependency tree for the software stack making up the P2WDB interfaces:
 
 ![ipfs-p2wdb-service dependency graph](./diagrams/dependency-graph.png)
 
-## Reprecussions of this Technology
+## Blockchain Interfaces
 
-Once the basic components are understood, it's possible to take a step back and assess the repercussions of this technology. The P2WDB functions in a similar manner to a blockchain, but without a lot of the overhead and cost the blockchains incur. Here are just a few applications that can be unlocked by the P2WDB technology:
+In addition to the REST and JSON interfaces, on-chain interfaces are planned to be developed for each supported blockchain. For example, on the Bitcoin Cash blockchain, a communication protocol using the OP_RETURN will be developed for reading and writing to the database, directly on-chain.
+
+This would allow on-chain oracles to be driven by entries to the P2WDB. It would allows on-chain applications on one blockchain to communicate with on-chain applications on their blockchain and on other blockchains.
+
+This would make it much more pragmatic for applications to use pruned nodes instead of archival nodes, with their onerous data requirements and long sync times. Moving application data to an external but accessible database, makes blockchain technology much more scalable.
+
+## Repercussions of this Technology
+
+Once the basic components are understood, it's possible to take a step back and assess the repercussions of this technology. The P2WDB functions in a similar manner to a blockchain, but without a lot of the overhead and cost that blockchains incur. Here are just a few applications that can be unlocked by the P2WDB technology:
 
 - Cross-blockchain communication
 - The [SLP token specification](https://github.com/simpleledger/slp-specifications/blob/master/slp-token-type-1.md) could be ported to create a single token protocol that is accessible by multiple blockchains.
 - Uncensorable, community-driven marketplaces. An uncensorable version of [Craigslist](https://craigslist.org) for example. Or a decentralized exchange (DEX) for trading cryptocurrencies.
 
-This idea not only compliments blockchains, but improves upon them by creating a much more flexible and scalable data layer. Because it rides on the IPFS network, databases can be archived on Filecoin.
+This idea compliments blockchains by creating a much more flexible and scalable data layer. Because it rides on the IPFS network, databases can be archived on Filecoin.
