@@ -18,6 +18,8 @@ Documentation:
 
 - [API documentation for both interfaces can be found here.](https://p2wdb.fullstackcash.nl/)
 - [Example code for burning tokens and writing data to the DB.](./examples)
+- [Developer Documentation and Architectural Overview](./dev-docs)
+- [Next Steps for this project](./dev-docs/next-steps.md)
 
 This project is under heavy development and is only appropriate for use by JavaScript developers familiar with REST API or JSON RPC development.
 

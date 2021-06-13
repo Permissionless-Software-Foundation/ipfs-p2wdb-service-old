@@ -14,15 +14,12 @@ module.exports.routes = [
     method: 'GET',
     route: '/',
     handlers: [controller.readAll]
+  },
+  {
+    method: 'GET',
+    route: '/:hash',
+    handlers: [controller.getUser]
   }
-  // {
-  //   method: 'GET',
-  //   route: '/:id',
-  //   handlers: [
-  //     validator.ensureUser,
-  //     controller.getUser
-  //   ]
-  // },
   // {
   //   method: 'PUT',
   //   route: '/:id',

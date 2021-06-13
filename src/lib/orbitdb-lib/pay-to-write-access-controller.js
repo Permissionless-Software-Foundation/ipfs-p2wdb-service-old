@@ -151,7 +151,7 @@ class PayToWriteAccessController extends AccessController {
   // Return true if entry is allowed to be added to the database
   async canAppend (entry, identityProvider) {
     try {
-      console.log('canAppend entry: ', entry)
+      // console.log('canAppend entry: ', entry)
 
       let validTx = false
 
@@ -216,7 +216,7 @@ class PayToWriteAccessController extends AccessController {
       let isValid = false
 
       const txInfo = await _this.bchjs.Transaction.get(txid)
-      console.log(`txInfo: ${JSON.stringify(txInfo, null, 2)}`)
+      // console.log(`txInfo: ${JSON.stringify(txInfo, null, 2)}`)
 
       // Return false if txid is not a valid SLP tx.
       if (!txInfo.isValidSLPTx) return false

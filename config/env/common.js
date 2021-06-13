@@ -54,7 +54,9 @@ module.exports = {
   announceJsonLd: {
     '@context': 'https://schema.org/',
     '@type': 'WebAPI',
-    name: 'ipfs-p2wdb-service',
+    name: process.env.COORD_NAME
+      ? process.env.COORD_NAME
+      : 'ipfs-p2wdb-service',
     description:
       'This is a PROTOTYPE access point to the PSF pay-to-write database. DB content may be wiped at any moment. Do not depend on this DB for production use! Cost to write to the DB is 0.01 PSF tokens.',
     documentation: 'https://p2wdb.fullstack.cash/',
