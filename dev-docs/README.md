@@ -8,15 +8,15 @@ This directory contains Markdown documents which describe the architecture of th
 
 The biggest change that P2WDB makes is to add a custom [Access Control Library](https://github.com/orbitdb/orbit-db-access-controllers) (ACL) to OrbitDB. This ACL requires that users submit a proof-of-burn in order to write data to the database. Anyone can read from the database.
 
+The ACL rules become part of the hash for the database name. If a malicious user attempts to re-write the ACL rules for their instance of the P2WDB, they will only succeed in creating a new database. Their node will be isolated and other nodes running the consensus version of the database will not recognize it.
+
 ## Proof-of-Burn
 
 The 'big innovation' in this project is to combine OrbitDB with a proof-of-burn to control database writes. The proof-of-burn is simply a transaction ID (TXID) on a blockchain. Each independent copy of the P2WDB will evaluate this transaction and verify that the transaction involves burning a specific quantity of a specific token. If those criteria are met, then the user is allowed to write data to the database. Otherwise the write request is rejected. Each instance of the P2WDB independently validates these write entries, similar to nodes on a blockchain.
 
-The ACL rules become part of the hash for the database name. If a malicious user attempts to re-write the ACL rules for their instance of the P2WDB, they will only succeed in creating a new database. Their node will be isolated and other nodes running the consensus version of the database will not recognize it.
-
 Right now the Bitcoin Cash (BCH) blockchain is used for the proof-of-burn, but one goal of this project is to expand the proof-of-burn to other blockchains, including [Avalanche](https://www.avax.network/) and [eCash](https://e.cash). Implementing interfaces for different blockchains will allow the P2WDB to become a medium for cross-blockchain communication. For example, an event on one blockchain could trigger a smart contract or Script on another blockchain.
 
-Currently, the proof of burn requires 0.01 [PSF tokens](https://psfoundation.cash) burned in order to write 10KB of text data to the database. These numbers will probably change in the future, but these are what is currently implemented. [Example scripts](../examples) are provided to help developers interact with the database.
+Currently, the proof of burn requires 0.01 [PSF tokens](https://psfoundation.cash) burned in order to write (up to) 10KB of text data to the database. These numbers will probably change in the future, but these are what is currently implemented. [Example scripts](../examples) are provided to help developers interact with the database.
 
 ## P2WDB API & RPC
 
@@ -39,7 +39,7 @@ Reads and writes to the P2WDB can be accomplished via REST API over HTTP or JSON
 
 In addition to the REST and JSON interfaces, on-chain interfaces are planned to be developed for each supported blockchain. For example, on the Bitcoin Cash blockchain, a communication protocol using the OP_RETURN will be developed for reading and writing to the database, directly on-chain.
 
-This would allow on-chain oracles to be driven by entries to the P2WDB. It would allow on-chain applications on one blockchain to communicate with on-chain applications on their blockchain and on other blockchains.
+This would allow on-chain oracles to be driven by entries to the P2WDB. It would allow on-chain applications on one blockchain to pass data to another on-chain applications on their blockchain and on other blockchains.
 
 This would make it much more pragmatic for applications to use pruned nodes instead of archival nodes. Archival nodes maintain a full copy of the blockchain (200GB and growing for BCH). Archival nodes have onerous data requirements and long sync times. Moving application data to an external but accessible database, makes blockchain technology much more scalable.
 
