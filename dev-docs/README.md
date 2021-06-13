@@ -41,7 +41,7 @@ In addition to the REST and JSON interfaces, on-chain interfaces are planned to 
 
 This would allow on-chain oracles to be driven by entries to the P2WDB. It would allow on-chain applications on one blockchain to communicate with on-chain applications on their blockchain and on other blockchains.
 
-This would make it much more pragmatic for applications to use pruned nodes instead of archival nodes. Archive nodes maintain a full copy of the blockchain (200GB and growing for BCH). Archival nodes have onerous data requirements and long sync times. Moving application data to an external but accessible database, makes blockchain technology much more scalable.
+This would make it much more pragmatic for applications to use pruned nodes instead of archival nodes. Archival nodes maintain a full copy of the blockchain (200GB and growing for BCH). Archival nodes have onerous data requirements and long sync times. Moving application data to an external but accessible database, makes blockchain technology much more scalable.
 
 ## Repercussions of this Technology
 
@@ -51,4 +51,4 @@ Once the basic components are understood, it's possible to take a step back and 
 - The [SLP token specification](https://github.com/simpleledger/slp-specifications/blob/master/slp-token-type-1.md) could be ported to create a single token protocol that is accessible by multiple blockchains.
 - Uncensorable, community-driven marketplaces. An uncensorable version of [Craigslist](https://craigslist.org) for example. Or a decentralized exchange (DEX) for trading cryptocurrencies.
 
-This idea compliments blockchains by creating a much more flexible and scalable data layer. Because it rides on the IPFS network, databases can be archived on Filecoin.
+This idea compliments blockchains by creating a much more flexible and scalable data layer. Because it rides on the IPFS network, databases can be archived on Filecoin. Subnetworks can shard the P2WDB by creating a new database for their use, then merging any needed data to the main database. This is similar to a side-chain in Bitcoin or a subnetwork in Avalanche.
