@@ -12,9 +12,11 @@ The biggest change that P2WDB makes is to add a custom [Access Control Library](
 
 The 'big innovation' in this project is to combine OrbitDB with a proof-of-burn to control database writes. The proof-of-burn is simply a transaction ID (TXID) on a blockchain. Each independent copy of the P2WDB will evaluate this transaction and verify that the transaction involves burning a specific quantity of a specific token. If those criteria are met, then the user is allowed to write data to the database. Otherwise the write request is rejected. Each instance of the P2WDB independently validates these write entries, similar to blockchain.
 
+The ACL rules become part of the hash for the database name. If a malicious user attempts to re-write the ACL rules for their instance of the P2WDB, they will only succeed in creating a new database. Their node will be isolated and other nodes running the consensus version of the database will not recognize it.
+
 Right now the Bitcoin Cash (BCH) blockchain is used for the proof-of-burn, but one goal of this project is to expand the proof-of-burn to other blockchain, including [Avalanche](https://www.avax.network/) and [eCash](https://e.cash). Implementing interfaces for different blockchains will allow the P2WDB to become a medium for cross-blockchain communication. For example, an event on one blockchain could trigger a smart contract or Script on another blockchain.
 
-Currently, the proof of burn requires 0.01 [PSF tokens](https://psfoundation.cash) burned in order to write 10KB of text data to the database. These numbers will probably change in the future, but these are what is currently implemented.
+Currently, the proof of burn requires 0.01 [PSF tokens](https://psfoundation.cash) burned in order to write 10KB of text data to the database. These numbers will probably change in the future, but these are what is currently implemented. [Example scripts](../examples) are provided to help developers interact with the database.
 
 ## P2WDB API & RPC
 
