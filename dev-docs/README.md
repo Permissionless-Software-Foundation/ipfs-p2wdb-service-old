@@ -1,6 +1,6 @@
 # Developer Documentation
 
-This directory contains Markdown documents which describe the architecture of the pay-to-write database (P2WDB). Officially, the P2WDB is "a peer-to-peer database based on [OrbitDB](https://github.com/orbitdb/orbit-db) that requires proof-of-burn in order to add entries to the database". The documents in this directory serve to expand on that statement, and describe all the subcomponents that go into that idea.
+This directory contains Markdown documents which describe the architecture of the pay-to-write database (P2WDB). The one-sentence description of the P2WDB is: "a peer-to-peer database based on [OrbitDB](https://github.com/orbitdb/orbit-db) that requires proof-of-burn in order to add entries to the database". The documents in this directory serve to expand on that statement, and describe all the subcomponents that go into that idea.
 
 ## OrbitDB
 
@@ -32,3 +32,13 @@ The JSON RPC is based on the [ipfs-coord](https://github.com/Permissionless-Soft
 Reads and writes to the P2WDB can be accomplished over either REST API over HTTP or JSON RPC over IPFS. Which one is preferable depends on the use-case. Here is the software dependency tree for the software stack making up the P2WDB interfaces:
 
 ![ipfs-p2wdb-service dependency graph](./diagrams/dependency-graph.png)
+
+## Reprecussions of this Technology
+
+Once the basic components are understood, it's possible to take a step back and assess the repercussions of this technology. The P2WDB functions in a similar manner to a blockchain, but without a lot of the overhead and cost the blockchains incur. Here are just a few applications that can be unlocked by the P2WDB technology:
+
+- Cross-blockchain communication
+- The [SLP token specification](https://github.com/simpleledger/slp-specifications/blob/master/slp-token-type-1.md) could be ported to create a single token protocol that is accessible by multiple blockchains.
+- Uncensorable, community-driven marketplaces. An uncensorable version of [Craigslist](https://craigslist.org) for example. Or a decentralized exchange (DEX) for trading cryptocurrencies.
+
+This idea not only compliments blockchains, but improves upon them by creating a much more flexible and scalable data layer. Because it rides on the IPFS network, databases can be archived on Filecoin.
