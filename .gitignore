@@ -66,5 +66,6 @@ orbitdb
 ipfsdata
 ipfs-service-provider.sh
 mongodb
+start-p2wdb.sh
 
 !README.md
