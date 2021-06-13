@@ -17,9 +17,8 @@ const MESSAGE = 'test'
 const SIGNATURE =
   'H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg='
 
-const SERVER = 'http://localhost:5001/p2wdb'
-// const SERVER = 'https://p2wdb.fullstackcash.nl/p2wdb'
-// const SERVER = 'http://157.90.118.230:5001/p2wdb'
+// const SERVER = 'http://localhost:5001/p2wdb'
+const SERVER = 'https://p2wdb.fullstackcash.nl/p2wdb'
 
 const dataObj = {
   appId: 'test',
