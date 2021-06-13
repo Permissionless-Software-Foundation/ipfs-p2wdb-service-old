@@ -27,11 +27,11 @@ There are two network interfaces for the P2WDB:
 
 The REST API is based on this [koa boilerplate](https://github.com/christroutner/koa-api-boilerplate). It allows the P2WDB to be interfaced with conventional Web 2.0 technology. It's expected that the P2WDB will be bundled with additional software, probably using Docker containers. The REST API provides a great way for orchestrated software to communicate, both via intranet or internet.
 
-The JSON RPC is based on the [ipfs-coord](https://github.com/Permissionless-Software-Foundation/ipfs-coord#readme) library. This library uses IPFS pubsub channels to allow new IPFS nodes to quickly find one another and establish an end-to-end encrypted (e2ee) connection. They can then communicate by passing JSON RPC commands. The JSON RPC is immediately accessible to developers by using [chat.fullstack.cash](https://chat.fullstack.cash) and the JSON RPC commands listed in the [API documentation](https://p2wdb.fullstackcash.nl/).
+The JSON RPC is based on the [ipfs-coord](https://github.com/Permissionless-Software-Foundation/ipfs-coord#readme) library. This library uses IPFS pubsub channels to allow new IPFS nodes to quickly find one another and establish an end-to-end encrypted (e2ee) connection. They can then exchange data by passing JSON RPC commands. The JSON RPC is immediately accessible to developers by using [chat.fullstack.cash](https://chat.fullstack.cash) and the JSON RPC commands listed in the [API documentation](https://p2wdb.fullstackcash.nl/).
 
 Both interfaces are maintained in the [ipfs-service-provider](https://github.com/Permissionless-Software-Foundation/ipfs-service-provider) repository, and are not directly maintained in this ipfs-p2wdb-service repository. Instead, changes around the interfaces are either pushed or pulled from the upstream ipfs-service-provider repository.
 
-Reads and writes to the P2WDB can be accomplished over either REST API over HTTP or JSON RPC over IPFS. Which one is preferable depends on the use-case. Here is the software dependency tree for the software stack making up the P2WDB interfaces:
+Reads and writes to the P2WDB can be accomplished via REST API over HTTP or JSON RPC over IPFS. Which one is preferable depends on the use-case. Here is the software dependency tree for the software stack making up the P2WDB interfaces:
 
 ![ipfs-p2wdb-service dependency graph](./diagrams/dependency-graph.png)
 
@@ -39,9 +39,9 @@ Reads and writes to the P2WDB can be accomplished over either REST API over HTTP
 
 In addition to the REST and JSON interfaces, on-chain interfaces are planned to be developed for each supported blockchain. For example, on the Bitcoin Cash blockchain, a communication protocol using the OP_RETURN will be developed for reading and writing to the database, directly on-chain.
 
-This would allow on-chain oracles to be driven by entries to the P2WDB. It would allows on-chain applications on one blockchain to communicate with on-chain applications on their blockchain and on other blockchains.
+This would allow on-chain oracles to be driven by entries to the P2WDB. It would allow on-chain applications on one blockchain to communicate with on-chain applications on their blockchain and on other blockchains.
 
-This would make it much more pragmatic for applications to use pruned nodes instead of archival nodes, with their onerous data requirements and long sync times. Moving application data to an external but accessible database, makes blockchain technology much more scalable.
+This would make it much more pragmatic for applications to use pruned nodes instead of archival nodes. Archive nodes maintain a full copy of the blockchain (200GB and growing for BCH). Archival nodes have onerous data requirements and long sync times. Moving application data to an external but accessible database, makes blockchain technology much more scalable.
 
 ## Repercussions of this Technology
 
