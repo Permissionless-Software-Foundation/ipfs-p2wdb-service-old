@@ -91,6 +91,18 @@ class PTWDBController {
       ctx.throw(422, err.message)
     }
   }
+
+  // Read a specific entry in the database, given its hash ID.
+  readEntry (ctx) {
+    try {
+      ctx.body = {
+        success: true,
+        data: 'not implemented yet'
+      }
+    } catch (err) {
+      ctx.throw(422, err.message)
+    }
+  }
 }
 
 module.exports = PTWDBController
