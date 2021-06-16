@@ -169,7 +169,9 @@ class PayToWriteDB {
       const keyValue = new this.KeyValue(kvObj)
       await keyValue.save()
 
-      return true
+      kvObj.success = true
+
+      return kvObj
     } catch (err) {
       wlogger.error('Error in pay-to-write.js/write()')
       throw err

@@ -153,7 +153,7 @@ describe('#Pay-To-Write', () => {
       }
     })
 
-    it('should return true if can append into the db', async () => {
+    it('should return success=true if can append into the db', async () => {
       const txid =
         '9ac06c53c158430ea32a587fb4e2bc9e947b1d8c6ff1e4cc02afa40d522d7967'
 
@@ -175,10 +175,19 @@ describe('#Pay-To-Write', () => {
       }
 
       // Add entry to the database.
-      const result = await axios(options)
-      // console.log('result: ', result)
+      let result = await axios(options)
+      result = result.data
+      console.log('result: ', result)
 
-      assert.equal(result.data.success, true)
+      // Function should return an object with the following properties.
+      assert.property(result, 'hash')
+      assert.property(result, 'success')
+      assert.property(result, 'key')
+      assert.property(result, 'value')
+
+      // Function should return true if entry was successfully added to the
+      // database.
+      assert.equal(true, result.success)
     })
 
     it('should throw error if entry already in db', async () => {

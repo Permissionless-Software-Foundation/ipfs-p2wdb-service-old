@@ -111,10 +111,17 @@ describe('#PayToWrite', () => {
       }
 
       const result = await uut.write(writeObj)
+      // console.log('result: ', result)
+
+      // Function should return an object with the following properties.
+      assert.property(result, 'hash')
+      assert.property(result, 'success')
+      assert.property(result, 'key')
+      assert.property(result, 'value')
 
       // Function should return true if entry was successfully added to the
       // database.
-      assert.equal(true, result)
+      assert.equal(true, result.success)
     })
 
     it('should throw error if entry already in db', async () => {
