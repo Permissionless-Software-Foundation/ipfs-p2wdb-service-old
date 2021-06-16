@@ -17,6 +17,7 @@ const SIGNATURE =
   'H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg='
 
 const dataObj = {
+  appId: 'test',
   title: 'Ross Ulbricht Presentation from Prison',
   sourceUrl: 'https://youtu.be/3V_SkLxgQjQ',
   ipfsUrl: ''

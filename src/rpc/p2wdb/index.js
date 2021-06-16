@@ -115,13 +115,14 @@ class P2wdbRPC {
       const writeObj = { key, signature, message, data }
       console.log(`writeObj: ${JSON.stringify(writeObj, null, 2)}`)
 
-      const success = await p2wdb.write(writeObj)
+      const result = await p2wdb.write(writeObj)
 
       const response = {
         endpoint: 'write',
         status: 200,
-        success,
-        message: ''
+        success: result.success,
+        message: '',
+        data: result
       }
 
       wlogger.debug(`Returning response: ${JSON.stringify(response, null, 2)}`)
