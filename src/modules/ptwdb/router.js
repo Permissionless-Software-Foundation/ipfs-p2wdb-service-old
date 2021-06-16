@@ -18,7 +18,7 @@ module.exports.routes = [
   {
     method: 'GET',
     route: '/:hash',
-    handlers: [controller.getUser]
+    handlers: [controller.readEntry]
   }
   // {
   //   method: 'PUT',

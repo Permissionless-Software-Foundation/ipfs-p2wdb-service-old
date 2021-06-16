@@ -13,6 +13,7 @@ const OrbitDB = require('orbit-db')
 // Local libraries
 const wlogger = require('../wlogger')
 const KeyValue = require('../../models/key-value')
+const config = require('../../../config')
 
 // Define the pay-to-write access controller.
 const AccessControllers = require('orbit-db-access-controllers')
@@ -24,20 +25,21 @@ AccessControllers.addAccessController({
 // let _this // local global for 'this'.
 
 class PayToWriteDB {
-  constructor (config) {
+  constructor (localConfig) {
     // _this = this
 
     // Input Validation
-    if (!config.ipfs) {
+    if (!localConfig.ipfs) {
       throw new Error(
         'Must past an instance of ipfs when instantiationg the PayToWriteDB class.'
       )
     } else {
-      this.ipfs = config.ipfs
+      this.ipfs = localConfig.ipfs
     }
 
     this.db = {} // Instance of OrbitDB.
     this.KeyValue = KeyValue // Mongo model.
+    this.config = config
 
     // _this.util = util
   }
@@ -64,8 +66,10 @@ class PayToWriteDB {
         }
       }
 
-      dbName =
-        '/orbitdb/zdpuAtkE6etPNfEKR7eGdgGpEFjJF2QKWNatDTk6VBxU7qJTo/testdb011'
+      // dbName =
+      //   '/orbitdb/zdpuAtkE6etPNfEKR7eGdgGpEFjJF2QKWNatDTk6VBxU7qJTo/testdb011'
+
+      dbName = this.config.orbitDbName
 
       // Create the key-value store.
       this.db = await orbitdb.keyvalue(dbName, options)
@@ -169,7 +173,9 @@ class PayToWriteDB {
       const keyValue = new this.KeyValue(kvObj)
       await keyValue.save()
 
-      return true
+      kvObj.success = true
+
+      return kvObj
     } catch (err) {
       wlogger.error('Error in pay-to-write.js/write()')
       throw err

@@ -44,11 +44,9 @@ class PTWDBController {
       const writeObj = { key, signature, message, data }
       console.log(`writeObj: ${JSON.stringify(writeObj, null, 2)}`)
 
-      const success = await ctx.ipfsLib.p2wdb.write(writeObj)
+      const result = await ctx.ipfsLib.p2wdb.write(writeObj)
 
-      ctx.body = {
-        success
-      }
+      ctx.body = result
     } catch (err) {
       console.error(err)
       ctx.throw(422, err.message)

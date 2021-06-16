@@ -17,15 +17,18 @@ const MESSAGE = 'test'
 const SIGNATURE =
   'H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg='
 
-// const SERVER = 'http://localhost:5001/p2wdb'
-const SERVER = 'https://p2wdb.fullstackcash.nl/p2wdb'
+const SERVER = 'http://localhost:5001/p2wdb'
+// const SERVER = 'https://p2wdb.fullstackcash.nl/p2wdb'
 
 const dataObj = {
   appId: 'test',
-  title: 'Title 4',
-  sourceUrl: 'url 4',
-  ipfsUrl: 'url 4'
+  title: Math.floor(Math.random() * 100000).toString(),
+  sourceUrl: Math.floor(Math.random() * 100000).toString(),
+  ipfsUrl: Math.floor(Math.random() * 100000).toString()
 }
+console.log(
+  `Adding this object to the P2WDB: ${JSON.stringify(dataObj, null, 2)}`
+)
 
 // REST API servers.
 const BCHN_MAINNET = 'https://bchn.fullstack.cash/v4/'
