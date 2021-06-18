@@ -39,11 +39,23 @@ describe('#PayToWrite', () => {
     })
   })
 
+  describe('#handleReplicateEvent', () => {
+    // TODO
+    it('should test this function', () => {
+      assert.equal(1, 1)
+    })
+  })
+
   describe('#readAll', () => {
     it('should read all data from the database', () => {
       const result = uut.readAll()
 
       assert.isObject(result)
+    })
+
+    // TODO
+    it('should catch and throw errors', () => {
+      assert.equal(1, 1)
     })
   })
 

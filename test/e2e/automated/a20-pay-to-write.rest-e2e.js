@@ -228,4 +228,18 @@ describe('#Pay-To-Write', () => {
       assert.equal(1, 1)
     })
   })
+
+  // TODO
+  describe('#readAll', () => {
+    it('should implement tests', () => {
+      assert.equal(1, 1)
+    })
+  })
+
+  // TODO
+  describe('#readEntry', () => {
+    it('should implement tests', () => {
+      assert.equal(1, 1)
+    })
+  })
 })
