@@ -80,24 +80,11 @@ class PayToWriteDB {
       // Load data persisted to the hard drive.
       await this.db.load()
 
-      // Used for debugging. Can be commented out when not debugging.
-      // Displays replication data when a peer OrbitDB notifies this peer of
-      // a new DB entry, and this DB tries to replicate the data.
-      // this.db.events.on('replicate', (address, entry) => {
-      //   try {
-      //     console.log('replicate event fired')
-      //     console.log('replicate address: ', address)
-      //     console.log('replicate entry: ', entry)
-      //
-      //     const data = this.db.get(entry)
-      //     console.log('entry data: ', data)
-      //
-      //     const all = this.db.all
-      //     console.log('all entries: ', all)
-      //   } catch (err) {
-      //     console.error('Error in replicate event:', err)
-      //   }
-      // })
+      // The replication event is triggered when one peer-db on the network
+      // adds a record. This is the signal that new data has arrived and
+      // the node needs to replicate it. This event is also triggered repeatedly
+      // when a new node enters the network and synces their local database
+      // to their peers.
       this.db.events.on('replicate', this.handleReplicateEvent)
 
       return this.db
