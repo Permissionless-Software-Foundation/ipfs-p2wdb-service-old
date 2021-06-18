@@ -220,5 +220,26 @@ describe('#Pay-To-Write', () => {
         assert.include(err.response.data, 'Entry already in database')
       }
     })
+
+    // TODO
+    it('should throw an error if database entry is too big', async () => {
+      // Current threshold is 10KB. This test should try to pass data larger than
+      // 10KB and assert that an error is returned.
+      assert.equal(1, 1)
+    })
+  })
+
+  // TODO
+  describe('#readAll', () => {
+    it('should implement tests', () => {
+      assert.equal(1, 1)
+    })
+  })
+
+  // TODO
+  describe('#readEntry', () => {
+    it('should implement tests', () => {
+      assert.equal(1, 1)
+    })
   })
 })

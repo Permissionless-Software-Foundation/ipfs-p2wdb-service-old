@@ -22,12 +22,10 @@ AccessControllers.addAccessController({
   AccessController: PayToWriteAccessController
 })
 
-// let _this // local global for 'this'.
+let _this // global variable for 'this' instance of the Class.
 
 class PayToWriteDB {
   constructor (localConfig) {
-    // _this = this
-
     // Input Validation
     if (!localConfig.ipfs) {
       throw new Error(
@@ -42,6 +40,9 @@ class PayToWriteDB {
     this.config = config
 
     // _this.util = util
+
+    // global variable for 'this' instance of the Class.
+    _this = this
   }
 
   // Returns the handle to a key-value store OrbitDB with pay-to-write
@@ -79,29 +80,38 @@ class PayToWriteDB {
       // Load data persisted to the hard drive.
       await this.db.load()
 
-      // Used for debugging. Can be commented out when not debugging.
-      // Displays replication data when a peer OrbitDB notifies this peer of
-      // a new DB entry, and this DB tries to replicate the data.
-      this.db.events.on('replicate', (address, entry) => {
-        try {
-          console.log('replicate event fired')
-          console.log('replicate address: ', address)
-          console.log('replicate entry: ', entry)
-
-          const data = this.db.get(entry)
-          console.log('entry data: ', data)
-
-          const all = this.db.all
-          console.log('all entries: ', all)
-        } catch (err) {
-          console.error('Error in replicate event:', err)
-        }
-      })
+      // The replication event is triggered when one peer-db on the network
+      // adds a record. This is the signal that new data has arrived and
+      // the node needs to replicate it. This event is also triggered repeatedly
+      // when a new node enters the network and synces their local database
+      // to their peers.
+      this.db.events.on('replicate', this.handleReplicateEvent)
 
       return this.db
     } catch (err) {
       console.error('Error in createDb()')
       throw err
+    }
+  }
+
+  // The event handler needs to implement a queue with retry. It will very
+  // quickly exhaust the rate limits of FullStack.cash or whatever blockchain
+  // service provider it's using. A retry queue would allow a new node sync
+  // to the existing peer databases while respecting rate limits.
+  handleReplicateEvent (address, entry) {
+    try {
+      console.log('replicate event fired')
+      console.log('replicate address: ', address)
+      console.log('replicate entry: ', entry)
+
+      const data = _this.db.get(entry)
+      console.log('entry data: ', data)
+
+      const all = _this.db.all
+      console.log('all entries: ', all)
+    } catch (err) {
+      // Top-level function. Do not throw an error.
+      console.error('Error in handleReplicateEvent(): ', err)
     }
   }
 

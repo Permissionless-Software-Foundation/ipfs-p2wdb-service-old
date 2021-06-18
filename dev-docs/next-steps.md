@@ -4,7 +4,7 @@ This document will be updated frequently to list out the next major milestones a
 
 ## Short Term
 
-- Writes to the database need to return the OribitDB hash for that entry.
+- The queue-with-retry need to be integrated into the replication event handler, so that new databases can replicate existing databases within the bounds of the rate limits of FullStack.cash (or other blockchain service provider).
 - A read-all endpoint exists, but a read by hash endpoint needs to be developed.
 - Add webhook functionality:
   - A webhook would be set up via REST API or JSON RPC command.
@@ -19,3 +19,5 @@ This document will be updated frequently to list out the next major milestones a
 - Add on-chain interface for read and write for the eCash blockchain.
 - Add proof-of-burn interaction for the Avalanche blockchain.
 - Add on-chain interface for read and write for the Avalanche blockchain.
+- Create a cross-chain database that subscribes to blockchain-specific databases and merges entries from them into a master database.
+- Add on-chain interfaces for the master database to each of the blockchain-specific interfaces.

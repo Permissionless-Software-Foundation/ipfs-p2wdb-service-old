@@ -25,11 +25,37 @@ describe('#PayToWrite', () => {
 
   afterEach(() => sandbox.restore())
 
+  describe('#constructor', () => {
+    // TODO
+    it('should throw an error if instance of IPFS is not provided', () => {
+      assert.equal(1, 1)
+    })
+  })
+
+  describe('#createDb', () => {
+    // TODO
+    it('should throw an error if dbName is not provided.', async () => {
+      assert.equal(1, 1)
+    })
+  })
+
+  describe('#handleReplicateEvent', () => {
+    // TODO
+    it('should test this function', () => {
+      assert.equal(1, 1)
+    })
+  })
+
   describe('#readAll', () => {
     it('should read all data from the database', () => {
       const result = uut.readAll()
 
       assert.isObject(result)
+    })
+
+    // TODO
+    it('should catch and throw errors', () => {
+      assert.equal(1, 1)
     })
   })
 

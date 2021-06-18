@@ -1,6 +1,9 @@
 /*
   Creates an Orbit-DB Access Controller that allows anyone to write, so long
   as they can prove they have burned an SLP token.
+
+  Most of this code is copied directly from the OrbitDB Access Controller Library (ACL):
+  https://github.com/orbitdb/orbit-db-access-controllers/blob/main/src/orbitdb-access-controller.js
 */
 
 // Public npm libraries
@@ -12,10 +15,6 @@ const config = require('../../../config')
 // Local libraries
 const ensureAddress = require('./ensure-ac-address')
 const KeyValue = require('../../models/key-value')
-
-// const TOKENID =
-//   // 'dd2fc6e47bfef7c9cfef39bd1be86b3a263a1822736a0c7a0655a758c6ea1713'
-//   'c2586d6a726ad3953dbac0c1e2a9c6342a78eb23e7e5f086f1b6aa4d760491d4'
 
 let _this
 
@@ -39,11 +38,13 @@ class PayToWriteAccessController extends AccessController {
     return 'payToWrite'
   }
 
-  // Returns the address of the OrbitDB used as the AC
+  // Returns the address of the OrbitDB used as the AC.
+  // No test coverage as this is copied directly from OrbitDB ACL.
   get address () {
     return this._db.address
   }
 
+  // No test coverage as this is copied directly from OrbitDB ACL.
   get capabilities () {
     if (this._db) {
       const capabilities = this._db.index
@@ -72,10 +73,12 @@ class PayToWriteAccessController extends AccessController {
     return {}
   }
 
+  // No test coverage as this is copied directly from OrbitDB ACL.
   get (capability) {
     return this.capabilities[capability] || new Set([])
   }
 
+  // No test coverage as this is copied directly from OrbitDB ACL.
   async close () {
     await this._db.close()
   }
@@ -102,6 +105,7 @@ class PayToWriteAccessController extends AccessController {
     await this._db.load()
   }
 
+  // No test coverage as this is copied directly from OrbitDB ACL.
   async save () {
     // return the manifest data
     return {
@@ -109,6 +113,7 @@ class PayToWriteAccessController extends AccessController {
     }
   }
 
+  // No test coverage as this is copied directly from OrbitDB ACL.
   async grant (capability, key) {
     // Merge current keys with the new key
     const capabilities = new Set([
@@ -118,6 +123,7 @@ class PayToWriteAccessController extends AccessController {
     await this._db.put(capability, Array.from(capabilities.values()))
   }
 
+  // No test coverage as this is copied directly from OrbitDB ACL.
   async revoke (capability, key) {
     const capabilities = new Set(this._db.get(capability) || [])
     capabilities.delete(key)
