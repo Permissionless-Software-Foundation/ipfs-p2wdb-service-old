@@ -1,6 +1,9 @@
 /*
   Creates an Orbit-DB Access Controller that allows anyone to write, so long
   as they can prove they have burned an SLP token.
+
+  Most of this code is copied directly from the OrbitDB Access Controller Library (ACL):
+  https://github.com/orbitdb/orbit-db-access-controllers/blob/main/src/orbitdb-access-controller.js
 */
 
 // Public npm libraries
@@ -13,14 +16,10 @@ const config = require('../../../config')
 const ensureAddress = require('./ensure-ac-address')
 const KeyValue = require('../../models/key-value')
 
-// const TOKENID =
-//   // 'dd2fc6e47bfef7c9cfef39bd1be86b3a263a1822736a0c7a0655a758c6ea1713'
-//   'c2586d6a726ad3953dbac0c1e2a9c6342a78eb23e7e5f086f1b6aa4d760491d4'
-
 let _this
 
 class PayToWriteAccessController extends AccessController {
-  constructor (orbitdb, options) {
+  constructor(orbitdb, options) {
     super()
     this._orbitdb = orbitdb
     this._db = null
@@ -35,16 +34,18 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // Returns the type of the access controller
-  static get type () {
+  static get type() {
     return 'payToWrite'
   }
 
-  // Returns the address of the OrbitDB used as the AC
-  get address () {
+  // Returns the address of the OrbitDB used as the AC.
+  // No test coverage as this is copied directly from OrbitDB ACL.
+  get address() {
     return this._db.address
   }
 
-  get capabilities () {
+  // No test coverage as this is copied directly from OrbitDB ACL.
+  get capabilities() {
     if (this._db) {
       const capabilities = this._db.index
 
@@ -72,15 +73,17 @@ class PayToWriteAccessController extends AccessController {
     return {}
   }
 
-  get (capability) {
+  // No test coverage as this is copied directly from OrbitDB ACL.
+  get(capability) {
     return this.capabilities[capability] || new Set([])
   }
 
-  async close () {
+  // No test coverage as this is copied directly from OrbitDB ACL.
+  async close() {
     await this._db.close()
   }
 
-  async load (address) {
+  async load(address) {
     if (this._db) {
       await this._db.close()
     }
@@ -102,14 +105,16 @@ class PayToWriteAccessController extends AccessController {
     await this._db.load()
   }
 
-  async save () {
+  // No test coverage as this is copied directly from OrbitDB ACL.
+  async save() {
     // return the manifest data
     return {
       address: this._db.address.toString()
     }
   }
 
-  async grant (capability, key) {
+  // No test coverage as this is copied directly from OrbitDB ACL.
+  async grant(capability, key) {
     // Merge current keys with the new key
     const capabilities = new Set([
       ...(this._db.get(capability) || []),
@@ -118,7 +123,8 @@ class PayToWriteAccessController extends AccessController {
     await this._db.put(capability, Array.from(capabilities.values()))
   }
 
-  async revoke (capability, key) {
+  // No test coverage as this is copied directly from OrbitDB ACL.
+  async revoke(capability, key) {
     const capabilities = new Set(this._db.get(capability) || [])
     capabilities.delete(key)
     if (capabilities.size > 0) {
@@ -129,12 +135,12 @@ class PayToWriteAccessController extends AccessController {
   }
 
   /* Private methods */
-  _onUpdate () {
+  _onUpdate() {
     this.emit('updated')
   }
 
   /* Factory */
-  static async create (orbitdb, options = {}) {
+  static async create(orbitdb, options = {}) {
     const ac = new PayToWriteAccessController(orbitdb, options)
     await ac.load(
       options.address || options.name || 'default-access-controller'
@@ -149,7 +155,7 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // Return true if entry is allowed to be added to the database
-  async canAppend (entry, identityProvider) {
+  async canAppend(entry, identityProvider) {
     try {
       // console.log('canAppend entry: ', entry)
 
@@ -211,7 +217,7 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // Returns true if the txid burned at least 0.001 tokens.
-  async _validateTx (txid) {
+  async _validateTx(txid) {
     try {
       let isValid = false
 
@@ -278,7 +284,7 @@ class PayToWriteAccessController extends AccessController {
   // tokens is the same user submitting the new DB entry. It prevents
   // 'front running', or malicous users watching the network for valid burn
   // TXs then using them to submit their own data to the DB.
-  async _validateSignature (txid, signature, message) {
+  async _validateSignature(txid, signature, message) {
     try {
       // Input validation
       if (!txid || typeof txid !== 'string') {
