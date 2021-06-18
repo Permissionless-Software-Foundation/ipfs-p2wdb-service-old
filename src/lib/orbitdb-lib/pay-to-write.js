@@ -82,26 +82,44 @@ class PayToWriteDB {
       // Used for debugging. Can be commented out when not debugging.
       // Displays replication data when a peer OrbitDB notifies this peer of
       // a new DB entry, and this DB tries to replicate the data.
-      this.db.events.on('replicate', (address, entry) => {
-        try {
-          console.log('replicate event fired')
-          console.log('replicate address: ', address)
-          console.log('replicate entry: ', entry)
-
-          const data = this.db.get(entry)
-          console.log('entry data: ', data)
-
-          const all = this.db.all
-          console.log('all entries: ', all)
-        } catch (err) {
-          console.error('Error in replicate event:', err)
-        }
-      })
+      // this.db.events.on('replicate', (address, entry) => {
+      //   try {
+      //     console.log('replicate event fired')
+      //     console.log('replicate address: ', address)
+      //     console.log('replicate entry: ', entry)
+      //
+      //     const data = this.db.get(entry)
+      //     console.log('entry data: ', data)
+      //
+      //     const all = this.db.all
+      //     console.log('all entries: ', all)
+      //   } catch (err) {
+      //     console.error('Error in replicate event:', err)
+      //   }
+      // })
+      this.db.events.on('replicate', this.handleReplicateEvent)
 
       return this.db
     } catch (err) {
       console.error('Error in createDb()')
       throw err
+    }
+  }
+
+  handleReplicateEvent (address, entry) {
+    try {
+      console.log('replicate event fired')
+      console.log('replicate address: ', address)
+      console.log('replicate entry: ', entry)
+
+      const data = this.db.get(entry)
+      console.log('entry data: ', data)
+
+      const all = this.db.all
+      console.log('all entries: ', all)
+    } catch (err) {
+      // Top-level function. Do not throw an error.
+      console.error('Error in handleReplicateEvent(): ', err)
     }
   }
 

@@ -7,15 +7,15 @@ const axios = require('axios')
 
 // CUSTOMIZE THESE VALUES FOR YOUR USE
 // Private key holding the tokens and some BCH.
-const WIF = 'L4s32H6Y5AmvEBgXM69NaLnkbgnNyq4FghFgxaDYsFry9JAbQSXP'
+const WIF = 'KwYLbsYipckrXsZH2rp2Z1pAM1Up8nWdEhfzVe9vWPerTXBJLtxU'
 // The BCH address corresponding to the WIF.
-const BCHADDR = 'bitcoincash:qpttq5zhd8gfyezetr4urp2jd0zgeu6ds596dv3arq'
+const BCHADDR = 'bitcoincash:qzd9erwy0yhx7j20zwekt4vs25s7qsxuesxq9rdj37'
 const TOKENID =
   '38e97c5d7d3585a2cbf3f9580c82ca33985f9cb0845d4dcce220cb709f9538b0'
 const TOKENQTY = 0.01
 const MESSAGE = 'test'
 const SIGNATURE =
-  'H+TgPR/6Fxlo2uDb9UyQpWENBW1xtQvM2+etWlSmc+1kIeZtyw7HCsYMnf8X+EdP0E+CUJwP37HcpVLyKly2XKg='
+  'IA8LCUnN6TUocSGnCe9nA1T4D+9hurJJ0vi3vBEJvAVwFfGcZ9ZlIWdR1m30wAxO4r0wb3YSzrM3QynpfgKUW/w='
 
 const SERVER = 'http://localhost:5001/p2wdb'
 // const SERVER = 'https://p2wdb.fullstackcash.nl/p2wdb'
