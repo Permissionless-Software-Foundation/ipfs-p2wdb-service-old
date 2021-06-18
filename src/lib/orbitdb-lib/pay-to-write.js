@@ -22,12 +22,10 @@ AccessControllers.addAccessController({
   AccessController: PayToWriteAccessController
 })
 
-// let _this // local global for 'this'.
+let _this // global variable for 'this' instance of the Class.
 
 class PayToWriteDB {
   constructor (localConfig) {
-    // _this = this
-
     // Input Validation
     if (!localConfig.ipfs) {
       throw new Error(
@@ -42,6 +40,9 @@ class PayToWriteDB {
     this.config = config
 
     // _this.util = util
+
+    // global variable for 'this' instance of the Class.
+    _this = this
   }
 
   // Returns the handle to a key-value store OrbitDB with pay-to-write
@@ -112,10 +113,10 @@ class PayToWriteDB {
       console.log('replicate address: ', address)
       console.log('replicate entry: ', entry)
 
-      const data = this.db.get(entry)
+      const data = _this.db.get(entry)
       console.log('entry data: ', data)
 
-      const all = this.db.all
+      const all = _this.db.all
       console.log('all entries: ', all)
     } catch (err) {
       // Top-level function. Do not throw an error.

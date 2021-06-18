@@ -4,6 +4,7 @@ This document will be updated frequently to list out the next major milestones a
 
 ## Short Term
 
+- The queue-with-retry need to be integrated into the replication event handler, so that new databases can replicate existing databases within the bounds of the rate limits of FullStack.cash (or other blockchain service provider).
 - A read-all endpoint exists, but a read by hash endpoint needs to be developed.
 - Add webhook functionality:
   - A webhook would be set up via REST API or JSON RPC command.
