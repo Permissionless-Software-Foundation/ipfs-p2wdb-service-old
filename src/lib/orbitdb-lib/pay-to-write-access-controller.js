@@ -33,6 +33,7 @@ class PayToWriteAccessController extends AccessController {
     this.KeyValue = KeyValue
     this.config = config
     this.validationQueue = new PQueue({ concurrency: 1 })
+    // console.log('this.validationQueue: ', this.validationQueue)
 
     _this = this
   }
@@ -201,8 +202,8 @@ class PayToWriteAccessController extends AccessController {
       // a queue. Code below this line will be called rapidly when a new node
       // is trying to sync with the rest of the nodes.
       const inputObj = { txid, signature, message }
-      validTx = await this.validationQueue(() =>
-        this.validateAgainstBlockchain(inputObj)
+      validTx = await _this.validationQueue.add(() =>
+        _this.validateAgainstBlockchain(inputObj)
       )
 
       return validTx
