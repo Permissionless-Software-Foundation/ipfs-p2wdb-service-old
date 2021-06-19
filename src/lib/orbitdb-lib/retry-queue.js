@@ -70,7 +70,7 @@ class RetryQueue {
       console.log(errorMsg)
 
       const SLEEP_TIME = 30000
-      console.log(`Waiting ${SLEEP_TIME} milliseconds before trying again.`)
+      console.log(`Waiting ${SLEEP_TIME} milliseconds before trying again.\n`)
       await _this.bchjs.Util.sleep(SLEEP_TIME) // 30 sec
     } catch (err) {
       console.error('Error in handleValidationError(): ', err)
