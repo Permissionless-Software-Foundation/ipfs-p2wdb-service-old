@@ -345,8 +345,12 @@ class PayToWriteAccessController extends AccessController {
 
       return isValid
     } catch (err) {
-      console.error('Error in _valideTx: ', err)
-      return false
+      console.error('Error in _validateTx: ', err)
+      // return false
+
+      // Throw an error rather than return false. This will pass rate-limit
+      // errors to the retry logic.
+      throw err
     }
   }
 
