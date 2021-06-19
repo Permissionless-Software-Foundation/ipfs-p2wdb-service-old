@@ -13,6 +13,13 @@ let _this
 
 class RetryQueue {
   constructor (localConfig) {
+    if (!localConfig.bchjs) {
+      throw new Error(
+        'Must pass instance of bch-js when instantiating RetryQueue Class.'
+      )
+    }
+    this.bchjs = localConfig.bchjs
+
     // Encapsulate dependencies
     this.validationQueue = new PQueue({ concurrency: 1 })
 
