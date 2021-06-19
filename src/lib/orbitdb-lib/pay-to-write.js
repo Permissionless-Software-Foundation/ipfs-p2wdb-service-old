@@ -94,10 +94,7 @@ class PayToWriteDB {
     }
   }
 
-  // The event handler needs to implement a queue with retry. It will very
-  // quickly exhaust the rate limits of FullStack.cash or whatever blockchain
-  // service provider it's using. A retry queue would allow a new node sync
-  // to the existing peer databases while respecting rate limits.
+  // The event handler.
   handleReplicateEvent (address, entry) {
     try {
       console.log('replicate event fired')

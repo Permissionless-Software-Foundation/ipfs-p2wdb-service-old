@@ -10,11 +10,12 @@
 const AccessController = require('orbit-db-access-controllers/src/access-controller-interface')
 const pMapSeries = require('p-map-series')
 const BCHJS = require('@psf/bch-js')
-const config = require('../../../config')
 
 // Local libraries
+const config = require('../../../config')
 const ensureAddress = require('./ensure-ac-address')
 const KeyValue = require('../../models/key-value')
+const RetryQueue = require('./retry-queue')
 
 let _this
 
@@ -29,6 +30,7 @@ class PayToWriteAccessController extends AccessController {
     this.bchjs = new BCHJS()
     this.KeyValue = KeyValue
     this.config = config
+    this.retryQueue = new RetryQueue({ bchjs: this.bchjs })
 
     _this = this
   }
@@ -155,6 +157,10 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // Return true if entry is allowed to be added to the database
+  // This function needs to implement a queue with retry. It will very
+  // quickly exhaust the rate limits of FullStack.cash or whatever blockchain
+  // service provider it's using. A retry queue would allow a new node sync
+  // to the existing peer databases while respecting rate limits.
   async canAppend (entry, identityProvider) {
     try {
       // console.log('canAppend entry: ', entry)
@@ -189,6 +195,35 @@ class PayToWriteAccessController extends AccessController {
         }
       }
 
+      // Validate the TXID against the blockchain; use a queue with automatic retry.
+      // New nodes connecting will attempt to rapidly validate a lot of entries.
+      // A promise-based queue allows this to happen while respecting rate-limits
+      // of the blockchain service provider.
+      const inputObj = { txid, signature, message }
+      validTx = await _this.retryQueue.addToQueue(
+        _this.validateAgainstBlockchain,
+        inputObj
+      )
+      console.log(`Validation for TXID ${txid} completed.`)
+
+      return validTx
+    } catch (err) {
+      console.log(
+        'Error in pay-to-write-access-controller.js/canAppend(). Returning false. Error: \n',
+        err
+      )
+      return false
+    }
+  }
+
+  // This is an async wrapper function. It wraps all other logic for validating
+  // a new entry and it's proof-of-burn against the blockchain.
+  async validateAgainstBlockchain (inputObj) {
+    try {
+      const { txid, signature, message } = inputObj
+
+      let validTx = false
+
       // Validate the signature to ensure the user submitting data owns
       // the address that did the token burn.
       // This prevents 'front running' corner case.
@@ -204,15 +239,13 @@ class PayToWriteAccessController extends AccessController {
       }
 
       // Validate the transaction matches the burning rules.
-      validTx = await this._validateTx(txid)
+      validTx = await _this._validateTx(txid)
 
       return validTx
     } catch (err) {
-      console.log(
-        'Error in pay-to-write-access-controller.js/canAppend(). Returning false. Error: \n',
-        err
-      )
-      return false
+      console.error('Error in validateAgainstBlockchain(): ', err.message)
+      // Throw error?
+      throw err
     }
   }
 
@@ -274,8 +307,12 @@ class PayToWriteAccessController extends AccessController {
 
       return isValid
     } catch (err) {
-      console.error('Error in _valideTx: ', err)
-      return false
+      console.error('Error in _validateTx: ', err.message)
+      // return false
+
+      // Throw an error rather than return false. This will pass rate-limit
+      // errors to the retry logic.
+      throw err
     }
   }
 
@@ -317,6 +354,7 @@ class PayToWriteAccessController extends AccessController {
       return isValid
     } catch (err) {
       console.error('Error in _validateSignature ')
+      if (err.error) throw new Error(err.error)
       throw err
     }
   }
