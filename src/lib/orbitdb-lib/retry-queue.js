@@ -1,9 +1,12 @@
 /*
-  This library leverages the p-retry and p-queue libraries, to created a
+  This library leverages the p-retry and p-queue libraries, to create a
   validation queue with automatic retry.
-  New nodes connecting will attempt to rapidly validate a lot of entries.
+
+  New nodes syncing will attempt to rapidly validate a lot of entries.
   A promise-based queue allows this to happen while respecting rate-limits
   of the blockchain service provider.
+
+  pay-to-write-access-controller.js depends on this library.
 */
 
 const PQueue = require('p-queue').default
