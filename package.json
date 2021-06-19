@@ -48,6 +48,7 @@
     "mongoose": "^5.11.15",
     "nodemailer": "^6.4.17",
     "orbit-db": "^0.26.1",
+    "p-queue": "^6.6.2",
     "passport-local": "^1.0.0",
     "uuid": "^8.3.2",
     "winston": "^3.3.3",
