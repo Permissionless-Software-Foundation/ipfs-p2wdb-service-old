@@ -283,6 +283,7 @@ class PayToWriteAccessController extends AccessController {
     } catch (err) {
       console.error('Error in validateAgainstBlockchain(): ', err)
       // Throw error?
+      throw err
     }
   }
 
