@@ -6,7 +6,7 @@
 
 P2WDB is an acronym for pay-to-write database. It's a peer-to-peer (p2p) databse that operates similarly to a blockchain. It solves two growing problems in the blockchain space:
 
-- **On-chain data** - Blockchains can be thought of as censorship resistant databases. They are great at censorship resistance, but they are really bad at being databases. On-chain data 'bloat' or 'state management' is one of the hardest scaling problems in the blockchain space. The P2WDB helps blockchains scale by proving a place to move data off-chain, but still be able to access that data on-chain.
+- **On-chain data** - Blockchains can be thought of as censorship resistant databases. They are great at censorship resistance, but they are really bad at being databases. On-chain data 'bloat' or 'state management' is one of the hardest scaling problems in the blockchain space. The P2WDB helps blockchains scale by providing a place to move data off-chain, but still be able to access that data on-chain.
 
 - **Cross-chain communication** - Blockchains are like islands or silos. They are isolated from one another and can not easily communicate with one another. This leads to tribalism and a mentality of a zero-sum game. The P2WDB is a cross-chain communication medium. An event on one chain can be communicated and effect a smart contract on another chain.
 
@@ -22,7 +22,7 @@ The architecture of the database is broken up into three major sections:
 
 There are three primary communication interfaces for a P2WDB:
 
-- **REST API over HTTP** is the modern way that web 2.0 apps communicate with one another. It's fast and efficient, but it's also centralized and easy to censor. It's important to provide this interface so that the P2WDB can be accessed by any web apps or phone apps.
+- **REST API over HTTP** is the modern way that web 2.0 apps communicate with one another. It's fast and efficient, but it's also centralized and easy to censor. It's important to provide this interface so that the P2WDB can be accessed by web apps or phone apps.
 
 - **JSON RPC over IPFS** is a censorship resistant replacement for the REST API. It's a little slower, but this interface can be accessed by web apps and phone apps while being able to easily tunnel through firewalls and thereby prevent attempts at censorship.
 
@@ -30,7 +30,7 @@ There are three primary communication interfaces for a P2WDB:
 
 ### P2WDB Architecture
 
-Each blockchain will have its own P2WDB instance that is specific to that blockchain. The local P2WDB can be written to by providing a proof-of-burn on that blockchain. A proof-of-burn is simply a transaction ID (TXID), where a specific quantity of a specific token was burned in that transaction. That is the 'ticket' that lets a user write new data to the database. Anyone can read from the database.
+Each blockchain will have its own P2WDB instance that is specific to that blockchain. The local P2WDB can be written-to by providing a proof-of-burn on that blockchain. A proof-of-burn is simply a transaction ID (TXID), where a specific quantity of a specific token (e.g. 0.01 [PSF tokens](https://psfoundation.cash)) was burned in that transaction. That is the 'ticket' that lets a user write new data to the database. Anyone can read from the database.
 
 All the local P2WDBs will feed into a global P2WDB, which will be blockchain agnostic. This does not require any effort on the users part. Any data written to a local P2WDB will be automatically added to the global P2WDB. In this way, the P2WDB can function as a cross-blockchain communication medium and data provider.
 
@@ -38,7 +38,9 @@ All the local P2WDBs will feed into a global P2WDB, which will be blockchain agn
 
 Because the P2WDB is based on [IPFS](https://ipfs.io) and [OrbitDB](https://orbitdb.org/), anyone at any time can backup the database onto [Filecoin](https://filecoin.io). 'Official' snapshots will be taken once every three months.
 
-Smaller databases make decentralization and censorship resistance better. For this reason, future plans include creating a new global P2WDB every year. Previous years databases will be backed up on Filecoin, with access over IPFS. Archival access will be a secondary service.
+Smaller databases make decentralization and censorship resistance better. For this reason, future plans include the creation of a new global P2WDB every year. Previous years databases will be backed up on Filecoin, with access over IPFS. Archival access will be a secondary service.
+
+Keeping the P2WDB small and nimble ensures it's easy to replicate by many service providers. The more service providers participating in the ecosystem, the more censorship resistant the data becomes.
 
 ## About This Repository
 
