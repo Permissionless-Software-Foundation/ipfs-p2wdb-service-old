@@ -21,11 +21,15 @@ const SERVER = 'http://localhost:5001/p2wdb'
 // const SERVER = 'http://192.168.0.76:5001/p2wdb'
 // const SERVER = 'https://p2wdb.fullstackcash.nl/p2wdb'
 
+const now = new Date()
+
 const dataObj = {
   appId: 'test',
   title: Math.floor(Math.random() * 100000).toString(),
   sourceUrl: Math.floor(Math.random() * 100000).toString(),
-  ipfsUrl: Math.floor(Math.random() * 100000).toString()
+  ipfsUrl: Math.floor(Math.random() * 100000).toString(),
+  timestamp: now.toISOString(),
+  localTimestamp: now.toLocaleString()
 }
 console.log(
   `Adding this object to the P2WDB: ${JSON.stringify(dataObj, null, 2)}`
