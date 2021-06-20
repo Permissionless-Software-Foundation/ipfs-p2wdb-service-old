@@ -127,6 +127,7 @@ class PayToWriteDB {
   }
 
   // Write an entry to the database. Returns true or false to indicate success or failure.
+  // This method is called by the REST or RPC interface.
   async write (writeObj) {
     try {
       const { key, signature, message, data } = writeObj
@@ -171,14 +172,22 @@ class PayToWriteDB {
       const hash = await this.db.put(key, dbKeyValue)
       console.log('hash: ', hash)
 
-      // Add the entry to the MongoDB if it passed the OrbitDB checks.
+      // Create a key-value object to add to MongoDB and pass back to the user.
       const kvObj = {
         hash,
         key,
-        value: dbKeyValue
+        value: dbKeyValue,
+        isValid: true
       }
-      const keyValue = new this.KeyValue(kvObj)
-      await keyValue.save()
+
+      // Add the entry to the MongoDB if it doesn't already exist.
+      // TODO: I think this whole block can be removed? I think it's handled
+      // by the markValid() method in the ACL.
+      const mongoRes2 = await this.KeyValue.find({ key })
+      if (mongoRes2.length === 0) {
+        const keyValue = new this.KeyValue(kvObj)
+        await keyValue.save()
+      }
 
       kvObj.success = true
 
