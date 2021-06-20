@@ -127,6 +127,7 @@ class PayToWriteDB {
   }
 
   // Write an entry to the database. Returns true or false to indicate success or failure.
+  // This method is called by the REST or RPC interface.
   async write (writeObj) {
     try {
       const { key, signature, message, data } = writeObj

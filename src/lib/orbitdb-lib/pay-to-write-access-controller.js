@@ -163,7 +163,7 @@ class PayToWriteAccessController extends AccessController {
   // to the existing peer databases while respecting rate limits.
   async canAppend (entry, identityProvider) {
     try {
-      // console.log('canAppend entry: ', entry)
+      console.log('canAppend entry: ', entry)
 
       let validTx = false
 
@@ -208,7 +208,18 @@ class PayToWriteAccessController extends AccessController {
         _this.validateAgainstBlockchain,
         inputObj
       )
-      console.log(`Validation for TXID ${txid} completed.`)
+      console.log(`Validation for TXID ${txid} completed. Result: ${validTx}`)
+
+      // If the entry passed validation, save the entry to the MongoDB.
+      // But only if the entry has a 'hash' value.
+      // - has hash value: entry is being replicated from a peer
+      // - no hash value: entry came in from a user of this node via REST or RPC.
+      if (validTx && entry.hash) {
+        inputObj.data = dbData
+        inputObj.hash = entry.hash
+
+        await _this.markValid(inputObj)
+      }
 
       return validTx
     } catch (err) {
@@ -217,6 +228,39 @@ class PayToWriteAccessController extends AccessController {
         err
       )
       return false
+    }
+  }
+
+  // Add a valid TXID to the database. This is used to add entries that were
+  // passed to this node by a peer, replicating the OrbitDB. This is in
+  // contrast to a user submitting a new entry via REST or RPC.
+  async markValid (inputObj) {
+    try {
+      console.log(
+        `markValid called with this data: ${JSON.stringify(inputObj, null, 2)}`
+      )
+      const { txid, signature, message, data, hash } = inputObj
+
+      // Exit quietly if this entry has already been created in the MongoDB.
+      const mongoRes = await this.KeyValue.find({ key: txid })
+      if (mongoRes.length > 0) return
+
+      // Add the entry to the MongoDB if it passed the OrbitDB checks.
+      const kvObj = {
+        hash,
+        key: txid,
+        value: {
+          signature,
+          message,
+          data
+        },
+        isValid: true
+      }
+      const keyValue = new this.KeyValue(kvObj)
+      await keyValue.save()
+    } catch (err) {
+      console.error('Error in markValid()')
+      throw err
     }
   }
 
