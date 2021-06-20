@@ -175,7 +175,8 @@ class PayToWriteDB {
       const kvObj = {
         hash,
         key,
-        value: dbKeyValue
+        value: dbKeyValue,
+        isValid: true
       }
       const keyValue = new this.KeyValue(kvObj)
       await keyValue.save()
