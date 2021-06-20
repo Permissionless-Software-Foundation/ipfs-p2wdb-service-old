@@ -69,5 +69,9 @@ module.exports = {
 
   // IPFS Ports
   ipfsTcpPort: 5668,
-  ipfsWsPort: 5669
+  ipfsWsPort: 5669,
+
+  // IPNS hash to get the latest config info.
+  // Not currently implemented.
+  ipnsConfig: 'QmTtXA18C6sg3ji9zem4wpNyoz9m4UZT85mA2D2jx2gzEk'
 }
