@@ -2,29 +2,29 @@ const CONTROLLER = require('./controller')
 const controller = new CONTROLLER()
 
 // ptwdb = pay to write DB
-module.exports.baseUrl = '/ptwdb'
+module.exports.baseUrl = '/p2wdb'
 
 module.exports.routes = [
   {
     method: 'POST',
     route: '/',
     handlers: [controller.writeToDb]
-  },
+  }
   // {
   //   method: 'POST',
   //   route: '/webhook',
   //   handler: [controller.createWebhook]
   // },
-  {
-    method: 'GET',
-    route: '/',
-    handlers: [controller.readAll]
-  },
-  {
-    method: 'GET',
-    route: '/:hash',
-    handlers: [controller.readEntry]
-  }
+  // {
+  //   method: 'GET',
+  //   route: '/',
+  //   handlers: [controller.readAll]
+  // },
+  // {
+  //   method: 'GET',
+  //   route: '/:hash',
+  //   handlers: [controller.readEntry]
+  // }
 
   // {
   //   method: 'PUT',

@@ -56,6 +56,10 @@ async function startServer () {
   const modules = require('../src/modules')
   modules(app)
 
+  // Use Clean Architecture Controllers.
+  const controllers = require('../src/controllers')
+  controllers(app)
+
   // Enable CORS for testing
   // THIS IS A SECURITY RISK. COMMENT OUT FOR PRODUCTION
   app.use(cors({ origin: '*' }))
