@@ -11,6 +11,11 @@ module.exports.routes = [
     handlers: [controller.writeToDb]
   },
   {
+    method: 'POST',
+    route: '/webhook',
+    handler: [controller.createWebhook]
+  },
+  {
     method: 'GET',
     route: '/',
     handlers: [controller.readAll]
@@ -20,6 +25,7 @@ module.exports.routes = [
     route: '/:hash',
     handlers: [controller.readEntry]
   }
+
   // {
   //   method: 'PUT',
   //   route: '/:id',

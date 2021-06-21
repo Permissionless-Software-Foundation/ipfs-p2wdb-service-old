@@ -101,6 +101,19 @@ class PTWDBController {
       ctx.throw(422, err.message)
     }
   }
+
+  // Create a webhook.
+  // This is very simple, and just a prototype. Not ready for production.
+  createWebhook (ctx) {
+    try {
+      ctx.body = {
+        success: true,
+        data: 'not implemented yet'
+      }
+    } catch (err) {
+      ctx.throw(422, err.message)
+    }
+  }
 }
 
 module.exports = PTWDBController
