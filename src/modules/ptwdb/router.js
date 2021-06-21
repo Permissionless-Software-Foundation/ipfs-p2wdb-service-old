@@ -10,11 +10,11 @@ module.exports.routes = [
     route: '/',
     handlers: [controller.writeToDb]
   },
-  {
-    method: 'POST',
-    route: '/webhook',
-    handler: [controller.createWebhook]
-  },
+  // {
+  //   method: 'POST',
+  //   route: '/webhook',
+  //   handler: [controller.createWebhook]
+  // },
   {
     method: 'GET',
     route: '/',
