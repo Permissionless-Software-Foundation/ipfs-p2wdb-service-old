@@ -6,7 +6,7 @@
 
 const DBEntry = require('../entities/db-entry')
 
-class WriteEntry {
+class AddEntry {
   constructor (localConfig = {}) {
     this.p2wdb = localConfig.p2wdb
     this.localDb = localConfig.localDb
@@ -15,7 +15,7 @@ class WriteEntry {
     this.dbEntry = new DBEntry()
   }
 
-  async addEntry (rawData) {
+  async add (rawData) {
     try {
       // Generate a validated entry by passing the raw data through input validation.
       const entry = this.dbEntry.makeEntry(rawData)
@@ -40,4 +40,4 @@ class WriteEntry {
   }
 }
 
-module.exports = WriteEntry
+module.exports = AddEntry

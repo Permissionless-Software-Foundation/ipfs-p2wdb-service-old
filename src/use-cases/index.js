@@ -1,6 +1,10 @@
-// const WriteEntry = require('./write-entry')
-//
-// const writeEntry = new WriteEntry({
-//   p2wdb: () => {},
-//   localdb: () => {}
-// })
+const AddEntry = require('./add-entry')
+
+const addEntry = new AddEntry({
+  p2wdb: () => {},
+  localdb: () => {}
+})
+
+module.exports = {
+  addEntry
+}
