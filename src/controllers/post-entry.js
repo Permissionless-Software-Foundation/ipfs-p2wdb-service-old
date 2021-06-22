@@ -9,7 +9,7 @@ class PostEntry {
     if (!this.addEntry) throw new Error('add-entry use case required.')
   }
 
-  addEntry (ctx) {
+  restController (ctx) {
     try {
       const body = ctx.request.body
       console.log('body: ', body)

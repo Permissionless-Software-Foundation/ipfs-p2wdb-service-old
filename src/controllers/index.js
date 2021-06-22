@@ -10,10 +10,10 @@ const Router = require('koa-router')
 // Load the Clean Architecture Use Case libraries.
 const useCases = require('../use-cases')
 
-// Load the REST API controllers.
+// Load the REST API Controllers.
 const PostEntry = require('./post-entry')
 
-module.exports = function attachControllers (app) {
+module.exports = function attachRESTControllers (app) {
   const baseUrl = '/temp'
   const router = new Router({ prefix: baseUrl })
 
@@ -30,7 +30,7 @@ module.exports = function attachControllers (app) {
 
   // curl -H "Content-Type: application/json" -X POST -d '{ "user": "test" }' localhost:5001/temp/write
   router.post('/write', (ctx, next) => {
-    postEntry.addEntry(ctx)
+    postEntry.restController(ctx)
   })
 
   // Attach the Controller routes to the Koa app.
