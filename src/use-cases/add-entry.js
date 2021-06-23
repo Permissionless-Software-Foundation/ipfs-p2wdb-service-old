@@ -30,7 +30,7 @@ class AddEntry {
     _this = this
   }
 
-  async add (rawData) {
+  async addUserEntry (rawData) {
     try {
       // Generate a validated entry by passing the raw data through input validation.
       const entry = _this.dbEntry.makeUserEntry(rawData)
@@ -54,6 +54,26 @@ class AddEntry {
       console.error('Error in addEntry.add()')
       throw err
     }
+  }
+
+  async addPeerEntry (peerData) {
+    console.log('Entering addPeerEntry() with this data: ', peerData)
+
+    const entry = _this.dbEntry.makePeerEntry(peerData)
+
+    // Throw an error if the entry already exists.
+    const exists = await _this.localdb.doesEntryExist(entry)
+    if (exists) {
+      throw new Error('Entry already exists in the database.')
+    }
+
+    // The entry already exists in the P2WDB OrbitDB, so nothing needs to be
+    // done on that front.
+
+    // Add the entry to the local database (Mongo).
+    await _this.localdb.insert(entry)
+
+    return true
   }
 }
 

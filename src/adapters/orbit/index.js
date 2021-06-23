@@ -7,6 +7,7 @@ const OrbitDB = require('orbit-db')
 
 // Local libraries
 const config = require('../../../config')
+const validationEvent = require('./validation-event')
 // const wlogger = require('../wlogger')
 // const KeyValue = require('../../models/key-value')
 
@@ -17,7 +18,7 @@ AccessControllers.addAccessController({
   AccessController: PayToWriteAccessController
 })
 
-let _this
+// let _this
 
 class OrbitDBAdapter {
   constructor (localConfig = {}) {
@@ -31,12 +32,13 @@ class OrbitDBAdapter {
 
     // Encapsulate dependencies
     this.config = config
+    this.validationEvent = validationEvent
 
     // Properties of this class instance.
     this.db = {} // Instance of OrbitDB.
     this.isReady = false
 
-    _this = this
+    // _this = this
   }
 
   // A wrapper to start OrbitDB.
@@ -86,33 +88,11 @@ class OrbitDBAdapter {
       // the node needs to replicate it. This event is also triggered repeatedly
       // when a new node enters the network and synces their local database
       // to their peers.
-      this.db.events.on('replicate', this.handleReplicateEvent)
+      // this.db.events.on('replicate', this.handleReplicateEvent)
 
-      this.db.events.on('replicated', (address, blah1, blah2) => {
-        console.log('replcated event handler triggered')
-        console.log('address: ', address)
-        console.log('blah1: ', blah1)
-        console.log('blah2: ', blah2)
-      })
-
-      this.db.events.on(
-        'replicate.progress',
-        (address, hash, entry, progress, have) => {
-          console.log('replicate.progress event handler triggered')
-          console.log('address: ', address)
-          console.log('hash: ', hash)
-          console.log('entry: ', entry)
-          console.log('progress: ', progress)
-          console.log('have: ', have)
-        }
-      )
-
-      this.db.events.on('write', (address, entry, heads) => {
-        console.log('write event handler triggered')
-        console.log('address: ', address)
-        console.log('heads: ', heads)
-        console.log('entry: ', entry)
-      })
+      // validationEvent.on('ValidationSucceeded', function (data) {
+      //   console.log('ValidationSucceeded event triggered. Data: ', data)
+      // })
 
       // Signal that the OrbitDB is ready to use.
       this.isReady = true
@@ -125,22 +105,22 @@ class OrbitDBAdapter {
   }
 
   // The event handler.
-  handleReplicateEvent (address, entry) {
-    try {
-      console.log('replicate event fired')
-      console.log('replicate address: ', address)
-      console.log('replicate entry: ', entry)
-
-      const data = _this.db.get(entry)
-      console.log('entry data: ', data)
-
-      const all = _this.db.all
-      console.log('all entries: ', all)
-    } catch (err) {
-      // Top-level function. Do not throw an error.
-      console.error('Error in handleReplicateEvent(): ', err)
-    }
-  }
+  // handleReplicateEvent (address, entry) {
+  //   try {
+  //     console.log('replicate event fired')
+  //     console.log('replicate address: ', address)
+  //     console.log('replicate entry: ', entry)
+  //
+  //     const data = _this.db.get(entry)
+  //     console.log('entry data: ', data)
+  //
+  //     const all = _this.db.all
+  //     console.log('all entries: ', all)
+  //   } catch (err) {
+  //     // Top-level function. Do not throw an error.
+  //     console.error('Error in handleReplicateEvent(): ', err)
+  //   }
+  // }
 
   // Read all entries in the OrbitDB.
   readAll () {

@@ -16,6 +16,7 @@ const config = require('../../../config')
 const ensureAddress = require('./ensure-ac-address')
 const KeyValue = require('../../models/key-value')
 const RetryQueue = require('./retry-queue')
+const validationEvent = require('./validation-event')
 // const Webhook = require('./webhook')
 
 let _this
@@ -212,7 +213,7 @@ class PayToWriteAccessController extends AccessController {
       )
       console.log(`Validation for TXID ${txid} completed. Result: ${validTx}`)
 
-      // If the entry passed validation, save the entry to the MongoDB.
+      // If the entry passed validation, trigger an event.
       // But only if the entry has a 'hash' value.
       // - has hash value: entry is being replicated from a peer
       // - no hash value: entry came in from a user of this node via REST or RPC.
@@ -220,11 +221,7 @@ class PayToWriteAccessController extends AccessController {
         inputObj.data = dbData
         inputObj.hash = entry.hash
 
-        // Add the valid entry to the MongoDB.
-        // await _this.markValid(inputObj)
-
-        // Trigger a webhook if this new entry matches a filter.
-        // await _this.webhook.triggerHooks(inputObj)
+        validationEvent.emit('ValidationSucceeded', inputObj)
       }
 
       return validTx

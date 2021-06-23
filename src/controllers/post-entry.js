@@ -19,7 +19,7 @@ class PostEntry {
       const writeObj = { txid, signature, message, data }
       console.log(`body data: ${JSON.stringify(writeObj, null, 2)}`)
 
-      const hash = await this.addEntry.add(writeObj)
+      const hash = await this.addEntry.addUserEntry(writeObj)
 
       ctx.body = {
         success: true,

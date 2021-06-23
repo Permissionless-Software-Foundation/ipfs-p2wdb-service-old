@@ -44,8 +44,30 @@ class DBEntry {
   }
 
   // Make a new P2WDB entry based on a replication event from data added by a
-  // peer database on the network
-  // makePeerEntry() {}
+  // peer database on the network.
+  // It's assumed this method is triggered by the 'ValidationSucceeded' event,
+  // so it's assumed the data is valid.
+  makePeerEntry ({ txid, signature, message, data, hash } = {}) {
+    const key = txid
+    const value = {
+      message,
+      signature,
+      data
+    }
+
+    // It's assumed this entry is valid, since this method should only be
+    // triggered by the 'ValidationSucceeded' event.
+    const isValid = true
+
+    const entry = {
+      hash,
+      key,
+      value,
+      isValid
+    }
+
+    return entry
+  }
 }
 
 module.exports = DBEntry
