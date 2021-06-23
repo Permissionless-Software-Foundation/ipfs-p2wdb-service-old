@@ -12,7 +12,7 @@
 */
 
 const IpfsAdapters = require('../ipfs')
-const OribitAdapter = require('../orbitdb')
+const OribitAdapter = require('../orbit')
 
 let _this
 
