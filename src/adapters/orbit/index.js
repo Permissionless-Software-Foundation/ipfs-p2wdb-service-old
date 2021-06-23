@@ -17,6 +17,8 @@ AccessControllers.addAccessController({
   AccessController: PayToWriteAccessController
 })
 
+let _this
+
 class OrbitDBAdapter {
   constructor (localConfig = {}) {
     // Input Validation
@@ -33,6 +35,8 @@ class OrbitDBAdapter {
     // Properties of this class instance.
     this.db = {} // Instance of OrbitDB.
     this.isReady = false
+
+    _this = this
   }
 
   // A wrapper to start OrbitDB.
@@ -101,10 +105,10 @@ class OrbitDBAdapter {
       console.log('replicate address: ', address)
       console.log('replicate entry: ', entry)
 
-      const data = this.db.get(entry)
+      const data = _this.db.get(entry)
       console.log('entry data: ', data)
 
-      const all = this.db.all
+      const all = _this.db.all
       console.log('all entries: ', all)
     } catch (err) {
       // Top-level function. Do not throw an error.

@@ -23,8 +23,8 @@ const bodyData = {
 //     '{"appId":"test","title":"48127","sourceUrl":"79563","ipfsUrl":"80977","timestamp":"2021-06-23T18:34:20.233Z","localTimestamp":"6/23/2021, 11:34:20 AM"}'
 // }
 
-const SERVER = 'http://localhost:5001/temp/write'
-// const SERVER = 'http://192.168.0.76:5001/p2wdb'
+// const SERVER = 'http://localhost:5001/temp/write'
+const SERVER = 'http://192.168.0.76:5001/temp/write'
 // const SERVER = 'https://p2wdb.fullstackcash.nl/p2wdb'
 
 async function burnAndWrite () {
