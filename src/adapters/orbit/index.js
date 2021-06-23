@@ -88,6 +88,32 @@ class OrbitDBAdapter {
       // to their peers.
       this.db.events.on('replicate', this.handleReplicateEvent)
 
+      this.db.events.on('replicated', (address, blah1, blah2) => {
+        console.log('replcated event handler triggered')
+        console.log('address: ', address)
+        console.log('blah1: ', blah1)
+        console.log('blah2: ', blah2)
+      })
+
+      this.db.events.on(
+        'replicate.progress',
+        (address, hash, entry, progress, have) => {
+          console.log('replicate.progress event handler triggered')
+          console.log('address: ', address)
+          console.log('hash: ', hash)
+          console.log('entry: ', entry)
+          console.log('progress: ', progress)
+          console.log('have: ', have)
+        }
+      )
+
+      this.db.events.on('write', (address, entry, heads) => {
+        console.log('write event handler triggered')
+        console.log('address: ', address)
+        console.log('heads: ', heads)
+        console.log('entry: ', entry)
+      })
+
       // Signal that the OrbitDB is ready to use.
       this.isReady = true
 
