@@ -9,16 +9,25 @@ class PostEntry {
     if (!this.addEntry) throw new Error('add-entry use case required.')
   }
 
-  restController (ctx) {
+  async restController (ctx) {
     try {
-      const body = ctx.request.body
-      console.log('body: ', body)
+      const txid = ctx.request.body.txid
+      const signature = ctx.request.body.signature
+      const message = ctx.request.body.message
+      const data = ctx.request.body.data
+
+      const writeObj = { txid, signature, message, data }
+      console.log(`body data: ${JSON.stringify(writeObj, null, 2)}`)
+
+      const hash = await this.addEntry.add(writeObj)
 
       ctx.body = {
-        success: true
+        success: true,
+        hash
       }
     } catch (err) {
-      ctx.throw(422, err.message)
+      console.log('Error in post-entry.js/restController(): ', err)
+      throw err
     }
   }
 }

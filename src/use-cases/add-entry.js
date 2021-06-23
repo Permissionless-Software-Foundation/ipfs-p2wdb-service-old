@@ -6,31 +6,46 @@
 
 const DBEntry = require('../entities/db-entry')
 
+let _this
+
 class AddEntry {
   constructor (localConfig = {}) {
+    if (!localConfig.p2wdb) {
+      throw new Error(
+        'p2wdb instance must be included when instantiating AddEntry'
+      )
+    }
     this.p2wdb = localConfig.p2wdb
-    this.localDb = localConfig.localDb
+
+    if (!localConfig.localdb) {
+      throw new Error(
+        'localdb instance must be included when instantiating AddEntry'
+      )
+    }
+    this.localdb = localConfig.localdb
 
     // Encapsulate dependencies.
     this.dbEntry = new DBEntry()
+
+    _this = this
   }
 
   async add (rawData) {
     try {
       // Generate a validated entry by passing the raw data through input validation.
-      const entry = this.dbEntry.makeEntry(rawData)
+      const entry = _this.dbEntry.makeEntry(rawData)
 
       // Throw an error if the entry already exists.
-      const exists = await this.localDb.doesEntryExist(entry)
+      const exists = await _this.localdb.doesEntryExist(entry)
       if (exists) {
         throw new Error('Entry already exists in the database.')
       }
 
       // Add the entry to the P2WDB OrbitDB.
-      const hash = await this.p2wdb.insert(entry)
+      const hash = await _this.p2wdb.insert(entry)
 
       // Add the entry to the local database (Mongo).
-      await this.localDb.insert(entry)
+      await _this.localdb.insert(entry)
 
       return hash
     } catch (err) {

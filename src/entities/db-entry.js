@@ -6,17 +6,26 @@
 class DBEntry {
   // constructor (localConfig) {}
 
-  makeEntry ({ hash, key, value, isValid = false } = {}) {
+  makeEntry ({ hash, txid, data, signature, message, isValid = false } = {}) {
     // if (!hash || typeof hash !== 'string') {
     //   throw new Error('Entry requires OrbitDB hash string.')
     // }
 
-    if (!key || typeof key !== 'string') {
-      throw new Error('Entry key must be a TXID string of proof-of-burn.')
+    if (!txid || typeof txid !== 'string') {
+      throw new Error(
+        'TXID must be a string containing a transaction ID of proof-of-burn.'
+      )
     }
 
-    if (!value) {
-      throw new Error('Entry requires an value property.')
+    if (!data) {
+      throw new Error('Entry requires an data property.')
+    }
+
+    const key = txid
+    const value = {
+      message,
+      signature,
+      data
     }
 
     const entry = {

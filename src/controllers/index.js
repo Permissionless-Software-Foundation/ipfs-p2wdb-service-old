@@ -29,8 +29,13 @@ module.exports = function attachRESTControllers (app) {
   })
 
   // curl -H "Content-Type: application/json" -X POST -d '{ "user": "test" }' localhost:5001/temp/write
-  router.post('/write', (ctx, next) => {
-    postEntry.restController(ctx)
+  router.post('/write', async (ctx, next) => {
+    try {
+      await postEntry.restController(ctx)
+    } catch (err) {
+      // console.error('Error in POST /temp/write controller')
+      ctx.throw(422, err.message)
+    }
   })
 
   // Attach the Controller routes to the Koa app.

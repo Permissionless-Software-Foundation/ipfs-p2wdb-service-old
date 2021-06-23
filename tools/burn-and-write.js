@@ -17,7 +17,7 @@ const MESSAGE = 'test'
 const SIGNATURE =
   'IA8LCUnN6TUocSGnCe9nA1T4D+9hurJJ0vi3vBEJvAVwFfGcZ9ZlIWdR1m30wAxO4r0wb3YSzrM3QynpfgKUW/w='
 
-const SERVER = 'http://localhost:5001/p2wdb'
+const SERVER = 'http://localhost:5001/temp/write'
 // const SERVER = 'http://192.168.0.76:5001/p2wdb'
 // const SERVER = 'https://p2wdb.fullstackcash.nl/p2wdb'
 
@@ -193,14 +193,17 @@ async function burnAndWrite () {
     // Sleep for 5 seconds.
     await bchjs.Util.sleep(5000)
 
-    // Submit the txid as proof-of-burn to write data to the database.
-    const result = await axios.post(SERVER, {
+    const bodyData = {
       // const result = await axios.post('https://p2wdb.fullstackcash.nl/p2wdb', {
       txid: txidStr[0],
       message: MESSAGE,
       signature: SIGNATURE,
       data: JSON.stringify(dataObj)
-    })
+    }
+    console.log(`bodyData: ${JSON.stringify(bodyData, null, 2)}`)
+
+    // Submit the txid as proof-of-burn to write data to the database.
+    const result = await axios.post(SERVER, bodyData)
     console.log(`Response from API: ${JSON.stringify(result.data, null, 2)}`)
   } catch (err) {
     console.error('Error in burnTokens: ', err)
