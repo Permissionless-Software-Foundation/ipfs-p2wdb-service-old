@@ -9,7 +9,7 @@ const mongoose = require('mongoose')
 // const config = require('../../config')
 
 const KeyValue = new mongoose.Schema({
-  hash: { type: String },
+  hash: { type: String, required: true },
   key: { type: String }, // BCH TXID
   value: { type: Object },
   isValid: { type: Boolean, default: false }

@@ -33,7 +33,7 @@ class AddEntry {
   async add (rawData) {
     try {
       // Generate a validated entry by passing the raw data through input validation.
-      const entry = _this.dbEntry.makeEntry(rawData)
+      const entry = _this.dbEntry.makeUserEntry(rawData)
 
       // Throw an error if the entry already exists.
       const exists = await _this.localdb.doesEntryExist(entry)
@@ -43,13 +43,15 @@ class AddEntry {
 
       // Add the entry to the P2WDB OrbitDB.
       const hash = await _this.p2wdb.insert(entry)
+      entry.hash = hash
+      entry.isValid = true
 
       // Add the entry to the local database (Mongo).
       await _this.localdb.insert(entry)
 
       return hash
     } catch (err) {
-      console.error('Error in addEntry()')
+      console.error('Error in addEntry.add()')
       throw err
     }
   }
