@@ -57,7 +57,7 @@ class AddEntry {
   }
 
   async addPeerEntry (peerData) {
-    console.log('Entering addPeerEntry() with this data: ', peerData)
+    // console.log('Entering addPeerEntry() with this data: ', peerData)
 
     const entry = _this.dbEntry.makePeerEntry(peerData)
 
