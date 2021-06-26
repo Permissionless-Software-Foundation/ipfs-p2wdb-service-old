@@ -18,10 +18,6 @@ class IpfsAdapter {
     // Properties of this class instance.
     this.isReady = false
     this.config = config
-
-    // Start the IPFS node. this.ipfs will be a promise that resolves to an
-    // instance of an IPFS node.
-    // this.ipfs = this.start() // Will be replaced by instance of IPFS.
   }
 
   // Start an IPFS node.
