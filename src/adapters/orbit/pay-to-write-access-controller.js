@@ -22,7 +22,7 @@ const validationEvent = require('./validation-event')
 let _this
 
 class PayToWriteAccessController extends AccessController {
-  constructor (orbitdb, options) {
+  constructor(orbitdb, options) {
     super()
     this._orbitdb = orbitdb
     this._db = null
@@ -39,18 +39,18 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // Returns the type of the access controller
-  static get type () {
+  static get type() {
     return 'payToWrite'
   }
 
   // Returns the address of the OrbitDB used as the AC.
   // No test coverage as this is copied directly from OrbitDB ACL.
-  get address () {
+  get address() {
     return this._db.address
   }
 
   // No test coverage as this is copied directly from OrbitDB ACL.
-  get capabilities () {
+  get capabilities() {
     if (this._db) {
       const capabilities = this._db.index
 
@@ -79,16 +79,17 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // No test coverage as this is copied directly from OrbitDB ACL.
-  get (capability) {
+  get(capability) {
     return this.capabilities[capability] || new Set([])
   }
 
   // No test coverage as this is copied directly from OrbitDB ACL.
-  async close () {
+  async close() {
     await this._db.close()
   }
 
-  async load (address) {
+  // No test coverage as this is copied directly from OrbitDB ACL.
+  async load(address) {
     if (this._db) {
       await this._db.close()
     }
@@ -111,7 +112,7 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // No test coverage as this is copied directly from OrbitDB ACL.
-  async save () {
+  async save() {
     // return the manifest data
     return {
       address: this._db.address.toString()
@@ -119,7 +120,7 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // No test coverage as this is copied directly from OrbitDB ACL.
-  async grant (capability, key) {
+  async grant(capability, key) {
     // Merge current keys with the new key
     const capabilities = new Set([
       ...(this._db.get(capability) || []),
@@ -129,7 +130,7 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // No test coverage as this is copied directly from OrbitDB ACL.
-  async revoke (capability, key) {
+  async revoke(capability, key) {
     const capabilities = new Set(this._db.get(capability) || [])
     capabilities.delete(key)
     if (capabilities.size > 0) {
@@ -140,12 +141,14 @@ class PayToWriteAccessController extends AccessController {
   }
 
   /* Private methods */
-  _onUpdate () {
+  // No test coverage as this is copied directly from OrbitDB ACL.
+  _onUpdate() {
     this.emit('updated')
   }
 
   /* Factory */
-  static async create (orbitdb, options = {}) {
+  // No test coverage as this is copied directly from OrbitDB ACL.
+  static async create(orbitdb, options = {}) {
     const ac = new PayToWriteAccessController(orbitdb, options)
     await ac.load(
       options.address || options.name || 'default-access-controller'
@@ -160,11 +163,11 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // Return true if entry is allowed to be added to the database
-  // This function needs to implement a queue with retry. It will very
+  // This function implements a queue with retry. It will very
   // quickly exhaust the rate limits of FullStack.cash or whatever blockchain
-  // service provider it's using. A retry queue would allow a new node sync
+  // service provider it's using. A retry queue allows a new node to sync
   // to the existing peer databases while respecting rate limits.
-  async canAppend (entry, identityProvider) {
+  async canAppend(entry, identityProvider) {
     try {
       // console.log('canAppend entry: ', entry)
 
@@ -195,11 +198,6 @@ class PayToWriteAccessController extends AccessController {
         // Return the previously saved validation result.
         const isValid = mongoRes[0].isValid
         return isValid
-
-        // if (mongoKey === txid) {
-        //   // Entry is already in the database.
-        //   return true
-        // }
       }
 
       // Validate the TXID against the blockchain; use a queue with automatic retry.
@@ -237,39 +235,39 @@ class PayToWriteAccessController extends AccessController {
   // Add a valid TXID to the database. This is used to add entries that were
   // passed to this node by a peer, replicating the OrbitDB. This is in
   // contrast to a user submitting a new entry via REST or RPC.
-  async markValid (inputObj) {
-    try {
-      console.log(
-        `markValid called with this data: ${JSON.stringify(inputObj, null, 2)}`
-      )
-      const { txid, signature, message, data, hash } = inputObj
-
-      // Exit quietly if this entry has already been created in the MongoDB.
-      const mongoRes = await this.KeyValue.find({ key: txid })
-      if (mongoRes.length > 0) return
-
-      // Add the entry to the MongoDB if it passed the OrbitDB checks.
-      const kvObj = {
-        hash,
-        key: txid,
-        value: {
-          signature,
-          message,
-          data
-        },
-        isValid: true
-      }
-      const keyValue = new this.KeyValue(kvObj)
-      await keyValue.save()
-    } catch (err) {
-      console.error('Error in markValid()')
-      throw err
-    }
-  }
+  // async markValid(inputObj) {
+  //   try {
+  //     console.log(
+  //       `markValid called with this data: ${JSON.stringify(inputObj, null, 2)}`
+  //     )
+  //     const { txid, signature, message, data, hash } = inputObj
+  //
+  //     // Exit quietly if this entry has already been created in the MongoDB.
+  //     const mongoRes = await this.KeyValue.find({ key: txid })
+  //     if (mongoRes.length > 0) return
+  //
+  //     // Add the entry to the MongoDB if it passed the OrbitDB checks.
+  //     const kvObj = {
+  //       hash,
+  //       key: txid,
+  //       value: {
+  //         signature,
+  //         message,
+  //         data
+  //       },
+  //       isValid: true
+  //     }
+  //     const keyValue = new this.KeyValue(kvObj)
+  //     await keyValue.save()
+  //   } catch (err) {
+  //     console.error('Error in markValid()')
+  //     throw err
+  //   }
+  // }
 
   // This is an async wrapper function. It wraps all other logic for validating
   // a new entry and it's proof-of-burn against the blockchain.
-  async validateAgainstBlockchain (inputObj) {
+  async validateAgainstBlockchain(inputObj) {
     const { txid, signature, message } = inputObj
 
     try {
@@ -310,7 +308,7 @@ class PayToWriteAccessController extends AccessController {
 
   // Try to match the error message to one of several known error messages.
   // Returns true if there is a match. False if no match.
-  matchErrorMsg (msg) {
+  matchErrorMsg(msg) {
     try {
       // Returned on forged TXID or manipulated ACL rules.
       if (msg.includes('No such mempool or blockchain transaction')) return true
@@ -324,7 +322,7 @@ class PayToWriteAccessController extends AccessController {
 
   // Add the TXID to the database, and mark it as invalid. This will prevent
   // validation spamming.
-  async markInvalid (txid) {
+  async markInvalid(txid) {
     try {
       // Create a new entry in the database, to remember the TXID. Mark the
       // entry as invalid.
@@ -343,7 +341,7 @@ class PayToWriteAccessController extends AccessController {
   }
 
   // Returns true if the txid burned at least 0.001 tokens.
-  async _validateTx (txid) {
+  async _validateTx(txid) {
     try {
       let isValid = false
 
@@ -414,7 +412,7 @@ class PayToWriteAccessController extends AccessController {
   // tokens is the same user submitting the new DB entry. It prevents
   // 'front running', or malicous users watching the network for valid burn
   // TXs then using them to submit their own data to the DB.
-  async _validateSignature (txid, signature, message) {
+  async _validateSignature(txid, signature, message) {
     try {
       // Input validation
       if (!txid || typeof txid !== 'string') {
