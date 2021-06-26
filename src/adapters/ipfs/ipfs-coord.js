@@ -13,7 +13,7 @@ const config = require('../../../config')
 const JSONRPC = require('../../rpc')
 
 class IpfsCoordAdapter {
-  constructor (localConfig) {
+  constructor (localConfig = {}) {
     // Dependency injection.
     this.ipfs = localConfig.ipfs
     if (!this.ipfs) {
@@ -33,26 +33,24 @@ class IpfsCoordAdapter {
   }
 
   async start () {
-    try {
-      this.ipfsCoord = new this.IpfsCoord({
-        ipfs: this.ipfs,
-        type: 'node.js',
-        // type: 'browser',
-        bchjs: this.bchjs,
-        privateLog: this.rpc.router,
-        isCircuitRelay: this.config.isCircuitRelay,
-        apiInfo: this.config.apiInfo,
-        announceJsonLd: this.config.announceJsonLd
-      })
+    this.ipfsCoord = new this.IpfsCoord({
+      ipfs: this.ipfs,
+      type: 'node.js',
+      // type: 'browser',
+      bchjs: this.bchjs,
+      privateLog: this.rpc.router,
+      isCircuitRelay: this.config.isCircuitRelay,
+      apiInfo: this.config.apiInfo,
+      announceJsonLd: this.config.announceJsonLd
+    })
 
-      // Wait for the ipfs-coord library to signal that it is ready.
-      await this.ipfsCoord.isReady()
+    // Wait for the ipfs-coord library to signal that it is ready.
+    await this.ipfsCoord.isReady()
 
-      // Signal that this adapter is ready.
-      this.isReady = true
-    } catch (err) {
-      console.error('Error in ipfs-coord.js/start()')
-    }
+    // Signal that this adapter is ready.
+    this.isReady = true
+
+    return this.isReady
   }
 }
 
