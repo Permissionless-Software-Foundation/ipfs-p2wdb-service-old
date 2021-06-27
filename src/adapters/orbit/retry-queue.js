@@ -15,7 +15,7 @@ const pRetry = require('p-retry')
 let _this
 
 class RetryQueue {
-  constructor (localConfig) {
+  constructor (localConfig = {}) {
     if (!localConfig.bchjs) {
       throw new Error(
         'Must pass instance of bch-js when instantiating RetryQueue Class.'

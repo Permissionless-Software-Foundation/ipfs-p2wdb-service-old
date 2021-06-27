@@ -3,7 +3,7 @@
 */
 
 class PostEntry {
-  constructor (localConfig) {
+  constructor (localConfig = {}) {
     this.addEntry = localConfig.addEntry
 
     if (!this.addEntry) throw new Error('add-entry use case required.')

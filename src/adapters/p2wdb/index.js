@@ -44,6 +44,8 @@ class P2WDB {
       _this.isReady = true
 
       console.log('The P2WDB is ready to use.')
+
+      return _this.isReady
     } catch (err) {
       console.error('Error in adapters/p2wdb/index.js/start()')
       throw err
