@@ -2,6 +2,8 @@
   Clean Architecture Controller for the POST Entry.
 */
 
+// const UseCases = require()
+
 class PostEntry {
   constructor (localConfig = {}) {
     this.addEntry = localConfig.addEntry

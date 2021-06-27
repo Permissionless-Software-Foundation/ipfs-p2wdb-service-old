@@ -60,7 +60,7 @@ async function startServer () {
   // This also launches the other Clean Architecture Controller when the Use
   // Cases library is instantiated.
   const controllers = require('../src/controllers')
-  controllers(app)
+  controllers.attachControllers(app)
 
   // Enable CORS for testing
   // THIS IS A SECURITY RISK. COMMENT OUT FOR PRODUCTION
