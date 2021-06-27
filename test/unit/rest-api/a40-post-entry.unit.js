@@ -19,13 +19,6 @@ describe('#post-entry', () => {
 
   afterEach(() => sandbox.restore())
 
-  describe('#constructor', () => {
-    it('should throw an error if add-entry use case is not passed in', () => {
-      // TODO
-      assert.equal(1, 1)
-    })
-  })
-
   describe('#restController', () => {
     it('body should contain hash on success', () => {
       // TODO

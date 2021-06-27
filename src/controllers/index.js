@@ -11,8 +11,7 @@ const Router = require('koa-router')
 const useCases = require('../use-cases')
 
 // Load the Clean Architecture Adapters library
-const Adapters = require('../adapters')
-const adapters = new Adapters()
+const adapters = require('../adapters')
 
 // Load the REST API Controllers.
 const PostEntry = require('./rest/post-entry')
@@ -81,10 +80,10 @@ async function attachValidationController () {
       'ValidationSucceeded',
       async function (data) {
         try {
-          // console.log(
-          //   'ValidationSucceeded event triggering addPeerEntry() with this data: ',
-          //   data
-          // )
+          console.log(
+            'ValidationSucceeded event triggering addPeerEntry() with this data: ',
+            data
+          )
 
           await useCases.addEntry.addPeerEntry(data)
         } catch (err) {

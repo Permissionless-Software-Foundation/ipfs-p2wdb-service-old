@@ -2,14 +2,12 @@
   Clean Architecture Controller for the POST Entry.
 */
 
-// const UseCases = require()
+const useCases = require('../../use-cases')
 
 class PostEntry {
-  constructor (localConfig = {}) {
-    this.addEntry = localConfig.addEntry
-
-    if (!this.addEntry) throw new Error('add-entry use case required.')
-  }
+  // constructor (localConfig = {}) {
+  //
+  // }
 
   /**
    * @api {post} /p2wdb Write
@@ -42,7 +40,8 @@ class PostEntry {
       const writeObj = { txid, signature, message, data }
       console.log(`body data: ${JSON.stringify(writeObj, null, 2)}`)
 
-      const hash = await this.addEntry.addUserEntry(writeObj)
+      // const hash = await this.addEntry.addUserEntry(writeObj)
+      const hash = await useCases.addEntry.addUserEntry(writeObj)
 
       ctx.body = {
         success: true,

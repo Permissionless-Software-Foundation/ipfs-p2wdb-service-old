@@ -46,8 +46,12 @@ class AddEntry {
       entry.hash = hash
       entry.isValid = true
 
+      // Note: Inserting the entry into the P2WDB will trigger the
+      // ValidationSucceeded event. This event will automatically add the entry
+      // to the local MongoDB.
+      // Deprectated code below:
       // Add the entry to the local database (Mongo).
-      await _this.localdb.insert(entry)
+      // await _this.localdb.insert(entry)
 
       return hash
     } catch (err) {

@@ -2,13 +2,7 @@
 const AddEntry = require('./add-entry')
 const ReadEntry = require('./read-entry')
 
-// Adapters
-// const P2WDB = require('../adapters/p2wdb')
-// const p2wdb = new P2WDB()
-// const LocalDB = require('../adapters/local-db')
-// const localdb = new LocalDB()
-const Adapters = require('../adapters')
-const adapters = new Adapters()
+const adapters = require('../adapters')
 
 // Instantiate the Use Cases
 const addEntry = new AddEntry({
