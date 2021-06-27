@@ -6,7 +6,7 @@ const sinon = require('sinon')
 const assert = require('chai').assert
 
 // Unit under test (UUT)
-const GetAll = require('../../../src/controllers/get-all')
+const GetAll = require('../../../src/controllers/rest/get-all')
 
 // Mocks requred by UUT.
 const ReadEntry = require('../mocks/use-cases/read-entry.mock')
