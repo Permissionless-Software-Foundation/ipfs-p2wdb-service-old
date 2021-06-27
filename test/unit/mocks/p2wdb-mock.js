@@ -10,6 +10,10 @@ class P2WDB {
   async insert () {
     return {}
   }
+
+  async readAll () {
+    return { key: 'value' }
+  }
 }
 
 module.exports = P2WDB

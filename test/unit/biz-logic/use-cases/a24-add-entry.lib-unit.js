@@ -1,15 +1,15 @@
 /*
-  Unit tests for the P2WDB Add Entry Use Case
+  Unit tests for the P2WDB Add Entry Use Cases
 */
 
 const assert = require('chai').assert
 const sinon = require('sinon')
 
-const AddEntry = require('../../../src/use-cases/add-entry')
+const AddEntry = require('../../../../src/use-cases/add-entry')
 
 // Mocks
-const LocalDB = require('../mocks/localdb-mock')
-const P2WDB = require('../mocks/p2wdb-mock')
+const LocalDB = require('../../mocks/localdb-mock')
+const P2WDB = require('../../mocks/p2wdb-mock')
 
 let sandbox
 let uut

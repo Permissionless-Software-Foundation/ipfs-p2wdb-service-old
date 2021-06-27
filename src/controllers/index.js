@@ -12,6 +12,7 @@ const useCases = require('../use-cases')
 
 // Load the REST API Controllers.
 const PostEntry = require('./post-entry')
+const GetAll = require('./get-all')
 
 module.exports = function attachRESTControllers (app) {
   const baseUrl = '/temp'
@@ -34,6 +35,17 @@ module.exports = function attachRESTControllers (app) {
       await postEntry.restController(ctx)
     } catch (err) {
       // console.error('Error in POST /temp/write controller')
+      ctx.throw(422, err.message)
+    }
+  })
+
+  const readAll = new GetAll({
+    getEntries: useCases.readEntry
+  })
+  router.get('/all', async (ctx, next) => {
+    try {
+      await readAll.restController(ctx)
+    } catch (err) {
       ctx.throw(422, err.message)
     }
   })

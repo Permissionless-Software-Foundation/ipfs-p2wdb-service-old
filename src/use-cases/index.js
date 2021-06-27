@@ -1,5 +1,6 @@
 // Use Case libraries
 const AddEntry = require('./add-entry')
+const ReadEntry = require('./read-entry')
 
 // Adapters
 const P2WDB = require('../adapters/p2wdb')
@@ -14,6 +15,7 @@ const addEntry = new AddEntry({
   p2wdb,
   localdb
 })
+const readEntry = new ReadEntry({ p2wdb })
 
 // Start all the non-REST controllers for the P2WDB. This includes IPFS,
 // ipfs-coord, JSON RPC over IPFS, and OrbitDB with the custom access controller.
@@ -48,5 +50,6 @@ startP2wdb()
 
 // Export the instances of the use-cases.
 module.exports = {
-  addEntry
+  addEntry,
+  readEntry
 }

@@ -1,6 +1,7 @@
 /*
   Adapter for the pay-to-write database (P2WDB).
-  This library provides high-level abstraction for interacting with the P2WDB.
+  This library provides high-level abstraction for interacting with the P2WDB,
+  which is composed of IPFS, ipfs-coord, and OrbitDB.
 
   This library sets of a series of asynchronous events in several other libraries.
   Here are a few design approaches adopted in this library:
@@ -65,6 +66,19 @@ class P2WDB {
       return hash
     } catch (err) {
       console.error('Error in p2wdb.js/insert()')
+      throw err
+    }
+  }
+
+  // Read all entries in the P2WDB.
+  async readAll () {
+    try {
+      const data = await _this.orbit.readAll()
+      console.log('data: ', data)
+
+      return data
+    } catch (err) {
+      console.error('Error in p2wdb.js/readAll()')
       throw err
     }
   }
