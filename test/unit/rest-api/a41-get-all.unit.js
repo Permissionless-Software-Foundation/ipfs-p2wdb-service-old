@@ -9,15 +9,16 @@ const assert = require('chai').assert
 const GetAll = require('../../../src/controllers/rest/get-all')
 
 // Mocks requred by UUT.
-const ReadEntry = require('../mocks/use-cases/read-entry.mock')
+const adapters = require('../mocks/adapters')
+const UseCasesMock = require('../mocks/use-cases')
 
 let uut
 let sandbox
 
 describe('#get-all', () => {
   beforeEach(() => {
-    const getEntries = new ReadEntry()
-    uut = new GetAll({ getEntries })
+    const useCases = new UseCasesMock()
+    uut = new GetAll({ adapters, useCases })
 
     sandbox = sinon.createSandbox()
   })
@@ -25,13 +26,29 @@ describe('#get-all', () => {
   afterEach(() => sandbox.restore())
 
   describe('#constructor', () => {
-    it('should throw an error if get-entries use case is not passed in', () => {
+    it('should throw an error if adapters not passed in', () => {
       try {
         uut = new GetAll()
 
         assert.fail('Unexpected code path.')
       } catch (err) {
-        assert.include(err.message, 'get-entries use case required.')
+        assert.include(
+          err.message,
+          'Instance of Adapters library required when instantiating PostEntry REST Controller.'
+        )
+      }
+    })
+
+    it('should throw an error if use-cases are not passed in', () => {
+      try {
+        uut = new GetAll({ adapters })
+
+        assert.fail('Unexpected code path.')
+      } catch (err) {
+        assert.include(
+          err.message,
+          'Instance of Use Cases library required when instantiating PostEntry REST Controller.'
+        )
       }
     })
   })
@@ -51,7 +68,7 @@ describe('#get-all', () => {
       try {
         // Force an error
         sandbox
-          .stub(uut.getEntries, 'readAllEntries')
+          .stub(uut.useCases.readEntry, 'readAllEntries')
           .rejects(new Error('test error'))
 
         await uut.restController()
