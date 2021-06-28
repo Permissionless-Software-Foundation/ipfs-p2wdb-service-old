@@ -10,7 +10,7 @@ const BCHJS = require('@psf/bch-js')
 
 // Local libraries
 const config = require('../../../config')
-const JSONRPC = require('../../rpc')
+const JSONRPC = require('../../controllers/json-rpc/')
 
 class IpfsCoordAdapter {
   constructor (localConfig = {}) {

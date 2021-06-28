@@ -2,12 +2,14 @@
   Clean Architecture Controller for the GET all Entries.
 */
 
-class GetAllEntries {
-  constructor (localConfig = {}) {
-    this.getEntries = localConfig.getEntries
+const useCases = require('../../use-cases')
 
-    if (!this.getEntries) throw new Error('get-entries use case required.')
-  }
+class GetAllEntries {
+  // constructor (localConfig = {}) {
+  //   this.getEntries = localConfig.getEntries
+  //
+  //   if (!this.getEntries) throw new Error('get-entries use case required.')
+  // }
 
   /**
    * @api {get} /p2wdb Read All
@@ -35,7 +37,7 @@ class GetAllEntries {
       console.log('this.getEntries: ', this.getEntries)
 
       // Get all the contents of the P2WDB.
-      const allData = await this.getEntries.readAllEntries()
+      const allData = await useCases.readEntry.readAllEntries()
 
       ctx.body = {
         success: true,
