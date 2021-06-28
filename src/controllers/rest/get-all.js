@@ -2,14 +2,24 @@
   Clean Architecture Controller for the GET all Entries.
 */
 
-const useCases = require('../../use-cases')
+// const useCases = require('../../use-cases')
 
 class GetAllEntries {
-  // constructor (localConfig = {}) {
-  //   this.getEntries = localConfig.getEntries
-  //
-  //   if (!this.getEntries) throw new Error('get-entries use case required.')
-  // }
+  constructor (localConfig = {}) {
+    // Dependency Injection.
+    this.adapters = localConfig.adapters
+    if (!this.adapters) {
+      throw new Error(
+        'Instance of Adapters library required when instantiating PostEntry REST Controller.'
+      )
+    }
+    this.useCases = localConfig.useCases
+    if (!this.useCases) {
+      throw new Error(
+        'Instance of Use Cases library required when instantiating PostEntry REST Controller.'
+      )
+    }
+  }
 
   /**
    * @api {get} /p2wdb Read All
@@ -37,7 +47,7 @@ class GetAllEntries {
       console.log('this.getEntries: ', this.getEntries)
 
       // Get all the contents of the P2WDB.
-      const allData = await useCases.readEntry.readAllEntries()
+      const allData = await this.useCases.readEntry.readAllEntries()
 
       ctx.body = {
         success: true,

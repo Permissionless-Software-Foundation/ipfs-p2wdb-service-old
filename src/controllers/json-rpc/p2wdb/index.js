@@ -10,11 +10,25 @@
 
 // Local libraries
 const wlogger = require('../../../lib/wlogger')
-const useCases = require('../../../use-cases')
-console.log('useCases: ', useCases)
 
-class P2wdbRPC {
-  async p2wdbRouter (rpcData, p2wdb) {
+class P2WDBRPC {
+  constructor (localConfig = {}) {
+    // Dependency Injection.
+    this.adapters = localConfig.adapters
+    if (!this.adapters) {
+      throw new Error(
+        'Instance of Adapters library required when instantiating P2WDB JSON RPC Controller.'
+      )
+    }
+    this.useCases = localConfig.useCases
+    if (!this.useCases) {
+      throw new Error(
+        'Instance of Use Cases library required when instantiating P2WDB JSON RPC Controller.'
+      )
+    }
+  }
+
+  async p2wdbRouter (rpcData) {
     let endpoint = 'unknown' // Default value.
 
     try {
@@ -26,10 +40,10 @@ class P2wdbRPC {
       switch (endpoint) {
         case 'readAll':
           // await this.rateLimit.limiter(rpcData.from)
-          return await this.readAll(rpcData, p2wdb)
+          return await this.readAll(rpcData)
 
         case 'write':
-          return await this.write(rpcData, p2wdb)
+          return await this.write(rpcData)
       }
     } catch (err) {
       console.error('Error in P2wdbRPC/p2wdbRouter()')
@@ -58,13 +72,13 @@ class P2wdbRPC {
    */
   // Read all entries from the P2WDB.
   // {"jsonrpc":"2.0","id":"555","method":"p2wdb","params":{"endpoint": "readAll"}}
-  async readAll (rpcData, p2wdb) {
+  async readAll (rpcData) {
     try {
       console.log('P2WDB readAll() RPC endpoint called.')
-      console.log('useCases: ', useCases)
+      // console.log('useCases: ', useCases)
 
       // Get all the contents of the P2WDB.
-      const allData = await useCases.readEntry.readAllEntries()
+      const allData = await this.useCases.readEntry.readAllEntries()
       // const allData = p2wdb.readAll()
 
       const response = {
@@ -107,7 +121,7 @@ class P2wdbRPC {
    */
   // (attempt to) write an entry to the P2WDB.
   // {"jsonrpc":"2.0","id":"555","method":"p2wdb","params":{"endpoint": "write", "txid": "23a104c012c912c351e61a451c387e511f65d115fa79bb5038f4e6bac811754a", "message": "test", "signature": "ID1G37GgWc2MugZHzNss53mMQPT0Mebix6erYC/Qlc+PaJqZaMfjK59KXPDF5wJWlHjcK8hpVbly/5SBAspR54o="}}
-  async write (rpcData, p2wdb) {
+  async write (rpcData) {
     try {
       console.log('P2WDB write() RPC endpoint called.')
 
@@ -119,7 +133,7 @@ class P2wdbRPC {
       const writeObj = { txid, signature, message, data }
       console.log(`writeObj: ${JSON.stringify(writeObj, null, 2)}`)
 
-      const hash = await useCases.addEntry.addUserEntry(writeObj)
+      const hash = await this.useCases.addEntry.addUserEntry(writeObj)
 
       // const result = await p2wdb.write(writeObj)
 
@@ -150,4 +164,4 @@ class P2wdbRPC {
   }
 }
 
-module.exports = P2wdbRPC
+module.exports = P2WDBRPC

@@ -2,12 +2,24 @@
   Clean Architecture Controller for the POST Entry.
 */
 
-const useCases = require('../../use-cases')
+// const useCases = require('../../use-cases')
 
 class PostEntry {
-  // constructor (localConfig = {}) {
-  //
-  // }
+  constructor (localConfig = {}) {
+    // Dependency Injection.
+    this.adapters = localConfig.adapters
+    if (!this.adapters) {
+      throw new Error(
+        'Instance of Adapters library required when instantiating PostEntry REST Controller.'
+      )
+    }
+    this.useCases = localConfig.useCases
+    if (!this.useCases) {
+      throw new Error(
+        'Instance of Use Cases library required when instantiating PostEntry REST Controller.'
+      )
+    }
+  }
 
   /**
    * @api {post} /p2wdb Write
@@ -41,7 +53,7 @@ class PostEntry {
       console.log(`body data: ${JSON.stringify(writeObj, null, 2)}`)
 
       // const hash = await this.addEntry.addUserEntry(writeObj)
-      const hash = await useCases.addEntry.addUserEntry(writeObj)
+      const hash = await this.useCases.addEntry.addUserEntry(writeObj)
 
       ctx.body = {
         success: true,

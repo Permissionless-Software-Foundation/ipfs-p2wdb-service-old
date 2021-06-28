@@ -16,7 +16,6 @@ const adapters = require('../adapters')
 
 // Load the JSON RPC Controller.
 const JSONRPC = require('./json-rpc')
-// const rpc = new JSONRPC()
 
 // Load the Clean Architecture Use Case libraries.
 const UseCases = require('../use-cases')
@@ -38,23 +37,6 @@ async function attachControllers (app) {
   attachRPCControllers()
 }
 
-// Add the JSON RPC router to the ipfs-coord adapter.
-function attachRPCControllers () {
-  // const jsonRpcController = new JSONRPC()
-  // jsonRpcController.ipfsCoord =
-  //   adapters.p2wdb.ipfsAdapters.ipfsCoordAdapter.ipfsCoord
-
-  // Get the instance of ipfs-coord being used by the Adapter library.
-  const ipfsCoord = adapters.p2wdb.ipfsAdapters.ipfsCoordAdapter.ipfsCoord
-
-  const jsonRpcController = new JSONRPC({ ipfsCoord })
-
-  // Attach the input of the JSON RPC router to the output of ipfs-coord.
-  adapters.p2wdb.ipfsAdapters.ipfsCoordAdapter.attachRPCRouter(
-    jsonRpcController.router
-  )
-}
-
 function attachRESTControllers (app) {
   const baseUrl = '/temp'
   const router = new Router({ prefix: baseUrl })
@@ -67,7 +49,9 @@ function attachRESTControllers (app) {
 
   // Instantiate the POST entry controller.
   const postEntry = new PostEntry({
-    addEntry: useCases.addEntry
+    // addEntry: useCases.addEntry
+    adapters,
+    useCases
   })
   // curl -H "Content-Type: application/json" -X POST -d '{ "user": "test" }' localhost:5001/temp/write
   router.post('/write', async (ctx, next) => {
@@ -79,8 +63,11 @@ function attachRESTControllers (app) {
     }
   })
 
+  // curl -H "Content-Type: application/json" -X GET localhost:5001/temp/all
   const readAll = new GetAll({
-    getEntries: useCases.readEntry
+    // getEntries: useCases.readEntry
+    adapters,
+    useCases
   })
   router.get('/all', async (ctx, next) => {
     try {
@@ -92,6 +79,23 @@ function attachRESTControllers (app) {
 
   // Attach the Controller routes to the Koa app.
   app.use(router.routes()).use(router.allowedMethods())
+}
+
+// Add the JSON RPC router to the ipfs-coord adapter.
+function attachRPCControllers () {
+  // const jsonRpcController = new JSONRPC()
+  // jsonRpcController.ipfsCoord =
+  //   adapters.p2wdb.ipfsAdapters.ipfsCoordAdapter.ipfsCoord
+
+  // Get the instance of ipfs-coord being used by the Adapter library.
+  // const ipfsCoord = adapters.p2wdb.ipfsAdapters.ipfsCoordAdapter.ipfsCoord
+
+  const jsonRpcController = new JSONRPC({ adapters, useCases })
+
+  // Attach the input of the JSON RPC router to the output of ipfs-coord.
+  adapters.p2wdb.ipfsAdapters.ipfsCoordAdapter.attachRPCRouter(
+    jsonRpcController.router
+  )
 }
 
 // Start the P2WDB and its downstream depenencies (IPFS, ipfs-coord, OrbitDB).
