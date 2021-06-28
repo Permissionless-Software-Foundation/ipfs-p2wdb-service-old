@@ -7,11 +7,12 @@
 // Public npm libraries.
 const Router = require('koa-router')
 
-// Load the Clean Architecture Use Case libraries.
-const useCases = require('../use-cases')
-
 // Load the Clean Architecture Adapters library
 const adapters = require('../adapters')
+
+// Load the Clean Architecture Use Case libraries.
+const UseCases = require('../use-cases')
+const useCases = new UseCases({ adapters })
 
 // Load the REST API Controllers.
 const PostEntry = require('./rest/post-entry')
