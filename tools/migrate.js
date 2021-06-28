@@ -6,6 +6,7 @@
 
 const axios = require('axios')
 
+// Customize these constants for your migration.
 const OLD_DB = 'http://192.168.0.76:5001/p2wdb'
 const NEW_DB = 'http://localhost:5001/p2wdb'
 

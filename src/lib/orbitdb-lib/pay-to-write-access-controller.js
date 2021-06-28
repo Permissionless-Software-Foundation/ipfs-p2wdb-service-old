@@ -16,6 +16,7 @@ const config = require('../../../config')
 const ensureAddress = require('./ensure-ac-address')
 const KeyValue = require('../../models/key-value')
 const RetryQueue = require('./retry-queue')
+const Webhook = require('./webhook')
 
 let _this
 
@@ -31,6 +32,7 @@ class PayToWriteAccessController extends AccessController {
     this.KeyValue = KeyValue
     this.config = config
     this.retryQueue = new RetryQueue({ bchjs: this.bchjs })
+    this.webhook = new Webhook()
 
     _this = this
   }
@@ -218,7 +220,11 @@ class PayToWriteAccessController extends AccessController {
         inputObj.data = dbData
         inputObj.hash = entry.hash
 
+        // Add the valid entry to the MongoDB.
         await _this.markValid(inputObj)
+
+        // Trigger a webhook if this new entry matches a filter.
+        await _this.webhook.triggerHooks(inputObj)
       }
 
       return validTx

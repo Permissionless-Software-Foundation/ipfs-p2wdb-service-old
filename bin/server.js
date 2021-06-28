@@ -12,7 +12,7 @@ const cors = require('kcors')
 
 // Local libraries
 const config = require('../config') // this first.
-const IPFSLib = require('../src/lib/ipfs')
+// const IPFSLib = require('../src/lib/ipfs')
 const AdminLib = require('../src/lib/admin')
 const adminLib = new AdminLib()
 // const JSONRPC = require('../src/rpc')
@@ -56,6 +56,12 @@ async function startServer () {
   const modules = require('../src/modules')
   modules(app)
 
+  // Use Clean Architecture Controllers.
+  // This also launches the other Clean Architecture Controller when the Use
+  // Cases library is instantiated.
+  const controllers = require('../src/controllers')
+  controllers.attachControllers(app)
+
   // Enable CORS for testing
   // THIS IS A SECURITY RISK. COMMENT OUT FOR PRODUCTION
   app.use(cors({ origin: '*' }))
@@ -73,12 +79,12 @@ async function startServer () {
   if (success) console.log('System admin user created.')
 
   // Start the IPFS node.
-  const ipfsLib = new IPFSLib()
-  await ipfsLib.start()
+  // const ipfsLib = new IPFSLib()
+  // await ipfsLib.start()
 
   // Save the pointer ot the ipfsLib to the context object, so that it's available
   // to API handlers.
-  app.context.ipfsLib = ipfsLib
+  // app.context.ipfsLib = ipfsLib
 
   return app
 }

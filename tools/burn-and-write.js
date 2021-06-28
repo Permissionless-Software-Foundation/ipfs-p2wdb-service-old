@@ -7,17 +7,19 @@ const axios = require('axios')
 
 // CUSTOMIZE THESE VALUES FOR YOUR USE
 // Private key holding the tokens and some BCH.
-const WIF = 'KwYLbsYipckrXsZH2rp2Z1pAM1Up8nWdEhfzVe9vWPerTXBJLtxU'
+const WIF = process.env.WIF
+if (!WIF) throw new Error('Add WIF to environment variable.')
+
 // The BCH address corresponding to the WIF.
-const BCHADDR = 'bitcoincash:qzd9erwy0yhx7j20zwekt4vs25s7qsxuesxq9rdj37'
+const BCHADDR = 'bitcoincash:qqp2fu2y8wra8afkefcx04yach8lhuaqvq3dxs5ddv'
 const TOKENID =
   '38e97c5d7d3585a2cbf3f9580c82ca33985f9cb0845d4dcce220cb709f9538b0'
 const TOKENQTY = 0.01
 const MESSAGE = 'test'
 const SIGNATURE =
-  'IA8LCUnN6TUocSGnCe9nA1T4D+9hurJJ0vi3vBEJvAVwFfGcZ9ZlIWdR1m30wAxO4r0wb3YSzrM3QynpfgKUW/w='
+  'H7Io3txwhjqOYFrAE/xBUzYGow510HL0U+G0LqelbHcDfqH/vQig/xcGfvTTBZpVoZtCoqOdvpPrsAFuL8VHWws='
 
-const SERVER = 'http://localhost:5001/p2wdb'
+const SERVER = 'http://localhost:5001/temp/write'
 // const SERVER = 'http://192.168.0.76:5001/p2wdb'
 // const SERVER = 'https://p2wdb.fullstackcash.nl/p2wdb'
 
@@ -193,14 +195,17 @@ async function burnAndWrite () {
     // Sleep for 5 seconds.
     await bchjs.Util.sleep(5000)
 
-    // Submit the txid as proof-of-burn to write data to the database.
-    const result = await axios.post(SERVER, {
+    const bodyData = {
       // const result = await axios.post('https://p2wdb.fullstackcash.nl/p2wdb', {
       txid: txidStr[0],
       message: MESSAGE,
       signature: SIGNATURE,
       data: JSON.stringify(dataObj)
-    })
+    }
+    console.log(`bodyData: ${JSON.stringify(bodyData, null, 2)}`)
+
+    // Submit the txid as proof-of-burn to write data to the database.
+    const result = await axios.post(SERVER, bodyData)
     console.log(`Response from API: ${JSON.stringify(result.data, null, 2)}`)
   } catch (err) {
     console.error('Error in burnTokens: ', err)

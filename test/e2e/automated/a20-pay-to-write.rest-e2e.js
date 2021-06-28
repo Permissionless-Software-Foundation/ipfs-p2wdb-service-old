@@ -1,7 +1,9 @@
 /*
   e2e tests for the P2WDB REST API endpoints.
-*/
 
+  Note: These are old tests from the old REST API controller.
+*/
+/*
 const axios = require('axios')
 const assert = require('chai').assert
 const config = require('../../../config')
@@ -243,3 +245,4 @@ describe('#Pay-To-Write', () => {
     })
   })
 })
+*/

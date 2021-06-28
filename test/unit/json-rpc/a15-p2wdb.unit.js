@@ -18,8 +18,8 @@ process.env.SVC_ENV = 'test'
 
 // Local libraries
 const config = require('../../../config')
-const UserRPC = require('../../../src/rpc/users')
-const RateLimit = require('../../../src/rpc/rate-limit')
+const UserRPC = require('../../../src/controllers/json-rpc/users')
+const RateLimit = require('../../../src/controllers/json-rpc/rate-limit')
 // const UserModel = require('../../../src/models/users')
 
 describe('#P2WDB-RPC', () => {
@@ -54,6 +54,18 @@ describe('#P2WDB-RPC', () => {
   // TODO
   describe('#readAll', () => {
     it('should implement tests', () => {
+      assert.equal(1, 1)
+    })
+  })
+
+  describe('#write', () => {
+    it('should return status 200 on successful add', async () => {
+      // TODO
+      assert.equal(1, 1)
+    })
+
+    it('should catch error and return an error object', async () => {
+      // TODO
       assert.equal(1, 1)
     })
   })

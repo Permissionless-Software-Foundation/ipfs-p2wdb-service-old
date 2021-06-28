@@ -26,8 +26,12 @@ class IPFSLib {
     this.config = config
 
     // Pointers to instances of ipfs and P2WDB orbitdb.
+    // These empty objects will be replaced after startup completes.
     this.ipfs = {}
     this.p2wdb = {}
+
+    // Properties of this class instance.
+    this.isReady = false
 
     // this.rpc = {}
     // if (localConfig.rpc) {
@@ -46,6 +50,8 @@ class IPFSLib {
       // Update the RPC instance with the instance of ipfs-coord.
       this.rpc.ipfsCoord = this.ipfsCoord
       this.rpc.p2wdb = this.p2wdb
+
+      this.isReady = true
 
       console.log('IPFS is ready.')
     } catch (err) {
