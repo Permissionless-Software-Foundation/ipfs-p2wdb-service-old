@@ -26,7 +26,7 @@ The above diagram is reflected in the code. The diagram below shows how dependen
 
 Major features of the diagram above:
 
-- The blunt point of an array connects the file that depends on the file pointed to by the pointy end of the arrow.
-- The dependencies in this graph follow the dependency arrows in the Clean Architecture diagram.
+- The blunt point of an arrow connects the file that depends on the file pointed to by the pointy end of the arrow.
+- The dependencies in the above diagram follow the dependency arrows in the Clean Architecture diagram.
 - This project is a Koa web server app. Koa is a framework and the entry point of Koa program loads the Controllers first.
-- The Controllers load the Adapters, then load the Use Cases, then finally the Entities.
+- The Controllers load the Adapters, then load the Use Cases, then finally the Entities. Each stage depends on the stage below it.
