@@ -15,7 +15,7 @@ const P2wdbController = require('./p2wdb')
 let _this
 
 class JSONRPC {
-  constructor (localConfig) {
+  constructor (localConfig = {}) {
     // Encapsulate dependencies
     this.jsonrpc = jsonrpc
     this.userController = new UserController()
@@ -24,8 +24,12 @@ class JSONRPC {
     this.p2wdbController = new P2wdbController()
 
     // Placeholders that will be replaced after other libraries finish initalizing.
-    this.ipfsCoord = {}
-    this.p2wdb = {}
+    this.ipfsCoord = localConfig.ipfsCoord
+    if (!this.ipfsCoord) {
+      throw new Error(
+        'Must include instance of ipfs-coord when instantiating the JSON RPC library.'
+      )
+    }
 
     _this = this
   }
@@ -73,13 +77,7 @@ class JSONRPC {
           retObj = await _this.aboutController.aboutRouter(parsedData)
           break
         case 'p2wdb':
-          // CT 5/30/21: Passing p2wdb is a hack to make it work right now.
-          // There should be a better way than passing the pointer to the p2wdb
-          // library.
-          retObj = await _this.p2wdbController.p2wdbRouter(
-            parsedData,
-            _this.p2wdb
-          )
+          retObj = await _this.p2wdbController.p2wdbRouter(parsedData)
           break
       }
 

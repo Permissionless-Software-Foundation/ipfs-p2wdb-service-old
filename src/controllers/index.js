@@ -7,16 +7,20 @@
 // Public npm libraries.
 const Router = require('koa-router')
 
+// Load the REST API Controllers.
+const PostEntry = require('./rest/post-entry')
+const GetAll = require('./rest/get-all')
+
 // Load the Clean Architecture Adapters library
 const adapters = require('../adapters')
+
+// Load the JSON RPC Controller.
+const JSONRPC = require('./json-rpc')
+// const rpc = new JSONRPC()
 
 // Load the Clean Architecture Use Case libraries.
 const UseCases = require('../use-cases')
 const useCases = new UseCases({ adapters })
-
-// Load the REST API Controllers.
-const PostEntry = require('./rest/post-entry')
-const GetAll = require('./rest/get-all')
 
 // Top-level function for this library.
 // Start the various Controllers and attach them to the app.
@@ -24,9 +28,31 @@ async function attachControllers (app) {
   // Attach the REST controllers to the Koa app.
   attachRESTControllers(app)
 
+  // Start the P2WDB.
+  await adapters.p2wdb.start()
+
   // Start the P2WDB and attach the validation event handler/controller to
   // the add-entry Use Case.
   await attachValidationController()
+
+  attachRPCControllers()
+}
+
+// Add the JSON RPC router to the ipfs-coord adapter.
+function attachRPCControllers () {
+  // const jsonRpcController = new JSONRPC()
+  // jsonRpcController.ipfsCoord =
+  //   adapters.p2wdb.ipfsAdapters.ipfsCoordAdapter.ipfsCoord
+
+  // Get the instance of ipfs-coord being used by the Adapter library.
+  const ipfsCoord = adapters.p2wdb.ipfsAdapters.ipfsCoordAdapter.ipfsCoord
+
+  const jsonRpcController = new JSONRPC({ ipfsCoord })
+
+  // Attach the input of the JSON RPC router to the output of ipfs-coord.
+  adapters.p2wdb.ipfsAdapters.ipfsCoordAdapter.attachRPCRouter(
+    jsonRpcController.router
+  )
 }
 
 function attachRESTControllers (app) {
@@ -73,9 +99,6 @@ function attachRESTControllers (app) {
 // to the Add-Entry Use Case.
 async function attachValidationController () {
   try {
-    // Start the P2WDB.
-    await adapters.p2wdb.start()
-
     // Trigger the addPeerEntry() use-case after a replication-validation event.
     adapters.p2wdb.orbit.validationEvent.on(
       'ValidationSucceeded',

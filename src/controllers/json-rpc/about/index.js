@@ -33,6 +33,7 @@ class AuthRPC {
   // This is a bit different than other router libraries, because there is
   // only one response, which is a string about this node.
   async aboutRouter (rpcData) {
+    console.log('Calling NEW About endpoint')
     return {
       success: true,
       status: 200,
