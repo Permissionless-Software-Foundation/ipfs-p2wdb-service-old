@@ -83,13 +83,6 @@ function attachRESTControllers (app) {
 
 // Add the JSON RPC router to the ipfs-coord adapter.
 function attachRPCControllers () {
-  // const jsonRpcController = new JSONRPC()
-  // jsonRpcController.ipfsCoord =
-  //   adapters.p2wdb.ipfsAdapters.ipfsCoordAdapter.ipfsCoord
-
-  // Get the instance of ipfs-coord being used by the Adapter library.
-  // const ipfsCoord = adapters.p2wdb.ipfsAdapters.ipfsCoordAdapter.ipfsCoord
-
   const jsonRpcController = new JSONRPC({ adapters, useCases })
 
   // Attach the input of the JSON RPC router to the output of ipfs-coord.
