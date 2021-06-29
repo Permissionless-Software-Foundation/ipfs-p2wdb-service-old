@@ -10,6 +10,7 @@ const Router = require('koa-router')
 // Load the REST API Controllers.
 const PostEntry = require('./rest/post-entry')
 const GetAll = require('./rest/get-all')
+const PostWebhook = require('./rest/post-webhook')
 
 // Load the Clean Architecture Adapters library
 const adapters = require('../adapters')
@@ -73,6 +74,21 @@ function attachRESTControllers (app) {
     try {
       await readAll.restController(ctx)
     } catch (err) {
+      ctx.throw(422, err.message)
+    }
+  })
+
+  // Instantiate the POST Webhook controller.
+  const postWebhook = new PostWebhook({
+    adapters,
+    useCases
+  })
+  // curl -H "Content-Type: application/json" -X POST -d '{ "user": "test" }' localhost:5001/temp/write
+  router.post('/webhook', async (ctx, next) => {
+    try {
+      await postWebhook.restController(ctx)
+    } catch (err) {
+      // console.error('Error in POST /temp/write controller')
       ctx.throw(422, err.message)
     }
   })

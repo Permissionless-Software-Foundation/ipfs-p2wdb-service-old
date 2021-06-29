@@ -4,11 +4,13 @@
 */
 
 const KeyValue = require('../models/key-value')
+const Webhook = require('../models/webhook')
 
 class LocalDB {
   constructor (localConfig = {}) {
     // Encapsulate dependencies.
     this.KeyValue = KeyValue
+    this.Webhook = Webhook
   }
 
   // Check to see if an entry already exists in the local database.
@@ -41,6 +43,16 @@ class LocalDB {
       console.error('Error in local-db.js/insert()')
       throw err
     }
+  }
+
+  async addWebhook (webhookData) {
+    const newWebhook = new this.Webhook(webhookData)
+    await newWebhook.save()
+    console.log('newWebhook: ', newWebhook)
+
+    const id = newWebhook._id
+
+    return id
   }
 }
 

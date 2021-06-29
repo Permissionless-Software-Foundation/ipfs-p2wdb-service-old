@@ -1,6 +1,7 @@
 // Individual Use Case libraries
 const AddEntry = require('./add-entry')
 const ReadEntry = require('./read-entry')
+const AddWebhook = require('./add-webhook')
 
 // const adapters = require('../adapters')
 
@@ -20,6 +21,8 @@ class UseCases {
     })
 
     this.readEntry = new ReadEntry({ p2wdb: this.adapters.p2wdb })
+
+    this.addWebhook = new AddWebhook({ localdb: this.adapters.localdb })
   }
 }
 
