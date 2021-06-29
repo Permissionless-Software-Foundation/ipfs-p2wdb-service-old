@@ -1,5 +1,5 @@
 /*
-  Koa router and controller for REST API endpoints concerned with the Entry
+  Koa router and controller for REST API endpoints concerned with the Webhook
   entity.
 */
 
@@ -7,22 +7,21 @@
 const Router = require('koa-router')
 
 // Load the REST API Controllers.
-const PostEntry = require('./post-entry')
-const GetAll = require('./get-all')
+const PostWebhook = require('./post-webhook')
 
-class EntryController {
+class WebhookRESTController {
   constructor (localConfig = {}) {
     // Dependency Injection.
     this.adapters = localConfig.adapters
     if (!this.adapters) {
       throw new Error(
-        'Instance of Adapters library required when instantiating PostEntry REST Controller.'
+        'Instance of Adapters library required when instantiating Webhook REST Controller.'
       )
     }
     this.useCases = localConfig.useCases
     if (!this.useCases) {
       throw new Error(
-        'Instance of Use Cases library required when instantiating PostEntry REST Controller.'
+        'Instance of Use Cases library required when instantiating Webhook REST Controller.'
       )
     }
 
@@ -32,11 +31,10 @@ class EntryController {
     }
 
     // Instantiate the REST API controllers
-    this.postEntry = new PostEntry(dependencies)
-    this.readAllEntries = new GetAll(dependencies)
+    this.postWebhook = new PostWebhook(dependencies)
 
     // Instantiate the router.
-    const baseUrl = '/p2wdb'
+    const baseUrl = '/webhook'
     this.router = new Router({ prefix: baseUrl })
   }
 
@@ -48,20 +46,11 @@ class EntryController {
     }
 
     // curl -H "Content-Type: application/json" -X POST -d '{ "user": "test" }' localhost:5001/p2wdb/write
-    this.router.post('/write', async (ctx, next) => {
+    this.router.post('/', async (ctx, next) => {
       try {
-        await this.postEntry.restController(ctx)
+        await this.postWebhook.restController(ctx)
       } catch (err) {
         // console.error('Error in POST /temp/write controller')
-        ctx.throw(422, err.message)
-      }
-    })
-
-    // curl -H "Content-Type: application/json" -X GET localhost:5001/p2wdb/all
-    this.router.get('/all', async (ctx, next) => {
-      try {
-        await this.readAllEntries.restController(ctx)
-      } catch (err) {
         ctx.throw(422, err.message)
       }
     })
@@ -71,4 +60,4 @@ class EntryController {
   }
 }
 
-module.exports = EntryController
+module.exports = WebhookRESTController

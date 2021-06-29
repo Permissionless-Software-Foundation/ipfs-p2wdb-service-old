@@ -5,11 +5,11 @@
 */
 
 // Public npm libraries.
-const Router = require('koa-router')
 
 // Load the REST API Controllers.
-const EntryController = require('./rest/entry')
-const PostWebhook = require('./rest/post-webhook')
+const EntryRESTController = require('./rest/entry')
+const WebhookRESTController = require('./rest/webhook')
+// const PostWebhook = require('./rest/post-webhook')
 
 // Load the Clean Architecture Adapters library
 const adapters = require('../adapters')
@@ -39,38 +39,18 @@ async function attachControllers (app) {
 
 function attachRESTControllers (app) {
   // Attach the REST API Controllers associated with the Entry Entity to the Koa app.
-  const entryController = new EntryController({
+  const entryController = new EntryRESTController({
     adapters,
     useCases
   })
-  entryController.attachEntityControllers(app)
+  entryController.attachControllers(app)
 
-  const baseUrl = '/temp'
-  const router = new Router({ prefix: baseUrl })
-
-  // curl -H "Content-Type: application/json" -X GET localhost:5001/temp/
-  router.get('/', (ctx, next) => {
-    const now = new Date()
-    ctx.body = now.toLocaleString()
-  })
-
-  // Instantiate the POST Webhook controller.
-  const postWebhook = new PostWebhook({
+  // Attach the REST API Controllers associated with the Webhook Entity to the Koa app.
+  const webhookController = new WebhookRESTController({
     adapters,
     useCases
   })
-  // curl -H "Content-Type: application/json" -X POST -d '{ "user": "test" }' localhost:5001/temp/write
-  router.post('/webhook', async (ctx, next) => {
-    try {
-      await postWebhook.restController(ctx)
-    } catch (err) {
-      // console.error('Error in POST /temp/write controller')
-      ctx.throw(422, err.message)
-    }
-  })
-
-  // Attach the Controller routes to the Koa app.
-  app.use(router.routes()).use(router.allowedMethods())
+  webhookController.attachControllers(app)
 }
 
 // Add the JSON RPC router to the ipfs-coord adapter.
