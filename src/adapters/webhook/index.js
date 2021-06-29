@@ -49,7 +49,7 @@ class Webhook {
       // Exit quietly if there is no appId in the JSON data.
       if (!appId) return
 
-      const matches = this.WebhookModel.find({ appId })
+      const matches = _this.WebhookModel.find({ appId })
       if (matches.length > 0) {
         await _this.triggerWebhook(matches)
       }

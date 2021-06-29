@@ -8,8 +8,7 @@
 const Router = require('koa-router')
 
 // Load the REST API Controllers.
-const PostEntry = require('./rest/post-entry')
-const GetAll = require('./rest/get-all')
+const EntryController = require('./rest/entry')
 const PostWebhook = require('./rest/post-webhook')
 
 // Load the Clean Architecture Adapters library
@@ -39,6 +38,13 @@ async function attachControllers (app) {
 }
 
 function attachRESTControllers (app) {
+  // Attach the REST API Controllers associated with the Entry Entity to the Koa app.
+  const entryController = new EntryController({
+    adapters,
+    useCases
+  })
+  entryController.attachEntityControllers(app)
+
   const baseUrl = '/temp'
   const router = new Router({ prefix: baseUrl })
 
@@ -46,36 +52,6 @@ function attachRESTControllers (app) {
   router.get('/', (ctx, next) => {
     const now = new Date()
     ctx.body = now.toLocaleString()
-  })
-
-  // Instantiate the POST entry controller.
-  const postEntry = new PostEntry({
-    // addEntry: useCases.addEntry
-    adapters,
-    useCases
-  })
-  // curl -H "Content-Type: application/json" -X POST -d '{ "user": "test" }' localhost:5001/temp/write
-  router.post('/write', async (ctx, next) => {
-    try {
-      await postEntry.restController(ctx)
-    } catch (err) {
-      // console.error('Error in POST /temp/write controller')
-      ctx.throw(422, err.message)
-    }
-  })
-
-  // curl -H "Content-Type: application/json" -X GET localhost:5001/temp/all
-  const readAll = new GetAll({
-    // getEntries: useCases.readEntry
-    adapters,
-    useCases
-  })
-  router.get('/all', async (ctx, next) => {
-    try {
-      await readAll.restController(ctx)
-    } catch (err) {
-      ctx.throw(422, err.message)
-    }
   })
 
   // Instantiate the POST Webhook controller.
