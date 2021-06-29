@@ -30,9 +30,18 @@ describe('#Webhook', () => {
       }
     })
 
+    it('should throw an error if appId is not provided', () => {
+      try {
+        uut.makeWebhook({ url: 'test' })
+      } catch (err) {
+        assert.include(err.message, 'appId for webhook must be a string.')
+      }
+    })
+
     it('should return a Webhook object', () => {
       const inputData = {
-        url: 'http://test.com'
+        url: 'http://test.com',
+        appId: 'someapp'
       }
 
       const entry = uut.makeWebhook(inputData)
