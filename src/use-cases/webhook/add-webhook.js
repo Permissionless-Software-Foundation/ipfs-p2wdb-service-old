@@ -1,7 +1,6 @@
 /*
-  This is the Class Library for the write-entry use-case. This is when a user
-  of this service wants to write a new Entry to the database. This is a different
-  use case than a replication event triggered by a new entry from a peer database.
+  This is the Class Library for the add-webhook use-case. This is when a user
+  wants to add a new webhook to the system.
 */
 
 const WebhookEntity = require('../../entities/webhook')

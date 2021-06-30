@@ -6,6 +6,7 @@
 
 // Individual Use Case libraries
 const AddWebhook = require('./add-webhook')
+const RemoveWebhook = require('./remove-webhook')
 
 class WebhookUseCases {
   constructor (localConfig = {}) {
@@ -17,6 +18,12 @@ class WebhookUseCases {
     }
 
     this.addWebhook = new AddWebhook({ webhookAdapter: this.adapters.webhook })
+
+    // remove() use-case.
+    const removeWebhookUseCase = new RemoveWebhook({
+      webhookAdapter: this.adapters.webhook
+    })
+    this.remove = removeWebhookUseCase.remove
   }
 }
 

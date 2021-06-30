@@ -20,7 +20,8 @@ const entry = {
 }
 
 const webhook = {
-  addNewWebhook: async () => {}
+  addNewWebhook: async () => {},
+  deleteWebhook: async () => {}
 }
 
 module.exports = { p2wdb, entry, webhook }
