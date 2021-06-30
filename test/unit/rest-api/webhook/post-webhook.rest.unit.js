@@ -107,4 +107,35 @@ describe('#PostWebhook', () => {
       }
     })
   })
+
+  describe('#routeHandler', () => {
+    it('should route to the rest controller', async () => {
+      // Mock the actual controller.
+      sandbox.stub(uut, 'restController').resolves({})
+
+      await uut.routeHandler()
+    })
+
+    it('should return 422 status on error', async () => {
+      try {
+        // Force an error
+        sandbox.stub(uut, 'restController').rejects(new Error('test error'))
+
+        // Mock the ctx.throw() function.
+        const ctx = {
+          throw: (status, message) => {
+            throw new Error(`status: ${status}, message: ${message}`)
+          }
+        }
+
+        await uut.routeHandler(ctx)
+
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        // console.log('err: ', err)
+        assert.include(err.message, '422')
+        assert.include(err.message, 'test error')
+      }
+    })
+  })
 })

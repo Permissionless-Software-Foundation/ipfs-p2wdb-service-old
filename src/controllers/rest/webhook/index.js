@@ -46,14 +46,7 @@ class WebhookRESTController {
     }
 
     // curl -H "Content-Type: application/json" -X POST -d '{ "user": "test" }' localhost:5001/p2wdb/write
-    this.router.post('/', async (ctx, next) => {
-      try {
-        await this.postWebhook.restController(ctx)
-      } catch (err) {
-        // console.error('Error in POST /temp/write controller')
-        ctx.throw(422, err.message)
-      }
-    })
+    this.router.post('/', this.postWebhook.routeHandler)
 
     // Attach the Controller routes to the Koa app.
     app.use(this.router.routes())

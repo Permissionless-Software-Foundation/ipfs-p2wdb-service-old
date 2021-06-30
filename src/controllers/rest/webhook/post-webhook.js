@@ -5,6 +5,8 @@
 
 // const useCases = require('../../use-cases')
 
+let _this
+
 class PostWebhook {
   constructor (localConfig = {}) {
     // Dependency Injection.
@@ -19,6 +21,17 @@ class PostWebhook {
       throw new Error(
         'Instance of Use Cases library required when instantiating PostEntry REST Controller.'
       )
+    }
+
+    _this = this
+  }
+
+  async routeHandler (ctx, next) {
+    try {
+      await _this.restController(ctx)
+    } catch (err) {
+      // console.error('Error in POST /temp/write controller')
+      ctx.throw(422, err.message)
     }
   }
 
@@ -52,7 +65,7 @@ class PostWebhook {
       const inputData = { url, appId }
       // console.log(`inputData: ${JSON.stringify(inputData, null, 2)}`)
 
-      // const hash = await this.addEntry.addUserEntry(writeObj)
+      // Returns the MongoDB ID of the new entry.
       const id = await this.useCases.webhook.addWebhook.addNewWebhook(inputData)
 
       ctx.body = {
