@@ -6,7 +6,7 @@
 
 const KeyValue = require('../../models/key-value')
 
-class EntityAdapter {
+class EntryAdapter {
   constructor (localConfig = {}) {
     // Encapsulate dependencies.
     this.KeyValue = KeyValue
@@ -45,4 +45,4 @@ class EntityAdapter {
   }
 }
 
-module.exports = EntityAdapter
+module.exports = EntryAdapter

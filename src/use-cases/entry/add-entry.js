@@ -12,14 +12,14 @@ class AddEntry {
   constructor (localConfig = {}) {
     if (!localConfig.p2wdbAdapter) {
       throw new Error(
-        'p2wdbAdapter instance must be included when instantiating AddEntry'
+        'p2wdbAdapter instance must be included when instantiating AddEntry use case'
       )
     }
     this.p2wdbAdapter = localConfig.p2wdbAdapter
 
     if (!localConfig.entryAdapter) {
       throw new Error(
-        'entryAdapter instance must be included when instantiating AddEntry'
+        'entryAdapter instance must be included when instantiating AddEntry use case'
       )
     }
     this.entryAdapter = localConfig.entryAdapter

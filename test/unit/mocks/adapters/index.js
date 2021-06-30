@@ -7,13 +7,16 @@ const p2wdb = {
     ipfsCoordAdapter: {
       ipfsCoord: {}
     }
-  }
+  },
+  insert: async () => {}
 }
 
 const entry = {
   readEntry: {
     readAllEntries: () => {}
-  }
+  },
+  doesEntryExist: async () => {},
+  insert: async () => {}
 }
 
 const webhook = () => {}

@@ -5,7 +5,7 @@
 const assert = require('chai').assert
 const sinon = require('sinon')
 
-const Webhook = require('../../../src/entities/webhook')
+const Webhook = require('../../../../src/entities/webhook')
 
 let sandbox
 let uut

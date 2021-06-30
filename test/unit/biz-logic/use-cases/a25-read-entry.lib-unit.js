@@ -5,7 +5,7 @@
 const assert = require('chai').assert
 const sinon = require('sinon')
 
-const ReadEntry = require('../../../../src/use-cases/read-entry')
+const ReadEntry = require('../../../../src/use-cases/entry/read-entry')
 
 // Mocks
 // const LocalDB = require('../mocks/localdb-mock')
@@ -20,8 +20,8 @@ describe('#ReadEntry', () => {
 
   beforeEach(() => {
     // const localdb = new LocalDB()
-    const p2wdb = new P2WDB()
-    uut = new ReadEntry({ p2wdb })
+    const p2wdbAdapter = new P2WDB()
+    uut = new ReadEntry({ p2wdbAdapter })
 
     sandbox = sinon.createSandbox()
   })
@@ -56,7 +56,9 @@ describe('#ReadEntry', () => {
     it('should catch and throw an error', async () => {
       try {
         // Force Error
-        sandbox.stub(uut.p2wdb, 'readAll').rejects(new Error('test error'))
+        sandbox
+          .stub(uut.p2wdbAdapter, 'readAll')
+          .rejects(new Error('test error'))
 
         await uut.readAllEntries()
 
