@@ -8,7 +8,7 @@ const WebhookModel = require('../../models/webhook')
 
 let _this
 
-class Webhook {
+class WebhookAdapter {
   constructor (localConfig) {
     // Attach the event handler to the event.
     validationEvent.on(
@@ -34,15 +34,18 @@ class Webhook {
 
       // const { txid, signature, message, data, hash } = eventData
       const { data } = eventData
+      // console.log('data: ', data)
 
       // Attempt to parse the raw data as JSON
       let jsonData = {}
       try {
         jsonData = JSON.parse(data)
       } catch (err) {
+        console.log(err.message)
         // Exit quietly. Entry does not comply with webhook protocol.
         return
       }
+      // console.log(`jsonData: ${JSON.stringify(jsonData, null, 2)}`)
 
       const appId = jsonData.appId
 
@@ -77,4 +80,4 @@ class Webhook {
   }
 }
 
-module.exports = Webhook
+module.exports = WebhookAdapter
