@@ -5,7 +5,7 @@
 // Individual adapter libraries.
 const P2WDBAdapter = require('./p2wdb')
 const p2wdb = new P2WDBAdapter()
-const EntryAdapter = require('./entity')
+const EntryAdapter = require('./entry')
 const entry = new EntryAdapter()
 const WebhookAdapter = require('./webhook')
 const webhook = new WebhookAdapter()
