@@ -21,10 +21,10 @@ describe('#Webhook', () => {
 
   afterEach(() => sandbox.restore())
 
-  describe('#makeWebhook', () => {
+  describe('#validate', () => {
     it('should throw an error if url is not provided', () => {
       try {
-        uut.makeWebhook()
+        uut.validate()
       } catch (err) {
         assert.include(err.message, 'url for webhook must be a string.')
       }
@@ -32,7 +32,7 @@ describe('#Webhook', () => {
 
     it('should throw an error if appId is not provided', () => {
       try {
-        uut.makeWebhook({ url: 'test' })
+        uut.validate({ url: 'test' })
       } catch (err) {
         assert.include(err.message, 'appId for webhook must be a string.')
       }
@@ -44,7 +44,7 @@ describe('#Webhook', () => {
         appId: 'someapp'
       }
 
-      const entry = uut.makeWebhook(inputData)
+      const entry = uut.validate(inputData)
       // console.log('entry: ', entry)
 
       assert.property(entry, 'url')

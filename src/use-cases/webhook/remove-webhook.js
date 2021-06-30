@@ -26,7 +26,7 @@ class RemoveWebhook {
   async remove (rawData) {
     try {
       // Generate a validated webhook by passing the raw data through input validation.
-      const webhookData = _this.webhookEntity.makeWebhook(rawData)
+      const webhookData = _this.webhookEntity.validate(rawData)
 
       // Add the webhook entry to the local database.
       const id = await this.webhookAdapter.deleteWebhook(webhookData)

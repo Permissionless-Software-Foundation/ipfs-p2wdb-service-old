@@ -26,7 +26,7 @@ class AddWebhook {
   async addNewWebhook (rawData) {
     try {
       // Generate a validated entry by passing the raw data through input validation.
-      const webhookData = _this.webhookEntity.makeWebhook(rawData)
+      const webhookData = _this.webhookEntity.validate(rawData)
 
       // Throw an error if the entry already exists.
       // const exists = await _this.localdb.doesEntryExist(entry)

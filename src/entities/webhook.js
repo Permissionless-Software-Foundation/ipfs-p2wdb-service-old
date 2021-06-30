@@ -3,7 +3,7 @@
 */
 
 class Webhook {
-  makeWebhook ({ url, appId } = {}) {
+  validate ({ url, appId } = {}) {
     // Input validation.
     if (!url || typeof url !== 'string') {
       throw new Error('url for webhook must be a string.')
