@@ -1,6 +1,6 @@
 /*
-  Prototype for triggering a webhook when new data is validated and written to
-  the P2WDB.
+  Adapter for Webhook Entity. This file contain database-specific code, as
+  well as the event handler for triggering a webhook.
 */
 
 const validationEvent = require('../orbit/validation-event')
@@ -63,6 +63,17 @@ class Webhook {
   // It loops through each match and executes that webhook.
   async triggerWebhook (matches) {
     console.log('triggerWebhook() triggered with these matches: ', matches)
+  }
+
+  // Add a new Webhook entity to the local database.
+  async addWebhook (webhookData) {
+    const newWebhook = new this.WebhookModel(webhookData)
+    await newWebhook.save()
+    // console.log('newWebhook: ', newWebhook)
+
+    const id = newWebhook._id
+
+    return id
   }
 }
 

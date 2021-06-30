@@ -16,13 +16,13 @@ class UseCases {
 
     // Instantiate the use cases.
     this.addEntry = new AddEntry({
-      p2wdb: this.adapters.p2wdb,
-      localdb: this.adapters.localdb
+      p2wdbAdapter: this.adapters.p2wdb,
+      entryAdapter: this.adapters.entry
     })
 
-    this.readEntry = new ReadEntry({ p2wdb: this.adapters.p2wdb })
+    this.readEntry = new ReadEntry({ p2wdbAdapter: this.adapters.p2wdb })
 
-    this.addWebhook = new AddWebhook({ localdb: this.adapters.localdb })
+    this.addWebhook = new AddWebhook({ webhookAdapter: this.adapters.webhook })
   }
 }
 

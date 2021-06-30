@@ -29,7 +29,7 @@ class PostWebhook {
    * @apiGroup Webhook
    *
    * @apiExample Example usage:
-   * curl -H "Content-Type: application/json" -X POST -d '{ "url": "https://test.com/my-webhook", "appId": "test" }' localhost:5001/temp/webhook
+   * curl -H "Content-Type: application/json" -X POST -d '{ "url": "https://test.com/my-webhook", "appId": "test" }' localhost:5001/webhook/
    *
    * @apiDescription
    * Add a new webhook. When a new database entry is added that matches the appID,

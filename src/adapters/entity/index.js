@@ -1,16 +1,15 @@
 /*
-  This is a Class Library for an Adapter for the local database.
-  The local database used in this adapter is MongoDB.
+  This is a Class Library for an Adapter for Entry Entity. This Adapter
+  interacts with the local MongoDB. It's the only file associated with the Entry
+  Entity that needs to know which specific database is being used.
 */
 
-const KeyValue = require('../models/key-value')
-const Webhook = require('../models/webhook')
+const KeyValue = require('../../models/key-value')
 
-class LocalDB {
+class EntityAdapter {
   constructor (localConfig = {}) {
     // Encapsulate dependencies.
     this.KeyValue = KeyValue
-    this.Webhook = Webhook
   }
 
   // Check to see if an entry already exists in the local database.
@@ -44,16 +43,6 @@ class LocalDB {
       throw err
     }
   }
-
-  async addWebhook (webhookData) {
-    const newWebhook = new this.Webhook(webhookData)
-    await newWebhook.save()
-    console.log('newWebhook: ', newWebhook)
-
-    const id = newWebhook._id
-
-    return id
-  }
 }
 
-module.exports = LocalDB
+module.exports = EntityAdapter

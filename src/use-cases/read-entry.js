@@ -9,12 +9,12 @@
 
 class ReadEntry {
   constructor (localConfig = {}) {
-    if (!localConfig.p2wdb) {
+    if (!localConfig.p2wdbAdapter) {
       throw new Error(
         'p2wdb instance must be included when instantiating ReadEntry'
       )
     }
-    this.p2wdb = localConfig.p2wdb
+    this.p2wdbAdapter = localConfig.p2wdbAdapter
 
     // _this = this
   }
@@ -22,7 +22,7 @@ class ReadEntry {
   // Read all entries in the P2WDB.
   async readAllEntries () {
     try {
-      const data = await this.p2wdb.readAll()
+      const data = await this.p2wdbAdapter.readAll()
 
       return data
     } catch (err) {

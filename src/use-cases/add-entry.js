@@ -10,19 +10,19 @@ let _this
 
 class AddEntry {
   constructor (localConfig = {}) {
-    if (!localConfig.p2wdb) {
+    if (!localConfig.p2wdbAdapter) {
       throw new Error(
-        'p2wdb instance must be included when instantiating AddEntry'
+        'p2wdbAdapter instance must be included when instantiating AddEntry'
       )
     }
-    this.p2wdb = localConfig.p2wdb
+    this.p2wdbAdapter = localConfig.p2wdbAdapter
 
-    if (!localConfig.localdb) {
+    if (!localConfig.entryAdapter) {
       throw new Error(
-        'localdb instance must be included when instantiating AddEntry'
+        'entryAdapter instance must be included when instantiating AddEntry'
       )
     }
-    this.localdb = localConfig.localdb
+    this.entryAdapter = localConfig.entryAdapter
 
     // Encapsulate dependencies.
     this.dbEntry = new DBEntry()
@@ -36,13 +36,13 @@ class AddEntry {
       const entry = _this.dbEntry.makeUserEntry(rawData)
 
       // Throw an error if the entry already exists.
-      const exists = await _this.localdb.doesEntryExist(entry)
+      const exists = await _this.entryAdapter.doesEntryExist(entry)
       if (exists) {
         throw new Error('Entry already exists in the database.')
       }
 
       // Add the entry to the P2WDB OrbitDB.
-      const hash = await _this.p2wdb.insert(entry)
+      const hash = await _this.p2wdbAdapter.insert(entry)
       entry.hash = hash
       entry.isValid = true
 
@@ -63,7 +63,7 @@ class AddEntry {
     const entry = _this.dbEntry.makePeerEntry(peerData)
 
     // Throw an error if the entry already exists.
-    const exists = await _this.localdb.doesEntryExist(entry)
+    const exists = await _this.entryAdapter.doesEntryExist(entry)
     if (exists) {
       throw new Error('Entry already exists in the database.')
     }
@@ -72,7 +72,7 @@ class AddEntry {
     // done on that front.
 
     // Add the entry to the local database (Mongo).
-    await _this.localdb.insert(entry)
+    await _this.entryAdapter.insert(entry)
 
     return true
   }

@@ -10,12 +10,12 @@ let _this
 
 class AddWebhook {
   constructor (localConfig = {}) {
-    if (!localConfig.localdb) {
+    if (!localConfig.webhookAdapter) {
       throw new Error(
         'localdb instance must be included when instantiating AddEntry'
       )
     }
-    this.localdb = localConfig.localdb
+    this.webhookAdapter = localConfig.webhookAdapter
 
     // Encapsulate dependencies.
     this.webhookEntity = new WebhookEntity()
@@ -36,7 +36,7 @@ class AddWebhook {
       // }
 
       // Add the webhook entry to the local database.
-      const id = await this.localdb.addWebhook(webhookData)
+      const id = await this.webhookAdapter.addWebhook(webhookData)
 
       return id
     } catch (err) {

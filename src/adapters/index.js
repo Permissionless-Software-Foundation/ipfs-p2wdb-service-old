@@ -3,11 +3,11 @@
 */
 
 // Individual adapter libraries.
-const P2WDB = require('../adapters/p2wdb')
-const p2wdb = new P2WDB()
-const LocalDB = require('../adapters/local-db')
-const localdb = new LocalDB()
-const Webhook = require('./webhook')
-const webhook = new Webhook()
+const P2WDBAdapter = require('./p2wdb')
+const p2wdb = new P2WDBAdapter()
+const EntryAdapter = require('./entity')
+const entry = new EntryAdapter()
+const WebhookAdapter = require('./webhook')
+const webhook = new WebhookAdapter()
 
-module.exports = { p2wdb, localdb, webhook }
+module.exports = { p2wdb, entry, webhook }
