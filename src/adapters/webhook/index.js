@@ -91,6 +91,7 @@ class WebhookAdapter {
       // Return false if there are no matches.
       if (!matches.length) return false
 
+      // console.log(`total matches: ${matches.length}`)
       for (let i = 0; i < matches.length; i++) {
         const thisMatch = matches[i]
 

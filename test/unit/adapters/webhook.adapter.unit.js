@@ -99,11 +99,54 @@ describe('#WebhookAdapter', () => {
       assert.equal(result, '123')
     })
   })
+
+  describe('#deleteWebhook', () => {
+    it('should delete the entry from the database, if it exists', async () => {
+      // Mock database dependencies.
+      uut.WebhookModel = WebhookModelMock
+
+      const data = {
+        url: 'http://test.com',
+        appId: 'test'
+      }
+
+      const result = await uut.deleteWebhook(data)
+
+      assert.equal(result, true)
+    })
+
+    it('should catch and throw an error', async () => {
+      try {
+        // Force an error
+        uut.WebhookModel = WebhookModelMock
+        sandbox.stub(uut.WebhookModel, 'find').rejects(new Error('test error'))
+
+        const data = {
+          url: 'http://test.com',
+          appId: 'test'
+        }
+
+        await uut.deleteWebhook(data)
+
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'test error')
+      }
+    })
+  })
 })
 
+// A simple mock of the Mongoose database model.
 class WebhookModelMock {
   constructor (obj) {
     this._id = '123'
+
+    this.remove = () => {}
+  }
+
+  static find () {
+    const mock = new WebhookModelMock()
+    return [mock]
   }
 
   save () {}

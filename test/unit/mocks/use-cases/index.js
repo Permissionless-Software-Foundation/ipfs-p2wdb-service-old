@@ -14,7 +14,8 @@ class UseCasesMock {
     this.webhook = {
       addWebhook: {
         addNewWebhook: async () => {}
-      }
+      },
+      remove: async () => {}
     }
   }
 }
