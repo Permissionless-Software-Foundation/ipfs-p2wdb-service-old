@@ -78,6 +78,31 @@ class WebhookAdapter {
 
     return id
   }
+
+  // Delete an existing webhook from the local database.
+  // Returns true on success, false if webhook can't be found.
+  async deleteWebhook (webhookData) {
+    try {
+      const matches = await this.WebhookModel.find({
+        url: webhookData.url,
+        appId: webhookData.appId
+      })
+
+      // Return false if there are no matches.
+      if (!matches.length) return false
+
+      for (let i = 0; i < matches.length; i++) {
+        const thisMatch = matches[i]
+
+        await thisMatch.remove()
+      }
+
+      return true
+    } catch (err) {
+      console.error('Error in deleteWebhook: ', err)
+      throw err
+    }
+  }
 }
 
 module.exports = WebhookAdapter

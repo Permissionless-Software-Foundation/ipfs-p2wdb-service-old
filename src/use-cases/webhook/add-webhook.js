@@ -35,7 +35,7 @@ class AddWebhook {
       // }
 
       // Add the webhook entry to the local database.
-      const id = await this.webhookAdapter.addNewWebhook(webhookData)
+      const id = await this.webhookAdapter.addWebhook(webhookData)
 
       return id
     } catch (err) {

@@ -8,6 +8,7 @@ const Router = require('koa-router')
 
 // Load the REST API Controllers.
 const PostWebhook = require('./post-webhook')
+const DeleteWebhook = require('./delete-webhook')
 
 class WebhookRESTController {
   constructor (localConfig = {}) {
@@ -32,6 +33,7 @@ class WebhookRESTController {
 
     // Instantiate the REST API controllers
     this.postWebhook = new PostWebhook(dependencies)
+    this.deleteWebhook = new DeleteWebhook(dependencies)
 
     // Instantiate the router.
     const baseUrl = '/webhook'
@@ -47,6 +49,7 @@ class WebhookRESTController {
 
     // curl -H "Content-Type: application/json" -X POST -d '{ "user": "test" }' localhost:5001/p2wdb/write
     this.router.post('/', this.postWebhook.routeHandler)
+    this.router.delete('/', this.deleteWebhook.routeHandler)
 
     // Attach the Controller routes to the Koa app.
     app.use(this.router.routes())

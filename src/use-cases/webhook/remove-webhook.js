@@ -29,7 +29,7 @@ class RemoveWebhook {
       const webhookData = _this.webhookEntity.validate(rawData)
 
       // Add the webhook entry to the local database.
-      const id = await this.webhookAdapter.deleteWebhook(webhookData)
+      const id = await _this.webhookAdapter.deleteWebhook(webhookData)
 
       return id
     } catch (err) {
