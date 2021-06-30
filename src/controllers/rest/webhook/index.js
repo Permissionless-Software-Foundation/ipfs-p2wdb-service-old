@@ -56,7 +56,8 @@ class WebhookRESTController {
     })
 
     // Attach the Controller routes to the Koa app.
-    app.use(this.router.routes()).use(this.router.allowedMethods())
+    app.use(this.router.routes())
+    app.use(this.router.allowedMethods())
   }
 }
 

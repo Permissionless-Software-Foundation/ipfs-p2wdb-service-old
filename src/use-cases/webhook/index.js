@@ -7,7 +7,7 @@
 // Individual Use Case libraries
 const AddWebhook = require('./add-webhook')
 
-class EntryUseCases {
+class WebhookUseCases {
   constructor (localConfig = {}) {
     this.adapters = localConfig.adapters
     if (!this.adapters) {
@@ -20,4 +20,4 @@ class EntryUseCases {
   }
 }
 
-module.exports = EntryUseCases
+module.exports = WebhookUseCases
