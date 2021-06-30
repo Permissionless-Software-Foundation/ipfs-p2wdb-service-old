@@ -52,11 +52,8 @@ class PostWebhook {
       const inputData = { url, appId }
       console.log(`inputData: ${JSON.stringify(inputData, null, 2)}`)
 
-      console.log('this.useCases: ', this.useCases)
-      console.log('this.useCases.addWebhook: ', this.useCases.addWebhook)
-
       // const hash = await this.addEntry.addUserEntry(writeObj)
-      const id = await this.useCases.addWebhook.addWebhook(inputData)
+      const id = await this.useCases.webhook.addWebhook.addWebhook(inputData)
 
       ctx.body = {
         success: true,

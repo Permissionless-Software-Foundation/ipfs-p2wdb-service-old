@@ -78,7 +78,7 @@ async function attachValidationController () {
             data
           )
 
-          await useCases.addEntry.addPeerEntry(data)
+          await useCases.entry.addEntry.addPeerEntry(data)
         } catch (err) {
           console.error(
             'Error trying to process peer data with addPeerEntry(): ',

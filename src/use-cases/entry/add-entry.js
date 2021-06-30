@@ -4,7 +4,7 @@
   use case than a replication event triggered by a new entry from a peer database.
 */
 
-const DBEntry = require('../entities/db-entry')
+const DBEntry = require('../../entities/db-entry')
 
 let _this
 

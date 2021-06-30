@@ -9,6 +9,13 @@ const p2wdb = {
     }
   }
 }
-const localdb = () => {}
 
-module.exports = { p2wdb, localdb }
+const entry = {
+  readEntry: {
+    readAllEntries: () => {}
+  }
+}
+
+const webhook = () => {}
+
+module.exports = { p2wdb, entry, webhook }

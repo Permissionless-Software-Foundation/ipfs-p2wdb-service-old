@@ -68,7 +68,7 @@ describe('#get-all', () => {
       try {
         // Force an error
         sandbox
-          .stub(uut.useCases.readEntry, 'readAllEntries')
+          .stub(uut.useCases.entry.readEntry, 'readAllEntries')
           .rejects(new Error('test error'))
 
         await uut.restController()

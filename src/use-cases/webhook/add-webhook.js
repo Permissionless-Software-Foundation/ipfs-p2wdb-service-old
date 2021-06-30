@@ -4,7 +4,7 @@
   use case than a replication event triggered by a new entry from a peer database.
 */
 
-const WebhookEntity = require('../entities/webhook')
+const WebhookEntity = require('../../entities/webhook')
 
 let _this
 

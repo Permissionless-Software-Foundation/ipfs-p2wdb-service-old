@@ -61,6 +61,11 @@ class IpfsAdapter {
       //   `IPFS node configuration: ${JSON.stringify(nodeConfig, null, 2)}`
       // )
 
+      // Stop the IPFS node if we're running tests.
+      if (this.config.env === 'test') {
+        await this.ipfs.stop()
+      }
+
       // Signal that this adapter is ready.
       this.isReady = true
 

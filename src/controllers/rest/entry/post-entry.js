@@ -53,7 +53,7 @@ class PostEntry {
       console.log(`body data: ${JSON.stringify(writeObj, null, 2)}`)
 
       // const hash = await this.addEntry.addUserEntry(writeObj)
-      const hash = await this.useCases.addEntry.addUserEntry(writeObj)
+      const hash = await this.useCases.entry.addEntry.addUserEntry(writeObj)
 
       ctx.body = {
         success: true,
