@@ -20,7 +20,7 @@ const entry = {
 }
 
 const webhook = {
-  addNewWebhook: async () => {},
+  addWebhook: async () => {},
   deleteWebhook: async () => {}
 }
 

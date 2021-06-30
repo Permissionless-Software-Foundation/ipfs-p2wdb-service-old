@@ -10,7 +10,7 @@ const AddWebhook = require('../../../../src/use-cases/webhook/add-webhook')
 // Mocks
 const adaptersMock = require('../../mocks/adapters')
 
-describe('#AddWebhook', () => {
+describe('#UseCase-AddWebhook', () => {
   let uut
   let sandbox
 
@@ -42,7 +42,7 @@ describe('#AddWebhook', () => {
   describe('#addNewWebhook', () => {
     it('should add a new webhook to the local database', async () => {
       // Mock dependencies
-      sandbox.stub(uut.webhookAdapter, 'addNewWebhook').resolves('123')
+      sandbox.stub(uut.webhookAdapter, 'addWebhook').resolves('123')
 
       const rawData = {
         url: 'http://test.com',
