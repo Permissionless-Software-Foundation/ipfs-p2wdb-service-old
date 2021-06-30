@@ -19,6 +19,8 @@ const entry = {
   insert: async () => {}
 }
 
-const webhook = () => {}
+const webhook = {
+  addNewWebhook: async () => {}
+}
 
 module.exports = { p2wdb, entry, webhook }

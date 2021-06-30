@@ -12,7 +12,7 @@ class AddWebhook {
   constructor (localConfig = {}) {
     if (!localConfig.webhookAdapter) {
       throw new Error(
-        'localdb instance must be included when instantiating AddEntry'
+        'webhookAdapter instance must be included when instantiating AddWebhook'
       )
     }
     this.webhookAdapter = localConfig.webhookAdapter
@@ -36,11 +36,11 @@ class AddWebhook {
       // }
 
       // Add the webhook entry to the local database.
-      const id = await this.webhookAdapter.addWebhook(webhookData)
+      const id = await this.webhookAdapter.addNewWebhook(webhookData)
 
       return id
     } catch (err) {
-      console.error('Error in addEntry.add()')
+      console.error('Error in addNewWebhook()')
       throw err
     }
   }
