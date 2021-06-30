@@ -10,6 +10,12 @@ class UseCasesMock {
       readEntry: new ReadEntryMock(),
       addEntry: () => {}
     }
+
+    this.webhook = {
+      addWebhook: {
+        addNewWebhook: async () => {}
+      }
+    }
   }
 }
 

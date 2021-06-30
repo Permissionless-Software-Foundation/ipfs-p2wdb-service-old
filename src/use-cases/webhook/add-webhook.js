@@ -24,7 +24,7 @@ class AddWebhook {
   }
 
   // Add a new webhook entry to the local database.
-  async addWebhook (rawData) {
+  async addNewWebhook (rawData) {
     try {
       // Generate a validated entry by passing the raw data through input validation.
       const webhookData = _this.webhookEntity.makeWebhook(rawData)

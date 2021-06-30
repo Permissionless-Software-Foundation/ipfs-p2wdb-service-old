@@ -50,17 +50,17 @@ class PostWebhook {
       const appId = ctx.request.body.appId
 
       const inputData = { url, appId }
-      console.log(`inputData: ${JSON.stringify(inputData, null, 2)}`)
+      // console.log(`inputData: ${JSON.stringify(inputData, null, 2)}`)
 
       // const hash = await this.addEntry.addUserEntry(writeObj)
-      const id = await this.useCases.webhook.addWebhook.addWebhook(inputData)
+      const id = await this.useCases.webhook.addWebhook.addNewWebhook(inputData)
 
       ctx.body = {
         success: true,
         id
       }
     } catch (err) {
-      console.log('Error in post-webhook.js/restController(): ', err)
+      console.log('Error in post-webhook.js/restController()')
       throw err
     }
   }

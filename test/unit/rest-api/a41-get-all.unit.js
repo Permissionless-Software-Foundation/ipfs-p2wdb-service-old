@@ -72,6 +72,8 @@ describe('#get-all', () => {
           .rejects(new Error('test error'))
 
         await uut.restController()
+
+        assert.fail('Unexpected code path')
       } catch (err) {
         assert.include(err.message, 'test error')
       }
