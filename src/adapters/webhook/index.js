@@ -3,6 +3,10 @@
   well as the event handler for triggering a webhook.
 */
 
+// Public npm libraries.
+const axios = require('axios')
+
+// Local libraries.
 const validationEvent = require('../orbit/validation-event')
 const WebhookModel = require('../../models/webhook')
 
@@ -18,6 +22,7 @@ class WebhookAdapter {
 
     // Encapsulate dependencies
     this.WebhookModel = WebhookModel
+    this.axios = axios
 
     _this = this
   }
@@ -33,8 +38,8 @@ class WebhookAdapter {
       )
 
       // const { txid, signature, message, data, hash } = eventData
-      const { data } = eventData
-      // console.log('data: ', data)
+      const { data, hash } = eventData
+      console.log('data: ', data)
 
       // Attempt to parse the raw data as JSON
       let jsonData = {}
@@ -45,16 +50,19 @@ class WebhookAdapter {
         // Exit quietly. Entry does not comply with webhook protocol.
         return
       }
-      // console.log(`jsonData: ${JSON.stringify(jsonData, null, 2)}`)
+      console.log(`jsonData: ${JSON.stringify(jsonData, null, 2)}`)
 
       const appId = jsonData.appId
+      console.log('appId: ', appId)
 
       // Exit quietly if there is no appId in the JSON data.
       if (!appId) return
 
-      const matches = _this.WebhookModel.find({ appId })
+      const matches = await _this.WebhookModel.find({ appId })
+      console.log('matches: ', matches)
+
       if (matches.length > 0) {
-        await _this.triggerWebhook(matches)
+        await _this.triggerWebhook(matches, hash)
       }
     } catch (err) {
       console.error('Error in validationSucceededEventHandler(): ', err)
@@ -64,8 +72,22 @@ class WebhookAdapter {
 
   // This function expects an array of Webhook MongoDB model instances as input.
   // It loops through each match and executes that webhook.
-  async triggerWebhook (matches) {
+  async triggerWebhook (matches, hash) {
     console.log('triggerWebhook() triggered with these matches: ', matches)
+
+    for (let i = 0; i < matches.length; i++) {
+      const thisMatch = matches[i]
+
+      console.log(
+        `Webhook triggered by ${hash}. appId: ${thisMatch.appId}, Calling: ${thisMatch.url}`
+      )
+      try {
+        // Call the webhook.
+        await this.axios.post(thisMatch.url, { hash })
+      } catch (err) {
+        /* exit quietly */
+      }
+    }
   }
 
   // Add a new Webhook entity to the local database.

@@ -73,10 +73,10 @@ async function attachValidationController () {
       'ValidationSucceeded',
       async function (data) {
         try {
-          console.log(
-            'ValidationSucceeded event triggering addPeerEntry() with this data: ',
-            data
-          )
+          // console.log(
+          //   'ValidationSucceeded event triggering addPeerEntry() with this data: ',
+          //   data
+          // )
 
           await useCases.entry.addEntry.addPeerEntry(data)
         } catch (err) {

@@ -76,8 +76,11 @@ describe('#WebhookAdapter', () => {
   })
 
   describe('#triggerWebhook', () => {
-    it('should trigger a webhook', async () => {
-      const matches = ['a']
+    it('should trigger a webhook given an array of matches', async () => {
+      // Mock axios so it doesn't make any real network calls.
+      sandbox.stub(uut.axios, 'post').resolves({})
+
+      const matches = [{ url: 'http://test.com', appId: 'test' }]
 
       await uut.triggerWebhook(matches)
     })
@@ -132,6 +135,21 @@ describe('#WebhookAdapter', () => {
       } catch (err) {
         assert.include(err.message, 'test error')
       }
+    })
+
+    it('should exit quietly if there is no match', async () => {
+      // Mock database dependencies.
+      uut.WebhookModel = WebhookModelMock
+      sandbox.stub(uut.WebhookModel, 'find').resolves([])
+
+      const data = {
+        url: 'http://test.com',
+        appId: 'test'
+      }
+
+      const result = await uut.deleteWebhook(data)
+
+      assert.equal(result, false)
     })
   })
 })
