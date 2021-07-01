@@ -14,6 +14,7 @@
 
 const IpfsAdapters = require('../ipfs')
 const OribitAdapter = require('../orbit')
+const KeyValue = require('../../models/key-value')
 
 let _this
 
@@ -21,6 +22,7 @@ class P2WDB {
   constructor (localConfig = {}) {
     // Encapsulate dependencies
     this.ipfsAdapters = new IpfsAdapters()
+    this.KeyValue = KeyValue
 
     // Properties of this class instance.
     this.isReady = false
@@ -79,6 +81,39 @@ class P2WDB {
       return data
     } catch (err) {
       console.error('Error in p2wdb.js/readAll()')
+      throw err
+    }
+  }
+
+  async readByHash (hash) {
+    try {
+      console.log('hash: ', hash)
+
+      // Note: No good way listed in API reference for getting entry by hash from
+      // OrbitDB directly.
+      // https://github.com/orbitdb/orbit-db/blob/main/API.md
+      // const data = _this.orbit.db.get(hash)
+
+      // Get an entry from MongoDB.
+      const data = await _this.KeyValue.findOne({ hash })
+      console.log('data: ', data)
+
+      return data
+    } catch (err) {
+      console.error('Error in p2wdb.js/readByHash()')
+      throw err
+    }
+  }
+
+  async readByTxid (txid) {
+    try {
+      console.log('txid: ', txid)
+      const data = _this.orbit.db.get(txid)
+      console.log('data: ', data)
+
+      return data
+    } catch (err) {
+      console.error('Error in p2wdb.js/readByTxid()')
       throw err
     }
   }

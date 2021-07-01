@@ -30,6 +30,28 @@ class ReadEntry {
       throw err
     }
   }
+
+  async readByHash (hash) {
+    try {
+      const data = await this.p2wdbAdapter.readByHash(hash)
+
+      return data
+    } catch (err) {
+      console.error('Error in readByHash()')
+      throw err
+    }
+  }
+
+  async readByTxid (txid) {
+    try {
+      const data = await this.p2wdbAdapter.readByTxid(txid)
+
+      return data
+    } catch (err) {
+      console.error('Error in readByTxid()')
+      throw err
+    }
+  }
 }
 
 module.exports = ReadEntry

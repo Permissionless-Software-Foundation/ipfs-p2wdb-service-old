@@ -9,6 +9,8 @@ const Router = require('koa-router')
 // Load the REST API Controllers.
 const PostEntry = require('./post-entry')
 const GetAll = require('./get-all')
+const GetByHash = require('./get-by-hash')
+const GetByTxid = require('./get-by-txid')
 
 class EntryController {
   constructor (localConfig = {}) {
@@ -34,6 +36,8 @@ class EntryController {
     // Instantiate the REST API controllers
     this.postEntry = new PostEntry(dependencies)
     this.readAllEntries = new GetAll(dependencies)
+    this.getByHash = new GetByHash(dependencies)
+    this.getByTxid = new GetByTxid(dependencies)
 
     // Instantiate the router.
     const baseUrl = '/p2wdb'
@@ -49,8 +53,15 @@ class EntryController {
 
     // curl -H "Content-Type: application/json" -X POST -d '{ "user": "test" }' localhost:5001/p2wdb/write
     this.router.post('/write', this.postEntry.routeHandler)
+
     // curl -H "Content-Type: application/json" -X GET localhost:5001/p2wdb/all
     this.router.get('/all', this.readAllEntries.routeHandler)
+
+    // curl -H "Content-Type: application/json" -X GET localhost:5001/p2wdb/hash/:hash
+    this.router.get('/hash/:hash', this.getByHash.routeHandler)
+
+    // curl -H "Content-Type: application/json" -X GET localhost:5001/p2wdb/txid/:txid
+    this.router.get('/txid/:txid', this.getByTxid.routeHandler)
 
     // Attach the Controller routes to the Koa app.
     app.use(this.router.routes())
