@@ -1,11 +1,12 @@
 /*
-  This is a Class Library for an Adapter for the local database.
-  The local database used in this adapter is MongoDB.
+  This is a Class Library for an Adapter for Entry Entity. This Adapter
+  interacts with the local MongoDB. It's the only file associated with the Entry
+  Entity that needs to know which specific database is being used.
 */
 
-const KeyValue = require('../models/key-value')
+const KeyValue = require('../../models/key-value')
 
-class LocalDB {
+class EntryAdapter {
   constructor (localConfig = {}) {
     // Encapsulate dependencies.
     this.KeyValue = KeyValue
@@ -44,4 +45,4 @@ class LocalDB {
   }
 }
 
-module.exports = LocalDB
+module.exports = EntryAdapter

@@ -6,8 +6,17 @@ const ReadEntryMock = require('./read-entry.mock')
 
 class UseCasesMock {
   constructor () {
-    this.readEntry = new ReadEntryMock()
-    this.addEntry = () => {}
+    this.entry = {
+      readEntry: new ReadEntryMock(),
+      addEntry: () => {}
+    }
+
+    this.webhook = {
+      addWebhook: {
+        addNewWebhook: async () => {}
+      },
+      remove: async () => {}
+    }
   }
 }
 

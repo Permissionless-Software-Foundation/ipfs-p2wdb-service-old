@@ -6,7 +6,7 @@ const sinon = require('sinon')
 const assert = require('chai').assert
 
 // Unit under test (UUT)
-const GetAll = require('../../../src/controllers/rest/get-all')
+const GetAll = require('../../../src/controllers/rest/entry/get-all')
 
 // Mocks requred by UUT.
 const adapters = require('../mocks/adapters')
@@ -68,10 +68,12 @@ describe('#get-all', () => {
       try {
         // Force an error
         sandbox
-          .stub(uut.useCases.readEntry, 'readAllEntries')
+          .stub(uut.useCases.entry.readEntry, 'readAllEntries')
           .rejects(new Error('test error'))
 
         await uut.restController()
+
+        assert.fail('Unexpected code path')
       } catch (err) {
         assert.include(err.message, 'test error')
       }

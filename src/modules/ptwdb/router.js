@@ -2,7 +2,7 @@ const CONTROLLER = require('./controller')
 const controller = new CONTROLLER()
 
 // ptwdb = pay to write DB
-module.exports.baseUrl = '/ptwdb'
+module.exports.baseUrl = '/blah'
 
 module.exports.routes = [
   {

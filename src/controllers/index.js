@@ -5,11 +5,11 @@
 */
 
 // Public npm libraries.
-const Router = require('koa-router')
 
 // Load the REST API Controllers.
-const PostEntry = require('./rest/post-entry')
-const GetAll = require('./rest/get-all')
+const EntryRESTController = require('./rest/entry')
+const WebhookRESTController = require('./rest/webhook')
+// const PostWebhook = require('./rest/post-webhook')
 
 // Load the Clean Architecture Adapters library
 const adapters = require('../adapters')
@@ -38,47 +38,19 @@ async function attachControllers (app) {
 }
 
 function attachRESTControllers (app) {
-  const baseUrl = '/temp'
-  const router = new Router({ prefix: baseUrl })
-
-  // curl -H "Content-Type: application/json" -X GET localhost:5001/temp/
-  router.get('/', (ctx, next) => {
-    const now = new Date()
-    ctx.body = now.toLocaleString()
-  })
-
-  // Instantiate the POST entry controller.
-  const postEntry = new PostEntry({
-    // addEntry: useCases.addEntry
+  // Attach the REST API Controllers associated with the Entry Entity to the Koa app.
+  const entryController = new EntryRESTController({
     adapters,
     useCases
   })
-  // curl -H "Content-Type: application/json" -X POST -d '{ "user": "test" }' localhost:5001/temp/write
-  router.post('/write', async (ctx, next) => {
-    try {
-      await postEntry.restController(ctx)
-    } catch (err) {
-      // console.error('Error in POST /temp/write controller')
-      ctx.throw(422, err.message)
-    }
-  })
+  entryController.attachControllers(app)
 
-  // curl -H "Content-Type: application/json" -X GET localhost:5001/temp/all
-  const readAll = new GetAll({
-    // getEntries: useCases.readEntry
+  // Attach the REST API Controllers associated with the Webhook Entity to the Koa app.
+  const webhookController = new WebhookRESTController({
     adapters,
     useCases
   })
-  router.get('/all', async (ctx, next) => {
-    try {
-      await readAll.restController(ctx)
-    } catch (err) {
-      ctx.throw(422, err.message)
-    }
-  })
-
-  // Attach the Controller routes to the Koa app.
-  app.use(router.routes()).use(router.allowedMethods())
+  webhookController.attachControllers(app)
 }
 
 // Add the JSON RPC router to the ipfs-coord adapter.
@@ -101,12 +73,12 @@ async function attachValidationController () {
       'ValidationSucceeded',
       async function (data) {
         try {
-          console.log(
-            'ValidationSucceeded event triggering addPeerEntry() with this data: ',
-            data
-          )
+          // console.log(
+          //   'ValidationSucceeded event triggering addPeerEntry() with this data: ',
+          //   data
+          // )
 
-          await useCases.addEntry.addPeerEntry(data)
+          await useCases.entry.addEntry.addPeerEntry(data)
         } catch (err) {
           console.error(
             'Error trying to process peer data with addPeerEntry(): ',

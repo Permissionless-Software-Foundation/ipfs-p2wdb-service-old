@@ -28,7 +28,7 @@ class GetAllEntries {
    * @apiGroup REST P2WDB
    *
    * @apiExample Example usage:
-   * curl -H "Content-Type: application/json" -X GET localhost:5001/temp/all
+   * curl -H "Content-Type: application/json" -X GET localhost:5001/p2wdb/all
    *
    * @apiDescription
    * Read all the entries from the database.
@@ -44,10 +44,10 @@ class GetAllEntries {
    */
   async restController (ctx) {
     try {
-      console.log('this.getEntries: ', this.getEntries)
+      console.log('this.useCases.entry: ', this.useCases.entry)
 
       // Get all the contents of the P2WDB.
-      const allData = await this.useCases.readEntry.readAllEntries()
+      const allData = await this.useCases.entry.readEntry.readAllEntries()
 
       ctx.body = {
         success: true,

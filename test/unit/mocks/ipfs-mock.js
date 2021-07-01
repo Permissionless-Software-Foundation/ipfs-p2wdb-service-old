@@ -18,6 +18,8 @@ class MockIpfsInstance {
       }
     }
   }
+
+  stop () {}
 }
 
 module.exports = IPFS

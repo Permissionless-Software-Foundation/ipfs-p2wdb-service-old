@@ -7,8 +7,21 @@ const p2wdb = {
     ipfsCoordAdapter: {
       ipfsCoord: {}
     }
-  }
+  },
+  insert: async () => {}
 }
-const localdb = () => {}
 
-module.exports = { p2wdb, localdb }
+const entry = {
+  readEntry: {
+    readAllEntries: () => {}
+  },
+  doesEntryExist: async () => {},
+  insert: async () => {}
+}
+
+const webhook = {
+  addWebhook: async () => {},
+  deleteWebhook: async () => {}
+}
+
+module.exports = { p2wdb, entry, webhook }

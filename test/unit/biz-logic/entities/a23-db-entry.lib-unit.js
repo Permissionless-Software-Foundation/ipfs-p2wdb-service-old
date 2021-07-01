@@ -5,7 +5,7 @@
 const assert = require('chai').assert
 const sinon = require('sinon')
 
-const DBEntry = require('../../../src/entities/db-entry')
+const DBEntry = require('../../../../src/entities/db-entry')
 
 let sandbox
 let uut

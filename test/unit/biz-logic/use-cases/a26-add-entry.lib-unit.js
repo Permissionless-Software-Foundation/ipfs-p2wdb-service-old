@@ -5,11 +5,10 @@
 const assert = require('chai').assert
 const sinon = require('sinon')
 
-const AddEntry = require('../../../../src/use-cases/add-entry')
+const AddEntry = require('../../../../src/use-cases/entry/add-entry')
 
 // Mocks
-const LocalDB = require('../../mocks/localdb-mock')
-const P2WDB = require('../../mocks/p2wdb-mock')
+const adaptersMock = require('../../mocks/adapters')
 
 let sandbox
 let uut
@@ -19,9 +18,10 @@ describe('#AddEntry', () => {
   before(async () => {})
 
   beforeEach(() => {
-    const localdb = new LocalDB()
-    const p2wdb = new P2WDB()
-    uut = new AddEntry({ p2wdb, localdb })
+    uut = new AddEntry({
+      p2wdbAdapter: adaptersMock.p2wdb,
+      entryAdapter: adaptersMock.entry
+    })
 
     rawData = {
       hash: 'zdpuAuxCW346zUG71Aai21Y31EJ1XNxcjXV5rz93DxftKnpjn',
@@ -47,20 +47,20 @@ describe('#AddEntry', () => {
       } catch (err) {
         assert.include(
           err.message,
-          'p2wdb instance must be included when instantiating AddEntry'
+          'p2wdbAdapter instance must be included when instantiating AddEntry'
         )
       }
     })
 
-    it('should throw an error if localdb instance is not included', () => {
+    it('should throw an error if entry adapter instance is not included', () => {
       try {
-        uut = new AddEntry({ p2wdb: {} })
+        uut = new AddEntry({ p2wdbAdapter: {} })
 
         assert.fail('Unexpected code path')
       } catch (err) {
         assert.include(
           err.message,
-          'localdb instance must be included when instantiating AddEntry'
+          'entryAdapter instance must be included when instantiating AddEntry use case'
         )
       }
     })
@@ -70,7 +70,7 @@ describe('#AddEntry', () => {
     it('should throw an error if entry already exists in the database.', async () => {
       try {
         // Mock dependencies.
-        sandbox.stub(uut.localdb, 'doesEntryExist').resolves(true)
+        sandbox.stub(uut.entryAdapter, 'doesEntryExist').resolves(true)
 
         await uut.addUserEntry(rawData)
 
@@ -82,8 +82,9 @@ describe('#AddEntry', () => {
 
     it('should add an entry to the P2WDB', async () => {
       // Mock dependencies
-      sandbox.stub(uut.localdb, 'doesEntryExist').resolves(false)
-      sandbox.stub(uut.p2wdb, 'insert').resolves('test-hash')
+      console.log('uut.entryAdapter: ', uut.entryAdapter)
+      sandbox.stub(uut.entryAdapter, 'doesEntryExist').resolves(false)
+      sandbox.stub(uut.p2wdbAdapter, 'insert').resolves('test-hash')
 
       const result = await uut.addUserEntry(rawData)
 
@@ -95,7 +96,7 @@ describe('#AddEntry', () => {
     it('should throw an error if entry already exists in the database.', async () => {
       try {
         // Mock dependencies.
-        sandbox.stub(uut.localdb, 'doesEntryExist').resolves(true)
+        sandbox.stub(uut.entryAdapter, 'doesEntryExist').resolves(true)
 
         await uut.addPeerEntry(rawData)
 
@@ -107,7 +108,7 @@ describe('#AddEntry', () => {
 
     it('should add an entry to the P2WDB', async () => {
       // Mock dependencies
-      sandbox.stub(uut.localdb, 'doesEntryExist').resolves(false)
+      sandbox.stub(uut.entryAdapter, 'doesEntryExist').resolves(false)
 
       const result = await uut.addPeerEntry(rawData)
 
