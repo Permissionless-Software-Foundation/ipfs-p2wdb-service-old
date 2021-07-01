@@ -48,26 +48,13 @@ class EntryController {
     }
 
     // curl -H "Content-Type: application/json" -X POST -d '{ "user": "test" }' localhost:5001/p2wdb/write
-    this.router.post('/write', async (ctx, next) => {
-      try {
-        await this.postEntry.restController(ctx)
-      } catch (err) {
-        // console.error('Error in POST /temp/write controller')
-        ctx.throw(422, err.message)
-      }
-    })
-
+    this.router.post('/write', this.postEntry.routeHandler)
     // curl -H "Content-Type: application/json" -X GET localhost:5001/p2wdb/all
-    this.router.get('/all', async (ctx, next) => {
-      try {
-        await this.readAllEntries.restController(ctx)
-      } catch (err) {
-        ctx.throw(422, err.message)
-      }
-    })
+    this.router.get('/all', this.readAllEntries.routeHandler)
 
     // Attach the Controller routes to the Koa app.
-    app.use(this.router.routes()).use(this.router.allowedMethods())
+    app.use(this.router.routes())
+    app.use(this.router.allowedMethods())
   }
 }
 

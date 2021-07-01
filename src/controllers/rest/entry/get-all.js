@@ -2,7 +2,7 @@
   Clean Architecture Controller for the GET all Entries.
 */
 
-// const useCases = require('../../use-cases')
+let _this
 
 class GetAllEntries {
   constructor (localConfig = {}) {
@@ -18,6 +18,17 @@ class GetAllEntries {
       throw new Error(
         'Instance of Use Cases library required when instantiating PostEntry REST Controller.'
       )
+    }
+
+    _this = this
+  }
+
+  async routeHandler (ctx, next) {
+    try {
+      await _this.restController(ctx)
+    } catch (err) {
+      // console.error('Error in POST /temp/write controller')
+      ctx.throw(422, err.message)
     }
   }
 
