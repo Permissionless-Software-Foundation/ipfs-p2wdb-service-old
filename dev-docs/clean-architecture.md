@@ -9,6 +9,8 @@ The architecture of the code in this repository attempts to follow the ideas beh
 
 Without knowing the patterns and reasoning behind Clean Architecture, the code in this project will look 'weird' to most JavaScript developers. This is because Clean Architecture comes from outside the JavaScript world and some of it's core ideas (like dependency inversion) don't translate easily into JavaScript.
 
+- [Summary Video](https://youtu.be/LftjSIbHzbo)
+
 Clean Architecture solves two key problems is application design:
 
 - It manages increasing complexity as new features and interfaces are added over time.
