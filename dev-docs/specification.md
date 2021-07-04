@@ -82,3 +82,9 @@ Adapters are output libraries so that the business logic doesn't need to know an
   - **ipfs** - An adapter for starting an IPFS node and connecting to the network.
   - **ipfs-coord** - An adapter library that wraps the ipfs-coord library. ipfs-coord is used to find other peers, establish pub-sub channels, and set up e2e encrypted communication and payment between peers.
   - **orbit** - An adapter for OrbitDB KeyValue store, and events around OrbitDB functionality.
+
+## Dependency Diagrams
+
+The specifications above for a dependency tree of libraries. Visually, the dependency tree looks like this:
+
+![Dependency Graph](./diagrams/p2wdb-clean-architecture.png)
