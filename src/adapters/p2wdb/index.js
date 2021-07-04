@@ -108,7 +108,10 @@ class P2WDB {
   async readByTxid (txid) {
     try {
       console.log('txid: ', txid)
-      const data = _this.orbit.db.get(txid)
+      // const data = _this.orbit.db.get(txid)
+
+      // Find the data in the local database
+      const data = await _this.KeyValue.findOne({ key: txid })
       console.log('data: ', data)
 
       return data
