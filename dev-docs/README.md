@@ -31,9 +31,21 @@ The JSON RPC is based on the [ipfs-coord](https://github.com/Permissionless-Soft
 
 Both interfaces are maintained in the [ipfs-service-provider](https://github.com/Permissionless-Software-Foundation/ipfs-service-provider) repository, and are not directly maintained in this ipfs-p2wdb-service repository. Instead, changes around the interfaces are either pushed or pulled from the upstream ipfs-service-provider repository.
 
-Reads and writes to the P2WDB can be accomplished via REST API over HTTP or JSON RPC over IPFS. Which one is preferable depends on the use-case. Here is the software dependency tree for the software stack making up the P2WDB interfaces:
+Reads and writes to the P2WDB can be accomplished via REST API over HTTP or JSON RPC over IPFS. Which one is preferable depends on the use-case.
+
+## Dependencies
+
+This ipfs-p2wdb-service repository is evolved from several other previous projects. Instead of maintaining a separate fork, code is frequently pulled down from the upstream repositories. Here is the software dependency tree for the software stack making up the P2WDB interfaces:
 
 ![ipfs-p2wdb-service dependency graph](./diagrams/dependency-graph.png)
+
+Here are the repositories listed in the diagram:
+
+- [OrbitDB](https://github.com/orbitdb/orbit-db)
+- [OrbitDB Access Control Library](https://github.com/orbitdb/orbit-db-access-controllers)
+- [ipfs-service-provider](https://github.com/Permissionless-Software-Foundation/ipfs-service-provider)
+- [ipfs-coord](https://github.com/Permissionless-Software-Foundation/ipfs-coord)
+- [koa-api-boilerplate](https://github.com/christroutner/koa-api-boilerplate)
 
 ## Blockchain Interfaces
 
