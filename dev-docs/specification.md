@@ -20,7 +20,7 @@ The Entry Entity is the core concept in the P2WDB. An entry exists both in the p
 The Entry Entity has the following properties:
 
 - **hash** - is an IPFS [CID](https://docs.ipfs.io/concepts/content-addressing/) assigned to the Entry by OrbitDB. It starts with the letter `z`.
-- **key** - Entries are stored as key-value pairs. The key is the transaction ID (TXID) of the transaction burning PSF tokens and providing the proof-of-burn. This TXID provided a universally unique key for the key-value pair.
+- **key** - Entries are stored as key-value pairs. The key is the transaction ID (TXID) of the transaction burning PSF tokens and providing the proof-of-burn. This TXID provides a universally unique key for the key-value pair.
 - **isValid** - A judgment by the local node on the validity of the proof-of-burn.
 - **value** - The value part of the key-value pair. This value is an object that contains the following properties:
   - **message** - a clear-text message used to generate a cryptographic signature.
@@ -30,10 +30,10 @@ The Entry Entity has the following properties:
 
 ### Webhook
 
-The Webhook Entity is used to trigger a POST REST API call to another computer when a new piece of data is added to the P2WDB with an `appId` that matches the one defined in the webhook. This provides a convenient way any application to leverage a global censorship-resistant database while ignoring data that does not apply to it. This Entity has the following properties:
+The Webhook Entity is used to trigger a POST REST API call to another computer when a new piece of data is added to the P2WDB with an `appId` that matches the one defined in the webhook. This provides a convenient way for any application to leverage a global censorship-resistant database while ignoring data that does not apply to it. This Entity has the following properties:
 
 - **appId** - The application identifier to match in order to trigger the webhook. When a new entry is added to the P2WDB with an `appId` property that matches, the webhook will be triggered.
-- **url** - The URL to call with the webhook. When triggered, the webhook will make a POST call this URL. In the `body` of the call, it will pass the TXID (`key`) and CID (`hash`) of the new entry.
+- **url** - The URL to call with the webhook. When triggered, the webhook will make a POST call to this URL. In the `body` of the call, it will pass the TXID (`key`) and CID (`hash`) of the new entry.
 
 ## Use Cases
 
@@ -44,9 +44,9 @@ Use cases are verbs or actions that is done _to_ an Entity or _between_ Entities
 Below are use-cases for the Entry Entity:
 
 - **Add Entry** - A new entry to the P2WDB. This explicitly adds the entry to the OrbitDB. Entry into the local MongoDB is automatically triggered through a replication event.
-- **Read Entry** - Read a specific entry in the database, given its `key` (TXID) or `hash` (CID) value.
+- **Read Entry** - Read a specific entry in the local (MongoDB) database, given its `key` (TXID) or `hash` (CID) value.
 - **Revalidate** - Attempt to validate an entry that has been marked invalid.
-- **Read Invalid** - Returns a paginated list of entries that have been parked invalid.
+- **Read Invalid** - Returns a paginated list of entries that have been marked invalid.
 
 ### Webhook
 
@@ -59,7 +59,7 @@ Below are use-cases for the Webhook Entity:
 
 Controllers are inputs to the system. When a controller is activated, it causes the system to react in some way.
 
-### REST API
+### REST API & JSON RPC
 
 The REST API and JSON RPC have matching endpoints. They use the same REST verbs and call the same use-cases functions. They have the following endpoints:
 
@@ -87,6 +87,6 @@ Adapters are output libraries so that the business logic doesn't need to know an
 
 ## Dependency Diagrams
 
-The specifications above for a dependency tree of libraries. Visually, the dependency tree looks like this:
+The specifications above form a dependency tree of libraries. Visually, the dependency tree looks like this:
 
 ![Dependency Graph](./diagrams/p2wdb-clean-architecture.png)
