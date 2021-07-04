@@ -45,6 +45,8 @@ Below are use-cases for the Entry Entity:
 
 - **Add Entry** - A new entry to the P2WDB. This explicitly adds the entry to the OrbitDB. Entry into the local MongoDB is automatically triggered through a replication event.
 - **Read Entry** - Read a specific entry in the database, given its `key` (TXID) or `hash` (CID) value.
+- **Revalidate** - Attempt to validate an entry that has been marked invalid.
+- **Read Invalid** - Returns a paginated list of entries that have been parked invalid.
 
 ### Webhook
 
