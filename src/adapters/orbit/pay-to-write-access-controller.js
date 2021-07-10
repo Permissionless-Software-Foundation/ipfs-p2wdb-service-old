@@ -379,7 +379,7 @@ class PayToWriteAccessController extends AccessController {
     }
   }
 
-  // Get the differential token qty between 
+  // Get the differential token qty between
   // the entry and output of a tx
   async getTokenQtyDiff (txInfo) {
     try {
