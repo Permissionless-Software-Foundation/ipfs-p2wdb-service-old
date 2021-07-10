@@ -133,7 +133,8 @@ describe('#PayToWriteAccessController', () => {
         assert.include(err.message, 'txid must be a string')
       }
     })
-    it('should throw error if txid is not string', async () => {
+
+    it('should throw error if txid is not a string', async () => {
       try {
         await uut._validateTx(1)
         assert.fail('Unexpected code path')
@@ -141,6 +142,7 @@ describe('#PayToWriteAccessController', () => {
         assert.include(err.message, 'txid must be a string')
       }
     })
+
     it('should catch bchjs error', async () => {
       try {
         // Force an error
@@ -188,16 +190,17 @@ describe('#PayToWriteAccessController', () => {
     it('should return false if token burn is less than the threshold', async () => {
       try {
         const spy = sinon.spy(uut, 'getTokenQtyDiff')
-        sandbox
-          .stub(uut.bchjs.Transaction, 'get')
-          .resolves(mock.txInfo)
+        sandbox.stub(uut.bchjs.Transaction, 'get').resolves(mock.txInfo)
 
         const txId = mock.tx.txid
         const result = await uut._validateTx(txId)
 
         // Makes sure that the code gets to the functionality
         // that we want to validate
-        assert.isTrue(spy.called, 'Expected getTokenQtyDiff function to be called')
+        assert.isTrue(
+          spy.called,
+          'Expected getTokenQtyDiff function to be called'
+        )
 
         assert.isFalse(result)
       } catch (err) {
@@ -207,15 +210,14 @@ describe('#PayToWriteAccessController', () => {
 
     it('should return true if required tokens are burned', async () => {
       uut.config.reqTokenQty = 0
-      sandbox
-        .stub(uut.bchjs.Transaction, 'get')
-        .resolves(mock.txInfo)
+      sandbox.stub(uut.bchjs.Transaction, 'get').resolves(mock.txInfo)
 
       const txId = mock.tx.txid
       const result = await uut._validateTx(txId)
       assert.isTrue(result)
     })
   })
+
   describe('#getTokenQtyDiff', () => {
     it('should throw error if input is not provided', async () => {
       try {
@@ -234,6 +236,7 @@ describe('#PayToWriteAccessController', () => {
         assert.include(err.message, 'txInfo must contain vin and vout array')
       }
     })
+
     it('should get tokenqty difference between vin and vout arrays', async () => {
       try {
         const diff = await uut.getTokenQtyDiff(mock.txInfo)
@@ -243,6 +246,7 @@ describe('#PayToWriteAccessController', () => {
       }
     })
   })
+
   describe('#markInvalid', () => {
     it('should catch and throw an error', async () => {
       // TODO
