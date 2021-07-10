@@ -343,6 +343,10 @@ class PayToWriteAccessController extends AccessController {
   // Returns true if the txid burned at least 0.001 tokens.
   async _validateTx (txid) {
     try {
+      if (!txid || typeof txid !== 'string') {
+        throw new Error('txid must be a string')
+      }
+
       let isValid = false
 
       const txInfo = await _this.bchjs.Transaction.get(txid)
@@ -354,6 +358,38 @@ class PayToWriteAccessController extends AccessController {
       // Return false if tokenId does not match.
       if (txInfo.tokenId !== this.config.tokenId) return false
 
+      const diff = await this.getTokenQtyDiff(txInfo)
+
+      // If the difference is above a positive threshold, then it's a burn
+      // transaction.
+      if (diff >= this.config.reqTokenQty) {
+        console.log(
+          `TX ${txid} proved burn of tokens. Will be allowed to write to DB.`
+        )
+        isValid = true
+      }
+
+      return isValid
+    } catch (err) {
+      console.error('Error in _validateTx: ', err.message)
+      // return false
+
+      // Throw an error rather than return false. This will pass rate-limit
+      // errors to the retry logic.
+      throw err
+    }
+  }
+
+  // Get the differential token qty between the inputs and outputs of a tx.
+  // This determins if the tx was a proper token burn.
+  async getTokenQtyDiff (txInfo) {
+    try {
+      if (!txInfo) {
+        throw new Error('txInfo is required')
+      }
+      if (!txInfo.vin || !txInfo.vout) {
+        throw new Error('txInfo must contain vin and vout array')
+      }
       // Sum up all the token inputs
       let inputTokenQty = 0
       for (let i = 0; i < txInfo.vin.length; i++) {
@@ -386,23 +422,9 @@ class PayToWriteAccessController extends AccessController {
 
       const diff = inputTokenQty - outputTokenQty
       console.log(`difference: ${diff}`)
-
-      // If the difference is above a positive threshold, then it's a burn
-      // transaction.
-      if (diff >= this.config.reqTokenQty) {
-        console.log(
-          `TX ${txid} proved burn of tokens. Will be allowed to write to DB.`
-        )
-        isValid = true
-      }
-
-      return isValid
+      return diff
     } catch (err) {
-      console.error('Error in _validateTx: ', err.message)
-      // return false
-
-      // Throw an error rather than return false. This will pass rate-limit
-      // errors to the retry logic.
+      console.error('Error in getVinVoutDiff: ', err.message)
       throw err
     }
   }
