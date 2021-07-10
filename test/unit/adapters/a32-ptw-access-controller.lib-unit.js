@@ -125,32 +125,124 @@ describe('#PayToWriteAccessController', () => {
   })
 
   describe('#_validateTx', () => {
-    it('should catch and throw an error', async () => {
-      // TODO
-      assert.equal(1, 1)
+    it('should throw error if txid is not provided', async () => {
+      try {
+        await uut._validateTx()
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'txid must be a string')
+      }
+    })
+    it('should throw error if txid is not string', async () => {
+      try {
+        await uut._validateTx(1)
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'txid must be a string')
+      }
+    })
+    it('should catch bchjs error', async () => {
+      try {
+        // Force an error
+        sandbox
+          .stub(uut.bchjs.Transaction, 'get')
+          .throws(new Error('some error message'))
+
+        const txId = mock.tx.txid
+        await uut._validateTx(txId)
+
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'some error message')
+      }
     })
 
     it('should return false if txid is not a valid SLP tx', async () => {
-      // TODO
-      assert.equal(1, 1)
+      try {
+        sandbox
+          .stub(uut.bchjs.Transaction, 'get')
+          .resolves({ isValidSLPTx: false })
+
+        const txId = mock.tx.txid
+        const result = await uut._validateTx(txId)
+        assert.isFalse(result)
+      } catch (err) {
+        assert.fail('Unexpected code path')
+      }
     })
 
     it('should return false if tokenId does not match', async () => {
-      // TODO
-      assert.equal(1, 1)
+      try {
+        sandbox
+          .stub(uut.bchjs.Transaction, 'get')
+          .resolves({ isValidSLPTx: true, tokenIid: 'wrong id' })
+
+        const txId = mock.tx.txid
+        const result = await uut._validateTx(txId)
+        assert.isFalse(result)
+      } catch (err) {
+        assert.fail('Unexpected code path')
+      }
     })
 
     it('should return false if token burn is less than the threshold', async () => {
-      // TODO
-      assert.equal(1, 1)
+      try {
+        const spy = sinon.spy(uut, 'getTokenQtyDiff')
+        sandbox
+          .stub(uut.bchjs.Transaction, 'get')
+          .resolves(mock.txInfo)
+
+        const txId = mock.tx.txid
+        const result = await uut._validateTx(txId)
+
+        // Makes sure that the code gets to the functionality
+        // that we want to validate
+        assert.isTrue(spy.called, 'Expected getTokenQtyDiff function to be called')
+
+        assert.isFalse(result)
+      } catch (err) {
+        assert.fail('Unexpected code path')
+      }
     })
 
     it('should return true if required tokens are burned', async () => {
-      // TODO
-      assert.equal(1, 1)
+      uut.config.reqTokenQty = 0
+      sandbox
+        .stub(uut.bchjs.Transaction, 'get')
+        .resolves(mock.txInfo)
+
+      const txId = mock.tx.txid
+      const result = await uut._validateTx(txId)
+      assert.isTrue(result)
     })
   })
+  describe('#getTokenQtyDiff', () => {
+    it('should throw error if input is not provided', async () => {
+      try {
+        await uut.getTokenQtyDiff()
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'txInfo is required')
+      }
+    })
 
+    it('should throw error if txinfo is invalid format', async () => {
+      try {
+        await uut.getTokenQtyDiff(1)
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'txInfo must contain vin and vout array')
+      }
+    })
+    it('should get tokenqty difference between vin and vout arrays', async () => {
+      try {
+        const diff = await uut.getTokenQtyDiff(mock.txInfo)
+        assert.isNumber(diff)
+      } catch (err) {
+        assert.fail('Unexpected code path')
+      }
+    })
+  })
   describe('#markInvalid', () => {
     it('should catch and throw an error', async () => {
       // TODO
