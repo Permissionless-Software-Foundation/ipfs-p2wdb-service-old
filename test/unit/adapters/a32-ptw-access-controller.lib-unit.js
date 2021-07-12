@@ -7,6 +7,10 @@ const assert = require('chai').assert
 const PayToWriteAccessController = require('../../../src/adapters/orbit/pay-to-write-access-controller')
 
 const sinon = require('sinon')
+const mongoose = require('mongoose')
+
+// Local support libraries
+const config = require('../../../config')
 
 const util = require('util')
 util.inspect.defaultOptions = { depth: 1 }
@@ -16,7 +20,19 @@ let sandbox
 let uut
 
 describe('#PayToWriteAccessController', () => {
-  before(async () => {})
+  before(async () => {
+    // Connect to the Mongo Database.
+    console.log(`Connecting to database: ${config.database}`)
+    mongoose.Promise = global.Promise
+    mongoose.set('useCreateIndex', true) // Stop deprecation warning.
+    await mongoose.connect(
+      config.database,
+      {
+        useUnifiedTopology: true,
+        useNewUrlParser: true
+      }
+    )
+  })
 
   beforeEach(() => {
     uut = new PayToWriteAccessController()
@@ -25,7 +41,9 @@ describe('#PayToWriteAccessController', () => {
   })
 
   afterEach(() => sandbox.restore())
-
+  after(() => {
+    mongoose.connection.close()
+  })
   describe('_validateSignature()', () => {
     it('should throw error if txid input is not provided', async () => {
       try {
@@ -248,14 +266,33 @@ describe('#PayToWriteAccessController', () => {
   })
 
   describe('#markInvalid', () => {
-    it('should catch and throw an error', async () => {
-      // TODO
-      assert.equal(1, 1)
+    it('should throw error if input is not provided', async () => {
+      try {
+        await uut.markInvalid()
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'txid must be a string')
+      }
+    })
+    it('should throw error if txid is not a string', async () => {
+      try {
+        await uut._validateTx(1)
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'txid must be a string')
+      }
     })
 
     it('should create a new entry in MongoDB', async () => {
-      // TODO
-      assert.equal(1, 1)
+      try {
+        const txId = mock.tx.txid
+        const keyValue = await uut.markInvalid(txId)
+
+        assert.isFalse(keyValue.isValid)
+        assert.equal(keyValue.key, txId)
+      } catch (err) {
+        assert.fail('Unexpected code path')
+      }
     })
   })
 

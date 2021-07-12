@@ -324,6 +324,9 @@ class PayToWriteAccessController extends AccessController {
   // validation spamming.
   async markInvalid (txid) {
     try {
+      if (!txid || typeof txid !== 'string') {
+        throw new Error('txid must be a string')
+      }
       // Create a new entry in the database, to remember the TXID. Mark the
       // entry as invalid.
       const kvObj = {
@@ -334,6 +337,7 @@ class PayToWriteAccessController extends AccessController {
       }
       const keyValue = new this.KeyValue(kvObj)
       await keyValue.save()
+      return keyValue
     } catch (err) {
       console.error('Error in markInvalid()')
       throw err
