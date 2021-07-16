@@ -297,6 +297,19 @@ describe('#PayToWriteAccessController', () => {
   })
 
   describe('#matchErrorMsg', () => {
+    it('should return false if input is missing', () => {
+      const errMsg = undefined
+      const result = uut.matchErrorMsg(errMsg)
+
+      assert.equal(result, false)
+    })
+    it('should return false if input is wrong type', () => {
+      const errMsg = {}
+      const result = uut.matchErrorMsg(errMsg)
+
+      assert.equal(result, false)
+    })
+
     it('should return false if no error message is matched', () => {
       const result = uut.matchErrorMsg('test message')
 

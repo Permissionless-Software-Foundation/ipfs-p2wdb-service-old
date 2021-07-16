@@ -310,6 +310,7 @@ class PayToWriteAccessController extends AccessController {
   // Returns true if there is a match. False if no match.
   matchErrorMsg (msg) {
     try {
+      if (!msg || typeof msg !== 'string') return false
       // Returned on forged TXID or manipulated ACL rules.
       if (msg.includes('No such mempool or blockchain transaction')) return true
 
