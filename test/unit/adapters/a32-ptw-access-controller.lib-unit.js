@@ -276,7 +276,7 @@ describe('#PayToWriteAccessController', () => {
     })
     it('should throw error if txid is not a string', async () => {
       try {
-        await uut._validateTx(1)
+        await uut.markInvalid(1)
         assert.fail('Unexpected code path')
       } catch (err) {
         assert.include(err.message, 'txid must be a string')
@@ -326,24 +326,98 @@ describe('#PayToWriteAccessController', () => {
   })
 
   describe('#validateAgainstBlockchain', () => {
-    it('should catch and throw a general error', async () => {
-      // TODO
-      assert.equal(1, 1)
+    it('should throw error if input is missing', async () => {
+      try {
+        await uut.validateAgainstBlockchain()
+        assert.fail('unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'Cannot destructure property')
+      }
+    })
+    it('should throw error if input is wrong type', async () => {
+      try {
+        await uut.validateAgainstBlockchain(1)
+        assert.fail('unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'input must be an object')
+      }
+    })
+    it('should throw error if "txid" property is not provided', async () => {
+      try {
+        await uut.validateAgainstBlockchain({})
+        assert.fail('unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'txid must be a string')
+      }
+    })
+    it('should throw error if "signature" property is not provided', async () => {
+      try {
+        const obj = {
+          txid: 'dc6a7bd80860f58e392d36f6da0fb32d23eb52f03447c11a472c32b2c1267cd0'
+        }
+        await uut.validateAgainstBlockchain(obj)
+        assert.fail('unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'signature must be a string')
+      }
+    })
+    it('should throw error if "message" property is not provided', async () => {
+      try {
+        const obj = {
+          txid: 'dc6a7bd80860f58e392d36f6da0fb32d23eb52f03447c11a472c32b2c1267cd0',
+          signature: 'S7OTnqZzs34lAJW4DPvCkLIv4HlR1wBux7x2OxmeiCVJ8xDmo3jcHjtWc4N9mdBVB4VUSPRt9Ete9wVVDzDeI'
+        }
+        await uut.validateAgainstBlockchain(obj)
+        assert.fail('unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'message must be a string')
+      }
+    })
+    it('should return false for invalid signature', async () => {
+      // Mock
+      sandbox
+        .stub(uut, '_validateSignature')
+        .resolves(false)
+
+      const obj = {
+        txid: 'dc6a7bd80860f58e392d36f6da0fb32d23eb52f03447c11a472c32b2c1267cd0',
+        signature: 'S7OTnqZzs34lAJW4DPvCkLIv4HlR1wBux7x2OxmeiCVJ8xDmo3jcHjtWc4N9mdBVB4VUSPRt9Ete9wVVDzDeI',
+        message: 'message'
+      }
+      const result = await uut.validateAgainstBlockchain(obj)
+      assert.isFalse(result)
     })
 
     it('should catch known error messages and mark the entry as invalid in Mongo', async () => {
-      // TODO
-      assert.equal(1, 1)
-    })
+      sandbox
+        .stub(uut, '_validateSignature')
+        .throws(new Error('No such mempool or blockchain transaction'))
 
-    it('should return false for invalid signature', async () => {
-      // TODO
-      assert.equal(1, 1)
+      const obj = {
+        txid: 'dc6a7bd80860f58e392d36f6da0fb32d23eb52f03447c11a472c32b2c1267cd0',
+        signature: 'S7OTnqZzs34lAJW4DPvCkLIv4HlR1wBux7x2OxmeiCVJ8xDmo3jcHjtWc4N9mdBVB4VUSPRt9Ete9wVVDzDeI',
+        message: 'message'
+      }
+      const result = await uut.validateAgainstBlockchain(obj)
+      assert.isFalse(result)
     })
 
     it('should return return true on successful validation', async () => {
-      // TODO
-      assert.equal(1, 1)
+      sandbox
+        .stub(uut, '_validateSignature')
+        .resolves(true)
+
+      sandbox
+        .stub(uut, '_validateTx')
+        .resolves(true)
+
+      const obj = {
+        txid: 'dc6a7bd80860f58e392d36f6da0fb32d23eb52f03447c11a472c32b2c1267cd0',
+        signature: 'S7OTnqZzs34lAJW4DPvCkLIv4HlR1wBux7x2OxmeiCVJ8xDmo3jcHjtWc4N9mdBVB4VUSPRt9Ete9wVVDzDeI',
+        message: 'message'
+      }
+      const result = await uut.validateAgainstBlockchain(obj)
+      assert.isTrue(result)
     })
   })
 
