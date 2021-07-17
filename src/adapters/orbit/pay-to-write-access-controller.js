@@ -271,6 +271,20 @@ class PayToWriteAccessController extends AccessController {
     const { txid, signature, message } = inputObj
 
     try {
+      // Input validation
+      if (!inputObj || typeof inputObj !== 'object') {
+        throw new Error('input must be an object')
+      }
+      if (!txid || typeof txid !== 'string') {
+        throw new Error('txid must be a string')
+      }
+      if (!signature || typeof signature !== 'string') {
+        throw new Error('signature must be a string')
+      }
+      if (!message || typeof message !== 'string') {
+        throw new Error('message must be a string')
+      }
+
       let validTx = false
 
       // Validate the signature to ensure the user submitting data owns
