@@ -33,6 +33,7 @@ class PayToWriteAccessController extends AccessController {
     this.KeyValue = KeyValue
     this.config = config
     this.retryQueue = new RetryQueue({ bchjs: this.bchjs })
+    this.validationEvent = validationEvent
     // this.webhook = new Webhook()
 
     _this = this
@@ -219,7 +220,7 @@ class PayToWriteAccessController extends AccessController {
         inputObj.data = dbData
         inputObj.hash = entry.hash
 
-        validationEvent.emit('ValidationSucceeded', inputObj)
+        this.validationEvent.emit('ValidationSucceeded', inputObj)
       }
 
       return validTx

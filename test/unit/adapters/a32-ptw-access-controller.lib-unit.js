@@ -422,19 +422,63 @@ describe('#PayToWriteAccessController', () => {
   })
 
   describe('#canAppend', () => {
+    it('should return false on error handled', async () => {
+      sandbox
+        .stub(uut.retryQueue, 'addToQueue')
+        .throws(new Error())
+
+      const result = await uut.canAppend(mock.entryMaxSize)
+      assert.isFalse(result)
+    })
+    it('should return false if input missing', async () => {
+      const result = await uut.canAppend()
+      assert.isFalse(result)
+    })
     it('should return false if the input data is greater than the maxDataSize', async () => {
-      // TODO
-      assert.equal(1, 1)
+      const result = await uut.canAppend(mock.entryMaxSize)
+      assert.isFalse(result)
     })
 
     it('should return value in MongoDB if entry already exists in the database', async () => {
-      // TODO
-      assert.equal(1, 1)
+      sandbox
+        .stub(uut.KeyValue, 'find')
+        .resolves([{ isValid: true }])
+
+      const result = await uut.canAppend(mock.entry)
+      assert.isTrue(result)
     })
 
     it('should return true if blockchain validation passes', async () => {
-      // TODO
-      assert.equal(1, 1)
+      sandbox
+        .stub(uut.retryQueue, 'addToQueue')
+        .resolves(true)
+
+      const result = await uut.canAppend(mock.entry)
+      assert.isTrue(result)
+    })
+
+    it('should emit event if hash exist for valid tx', async () => {
+      let eventInput
+
+      sandbox
+        .stub(uut.retryQueue, 'addToQueue')
+        .resolves(true)
+
+      sandbox
+        .stub(uut.validationEvent, 'emit')
+        .callsFake((eventName, value) => {
+          eventInput = value
+        })
+
+      const entry = mock.entry
+      entry.hash = 'hash'
+      const result = await uut.canAppend(entry)
+
+      assert.isTrue(result)
+
+      assert.isObject(eventInput, 'An object is expected to be emited')
+      assert.equal(eventInput.hash, entry.hash)
+      assert.equal(eventInput.data, entry.payload.value.data)
     })
   })
 })
