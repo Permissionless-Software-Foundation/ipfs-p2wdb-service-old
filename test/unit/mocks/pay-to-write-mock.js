@@ -166,7 +166,29 @@ const txInfo = {
   tokenDocHash: ''
 }
 
+const entry = {
+  payload: {
+    key: '8ab4ac5dea3f9024e3954ee5b61452955d659a34561f79ef62ac44e133d0980e',
+    value: {
+      signature: 'S7OTnqZzs34lAJW4DPvCkLIv4HlR1wBux7x2OxmeiCVJ8xDmo3jcHjtWc4N9mdBVB4VUSPRt9Ete9wVVDzDeI',
+      message: 'message',
+      data: 'test data'
+    }
+  }
+}
+const entryMaxSize = {
+  payload: {
+    key: '8ab4ac5dea3f9024e3954ee5b61452955d659a34561f79ef62ac44e133d0980e',
+    value: {
+      signature: 'S7OTnqZzs34lAJW4DPvCkLIv4HlR1wBux7x2OxmeiCVJ8xDmo3jcHjtWc4N9mdBVB4VUSPRt9Ete9wVVDzDeI',
+      message: 'message',
+      data: 'test data'.padStart(10001, 'a')
+    }
+  }
+}
 module.exports = {
   tx,
-  txInfo
+  txInfo,
+  entry,
+  entryMaxSize
 }
