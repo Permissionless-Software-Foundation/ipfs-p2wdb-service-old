@@ -5,10 +5,15 @@
 class OrbitDBMock {
   constructor () {
     this.all = {}
+    this.id = 'id'
   }
 
   async put () {
     return 'hash'
+  }
+
+  async load () {
+    return 'load'
   }
 }
 

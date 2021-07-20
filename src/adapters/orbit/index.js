@@ -25,7 +25,7 @@ class OrbitDBAdapter {
     // Input Validation
     if (!localConfig.ipfs) {
       throw new Error(
-        'Must past an instance of ipfs when instantiationg the PayToWriteDB class.'
+        'Must pass an instance of ipfs when instancing the OrbitDBAdapter class.'
       )
     }
     this.ipfs = localConfig.ipfs
@@ -33,6 +33,7 @@ class OrbitDBAdapter {
     // Encapsulate dependencies
     this.config = config
     this.validationEvent = validationEvent
+    this.OrbitDB = OrbitDB
 
     // Properties of this class instance.
     this.db = {} // Instance of OrbitDB.
@@ -48,6 +49,7 @@ class OrbitDBAdapter {
       console.log('OrbitDB is ready.')
     } catch (err) {
       console.error('Error in orbitdb/index.js/start()')
+      throw err
     }
   }
 
@@ -58,8 +60,7 @@ class OrbitDBAdapter {
       if (!dbName) {
         dbName = this.config.orbitDbName
       }
-
-      const orbitdb = await OrbitDB.createInstance(this.ipfs, {
+      const orbitdb = await this.OrbitDB.createInstance(this.ipfs, {
         // directory: "./orbitdb/examples/eventlog",
         directory: './orbitdb/dbs/keyvalue',
         AccessControllers: AccessControllers
