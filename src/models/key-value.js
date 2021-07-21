@@ -12,7 +12,8 @@ const KeyValue = new mongoose.Schema({
   hash: { type: String },
   key: { type: String }, // BCH TXID
   value: { type: Object },
-  isValid: { type: Boolean, default: false }
+  isValid: { type: Boolean, default: false },
+  appId: { type: String, default: '' }
 })
 
 // export default mongoose.model('user', User)

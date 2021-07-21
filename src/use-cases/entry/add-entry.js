@@ -58,7 +58,9 @@ class AddEntry {
   }
 
   async addPeerEntry (peerData) {
-    // console.log('Entering addPeerEntry() with this data: ', peerData)
+    // Attempt to extract the 'appId' property from the data.
+    peerData = this._extractAppId(peerData)
+    console.log('Entering addPeerEntry() with this data: ', peerData)
 
     const entry = _this.dbEntry.makePeerEntry(peerData)
 
@@ -75,6 +77,25 @@ class AddEntry {
     await _this.entryAdapter.insert(entry)
 
     return true
+  }
+
+  // Attempt to extract the appId property from the data.
+  _extractAppId (peerData) {
+    try {
+      // The parse() command will throw an error if the data isn't JSON.
+      // In that case, the catch() function will exit quietly.
+      const data = JSON.parse(peerData.data)
+
+      const appId = data.appId
+
+      peerData.appId = appId
+
+      return peerData
+    } catch (err) {
+      console.log('Error in _extractAppId(): ', err)
+      // Exit quietly.
+      return peerData
+    }
   }
 }
 

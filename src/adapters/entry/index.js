@@ -31,6 +31,8 @@ class EntryAdapter {
   // Insert a new entry into the local MongoDB database.
   async insert (entry) {
     try {
+      console.log(`entry: ${JSON.stringify(entry, null, 2)}`)
+
       const newKeyValue = new this.KeyValue(entry)
       await newKeyValue.save()
 

@@ -14,6 +14,7 @@ class DBEntry {
     data,
     signature,
     message,
+    appId,
     isValid = false
   } = {}) {
     // Input validation.
@@ -37,6 +38,7 @@ class DBEntry {
       hash,
       key,
       value,
+      appId,
       isValid
     }
 
@@ -47,7 +49,7 @@ class DBEntry {
   // peer database on the network.
   // It's assumed this method is triggered by the 'ValidationSucceeded' event,
   // so it's assumed the data is valid.
-  makePeerEntry ({ txid, signature, message, data, hash } = {}) {
+  makePeerEntry ({ txid, signature, message, data, hash, appId } = {}) {
     const key = txid
     const value = {
       message,
@@ -63,6 +65,7 @@ class DBEntry {
       hash,
       key,
       value,
+      appId,
       isValid
     }
 

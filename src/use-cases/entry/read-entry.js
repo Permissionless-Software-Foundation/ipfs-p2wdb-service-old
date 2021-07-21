@@ -52,6 +52,17 @@ class ReadEntry {
       throw err
     }
   }
+
+  async readByAppId (appId) {
+    try {
+      const data = await this.p2wdbAdapter.readByAppId(appId)
+
+      return data
+    } catch (err) {
+      console.error('Error in readByAppId()')
+      throw err
+    }
+  }
 }
 
 module.exports = ReadEntry
