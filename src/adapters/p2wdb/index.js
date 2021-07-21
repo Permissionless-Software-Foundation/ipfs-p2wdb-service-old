@@ -120,6 +120,22 @@ class P2WDB {
       throw err
     }
   }
+
+  async readByAppId (appId) {
+    try {
+      // console.log('appId: ', appId)
+      // const data = _this.orbit.db.get(txid)
+
+      // Find the data in the local database
+      const data = await _this.KeyValue.find({ appId })
+      console.log('data: ', data)
+
+      return data
+    } catch (err) {
+      console.error('Error in p2wdb.js/readByAppId()')
+      throw err
+    }
+  }
 }
 
 module.exports = P2WDB
