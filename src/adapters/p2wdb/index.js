@@ -61,7 +61,7 @@ class P2WDB {
     try {
       console.log('entry: ', entry)
 
-      // Add the entry to the Oribit DB
+      // Add the entry to the Oribit DB.
       const hash = await _this.orbit.db.put(entry.key, entry.value)
       console.log('hash: ', hash)
 
