@@ -23,7 +23,7 @@ class P2WDB {
     // Encapsulate dependencies
     this.ipfsAdapters = new IpfsAdapters()
     this.KeyValue = KeyValue
-
+    this.OribitAdapter = OribitAdapter
     // Properties of this class instance.
     this.isReady = false
 
@@ -38,7 +38,7 @@ class P2WDB {
       console.log('IPFS Adapters are all ready.')
 
       // Start the P2WDB OrbitDB.
-      _this.orbit = new OribitAdapter({
+      _this.orbit = new this.OribitAdapter({
         ipfs: this.ipfsAdapters.ipfs
       })
       await _this.orbit.start()

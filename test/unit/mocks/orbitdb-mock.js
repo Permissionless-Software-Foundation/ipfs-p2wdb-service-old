@@ -16,5 +16,22 @@ class OrbitDBMock {
     return 'load'
   }
 }
+class OrbitDBAdapterMock {
+  constructor () {
+    this.db = { put: () => { return 'hash' } }
+  }
 
-module.exports = OrbitDBMock
+  async start () {
+    return {}
+  }
+
+  async insert () {
+    return {}
+  }
+
+  async readAll () {
+    return { key: 'value' }
+  }
+}
+
+module.exports = { OrbitDBMock, OrbitDBAdapterMock }
