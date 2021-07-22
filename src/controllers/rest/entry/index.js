@@ -11,6 +11,7 @@ const PostEntry = require('./post-entry')
 const GetAll = require('./get-all')
 const GetByHash = require('./get-by-hash')
 const GetByTxid = require('./get-by-txid')
+const GetByAppId = require('./get-by-appid')
 
 class EntryController {
   constructor (localConfig = {}) {
@@ -38,6 +39,7 @@ class EntryController {
     this.readAllEntries = new GetAll(dependencies)
     this.getByHash = new GetByHash(dependencies)
     this.getByTxid = new GetByTxid(dependencies)
+    this.getByAppId = new GetByAppId(dependencies)
 
     // Instantiate the router.
     const baseUrl = '/p2wdb'
@@ -62,6 +64,9 @@ class EntryController {
 
     // curl -H "Content-Type: application/json" -X GET localhost:5001/p2wdb/txid/:txid
     this.router.get('/txid/:txid', this.getByTxid.routeHandler)
+
+    // curl -H "Content-Type: application/json" -X GET localhost:5001/p2wdb/appid/:appid
+    this.router.get('/appid/:appid', this.getByAppId.routeHandler)
 
     // Attach the Controller routes to the Koa app.
     app.use(this.router.routes())

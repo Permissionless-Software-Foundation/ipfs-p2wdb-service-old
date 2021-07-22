@@ -59,8 +59,9 @@ class PostEntry {
       const signature = ctx.request.body.signature
       const message = ctx.request.body.message
       const data = ctx.request.body.data
+      const appId = ctx.request.body.appId
 
-      const writeObj = { txid, signature, message, data }
+      const writeObj = { txid, signature, message, data, appId }
       console.log(`body data: ${JSON.stringify(writeObj, null, 2)}`)
 
       // const hash = await this.addEntry.addUserEntry(writeObj)
