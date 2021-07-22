@@ -25,6 +25,9 @@ class RetryQueue {
 
     // Encapsulate dependencies
     this.validationQueue = new PQueue({ concurrency: 1 })
+    this.pRetry = pRetry
+
+    this.attempts = 5
 
     _this = this
   }
@@ -32,10 +35,16 @@ class RetryQueue {
   // Add an async function to the queue, and execute it with the input object.
   async addToQueue (funcHandle, inputObj) {
     try {
+      if (!funcHandle) {
+        throw new Error('function handler is required')
+      }
+      if (!inputObj) {
+        throw new Error('input object is required')
+      }
+
       const returnVal = await _this.validationQueue.add(() =>
         _this.retryWrapper(funcHandle, inputObj)
       )
-
       return returnVal
     } catch (err) {
       console.error('Error in addToQueue()')
@@ -48,20 +57,26 @@ class RetryQueue {
   // function 'funcHandle'.
   async retryWrapper (funcHandle, inputObj) {
     try {
+      if (!funcHandle) {
+        throw new Error('function handler is required')
+      }
+      if (!inputObj) {
+        throw new Error('input object is required')
+      }
       console.log('Entering retryWrapper()')
 
-      return pRetry(
+      return this.pRetry(
         async () => {
           return await funcHandle(inputObj)
         },
         {
           onFailedAttempt: _this.handleValidationError,
-          retries: 5 // Retry 5 times
+          retries: this.attempts // Retry 5 times
         }
       )
     } catch (err) {
       console.error('Error in retryWrapper: ', err)
-      // throw err?
+      throw err
     }
   }
 
@@ -71,7 +86,6 @@ class RetryQueue {
     try {
       const errorMsg = `Attempt ${error.attemptNumber} to validate entry. There are ${error.retriesLeft} retries left. Waiting before trying again.`
       console.log(errorMsg)
-
       const SLEEP_TIME = 30000
       console.log(`Waiting ${SLEEP_TIME} milliseconds before trying again.\n`)
       await _this.bchjs.Util.sleep(SLEEP_TIME) // 30 sec
