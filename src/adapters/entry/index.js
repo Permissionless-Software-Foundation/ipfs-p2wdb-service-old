@@ -16,6 +16,14 @@ class EntryAdapter {
   // Returns true if the entry exists. Returns false if not.
   async doesEntryExist (entry) {
     try {
+      if (!entry || typeof entry !== 'object') {
+        throw new Error('entry object is required')
+      }
+
+      if (!entry.key || typeof entry.key !== 'string') {
+        throw new Error('property "key" must be a string')
+      }
+
       const key = entry.key
       const result = await this.KeyValue.find({ key })
 
@@ -31,6 +39,14 @@ class EntryAdapter {
   // Insert a new entry into the local MongoDB database.
   async insert (entry) {
     try {
+      if (!entry || typeof entry !== 'object') {
+        throw new Error('entry object is required')
+      }
+
+      if (!entry.key || typeof entry.key !== 'string') {
+        throw new Error('property "key" must be a string')
+      }
+
       console.log(`entry: ${JSON.stringify(entry, null, 2)}`)
 
       const newKeyValue = new this.KeyValue(entry)
@@ -38,8 +54,7 @@ class EntryAdapter {
 
       console.log('newKeyValue: ', newKeyValue)
 
-      // TODO: I should return the _id of the new entry.
-      return true
+      return newKeyValue._id.toString()
     } catch (err) {
       console.error('Error in local-db.js/insert()')
       throw err
